@@ -1,12 +1,14 @@
 export default [
   {
-    title: 'Home',
-    to: { name: 'root' },
-    icon: { icon: 'tabler-smart-home' },
+    title: 'Fra Document',
+    to: { name: 'fra-document' },
   },
   {
-    title: 'Second page',
-    to: { name: 'second-page' },
-    icon: { icon: 'tabler-file' },
+    title: 'Tracking Process FRA',
+    to: { name: 'tracking-process-fra' },
+  },
+  {
+    title: 'Monitoring & Evaluation',
+    to: { name: 'monitoring-evaluation' },
   },
 ]

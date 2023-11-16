@@ -14,6 +14,9 @@ defineProps({
   subtitle2: {
     type: String,
     default: ''
+  },
+  to: {
+    default: ""
   }
 })
 </script>
@@ -34,9 +37,13 @@ defineProps({
         </h4>
         <div class="text-body-2 mb-2">{{ subtitle1 }}</div>
         <div class="text-body-2">{{ subtitle2 }}</div>
-        <VBtn block class="mt-4">
-          Continue
-        </VBtn>
+        <RouterLink
+          :to="to"
+        >
+          <VBtn block class="mt-4">
+            Continue
+          </VBtn>
+        </RouterLink>
       </div>
     </VCardText>
   </VCard>

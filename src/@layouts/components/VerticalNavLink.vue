@@ -1,12 +1,12 @@
 <script setup>
-import { layoutConfig } from '@layouts'
-import { can } from '@layouts/plugins/casl'
-import { useLayoutConfigStore } from '@layouts/stores/config'
+import { layoutConfig } from '@layouts';
+import { can } from '@layouts/plugins/casl';
+import { useLayoutConfigStore } from '@layouts/stores/config';
 import {
-  getComputedNavLinkToProp,
-  getDynamicI18nProps,
-  isNavLinkActive,
-} from '@layouts/utils'
+getComputedNavLinkToProp,
+getDynamicI18nProps,
+isNavLinkActive,
+} from '@layouts/utils';
 
 const props = defineProps({
   item: {
@@ -32,7 +32,7 @@ const hideTitleAndBadge = configStore.isVerticalNavMini()
     >
       <Component
         :is="layoutConfig.app.iconRenderer || 'div'"
-        v-bind="item.icon || layoutConfig.verticalNav.defaultNavItemIconProps"
+        v-bind="item.icon"
         class="nav-item-icon"
       />
       <TransitionGroup name="transition-slide-x">

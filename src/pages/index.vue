@@ -48,6 +48,7 @@
                     subtitle1="Menu yang menampilkan List Dokumen FRA Product Digital Connectivity"
                     subtitle2="Pencarian Dokumen Repository FRA"
                     :img="imageCard1"
+                    :to="{ name: 'fra-document'}"
                   />
                 </VCol>
                 <VCol>
@@ -56,6 +57,7 @@
                     subtitle1="Menu yang menampilkan tracking process dokumen FRA mulai dari Submit sampai Sign"
                     subtitle2="Checklist Tracking Process"
                     :img="imageCard2"
+                    :to="{ name: 'tracking-process-fra'}"
                   />
                 </VCol>
                 <VCol>
@@ -64,6 +66,7 @@
                     subtitle1="Menu yang menampilkan Monitoring & Evaluation FRA Product Digital Connectivity"
                     subtitle2="Monitoring Product GTM"
                     :img="imageCard3"
+                    :to="{ name: 'monitoring-evaluation'}"
                   />
                 </VCol>
               </VRow>
