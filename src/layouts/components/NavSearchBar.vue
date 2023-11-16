@@ -1,7 +1,7 @@
 <script setup>
-import Shepherd from 'shepherd.js'
-import { withQuery } from 'ufo'
-import { useConfigStore } from '@core/stores/config'
+import { useConfigStore } from '@core/stores/config';
+import Shepherd from 'shepherd.js';
+import { withQuery } from 'ufo';
 
 defineOptions({
   // 👉 Is App Search Bar Visible
@@ -144,7 +144,7 @@ const searchResult = ref([])
 const fetchResults = async () => {
   const { data } = await useApi(withQuery('/app-bar/search', { q: searchQuery.value }))
 
-  searchResult.value = data.value
+  searchResult.value = []
 }
 
 watch(searchQuery, fetchResults)
@@ -194,7 +194,7 @@ const LazyAppBarSearch = defineAsyncComponent(() => import('@core/components/App
     @search="searchQuery = $event"
   >
     <!-- suggestion -->
-    <template #suggestions>
+    <!-- <template #suggestions>
       <VCardText class="app-bar-search-suggestions h-100 pa-10">
         <VRow
           v-if="suggestionGroups"
@@ -231,9 +231,9 @@ const LazyAppBarSearch = defineAsyncComponent(() => import('@core/components/App
           </VCol>
         </VRow>
       </VCardText>
-    </template>
+    </template> -->
     <!-- no data suggestion -->
-    <template #noDataSuggestion>
+    <!-- <template #noDataSuggestion>
       <div class="mt-8">
         <span class="d-flex justify-center text-disabled">Try searching for</span>
         <h6
@@ -250,7 +250,7 @@ const LazyAppBarSearch = defineAsyncComponent(() => import('@core/components/App
           <span class="text-sm">{{ suggestion.title }}</span>
         </h6>
       </div>
-    </template>
+    </template> -->
     <!-- search result -->
     <template #searchResult="{ item }">
       <VListSubheader class="text-disabled">
