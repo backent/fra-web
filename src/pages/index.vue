@@ -1,25 +1,94 @@
 <template>
-  <div>
-    <VCard
-      class="mb-6"
-      title="Kick start your project 🚀"
-    >
-      <VCardText>All the best for your new project.</VCardText>
-      <VCardText>
-        Please make sure to read our <a
-          href="https://demos.pixinvent.com/vuexy-vuejs-admin-template/documentation/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-decoration-none"
+    <div class="homepage pt-4">
+      <VContainer>
+        <VRow class="px-4">
+          <VCol>
+            <div class="text-h3">FRA Online</div>
+            <div>Fraud Risk Assessment Online </div>
+          </VCol>
+          <VCol class="d-flex justify-end">
+            <div class="d-flex flex-column align-center">
+              <VAvatar
+                size="34"
+                :image="avatar4"
+              />
+              <div>
+                John doe
+              </div>
+            </div>
+          </VCol>
+        </VRow>
+      </VContainer>
+      <VContainer>
+        
+        <VTextField
+          v-bind="$attrs"
+          placeholder="Search"
+          class="search-input  my-3"
+          density="comfortable"
         >
-          Template Documentation
-        </a> to understand where to go from here and how to use our template.
-      </VCardText>
-    </VCard>
+          <template #prepend-inner>
+            <VIcon
+              icon="tabler-search"
+              size="23"
+            />
+          </template>
+        </VTextField>
+      </VContainer>
 
-    <VCard title="Want to integrate JWT? 🔒">
-      <VCardText>We carefully crafted JWT flow so you can implement JWT with ease and with minimum efforts.</VCardText>
-      <VCardText>Please read our  JWT Documentation to get more out of JWT authentication.</VCardText>
-    </VCard>
-  </div>
+      <VContainer>
+        <VCard>
+            <VCardText>
+              <div class="text-h4">Menus</div>
+              <div class="mb-3">Lorem ipsum dolor sit amet.</div>
+              <VRow>
+                <VCol>
+                  <HomeCard
+                    title="Document FRA"
+                    subtitle1="Menu yang menampilkan List Dokumen FRA Product Digital Connectivity"
+                    subtitle2="Pencarian Dokumen Repository FRA"
+                    :img="imageCard1"
+                  />
+                </VCol>
+                <VCol>
+                  <HomeCard
+                    title="Tracking Process FRA"
+                    subtitle1="Menu yang menampilkan tracking process dokumen FRA mulai dari Submit sampai Sign"
+                    subtitle2="Checklist Tracking Process"
+                    :img="imageCard2"
+                  />
+                </VCol>
+                <VCol>
+                  <HomeCard
+                    title="Monitoring & Evaluation"
+                    subtitle1="Menu yang menampilkan Monitoring & Evaluation FRA Product Digital Connectivity"
+                    subtitle2="Monitoring Product GTM"
+                    :img="imageCard3"
+                  />
+                </VCol>
+              </VRow>
+            </VCardText>
+        </VCard>
+      </VContainer>
+    </div>
 </template>
+
+<script setup>
+import HomeCard from '@/components/CardHome.vue';
+import avatar4 from '@images/avatars/avatar-4.png';
+import imageCard1 from '@images/pages/home-page-document-fra.png';
+import imageCard3 from '@images/pages/home-page-monitoring-evaluation.png';
+import imageCard2 from '@images/pages/home-page-tracking-process-fra.png';
+
+definePage({ meta: { layout: 'blank' } })
+</script>
+
+<style lang="scss">
+.homepage {
+  background-color: #FFFAFA;
+}
+.search-input {
+  border-radius: 0.375rem !important;
+  background-color: rgb(var(--v-theme-surface));
+}
+</style>
