@@ -59,12 +59,20 @@
           style="height: 100%;" />
       </VCol>
     </VRow>
+
+    <VRow class="list-top-card align-stretch">
+      <VCol cols="4" v-for="item in computedListTop" :key="item.title">
+        <CardFraTopList :title="item.title" :subtitle="item.subtitle" :list="item.list" style="height: 100%;" />
+      </VCol>
+    </VRow>
   </VContainer>
 </template>
 
 <script setup>
 import CardFraCategory from '@/components/CardFraCategory.vue';
-import { colors } from '@/config/category';
+import CardFraTopList from '@/components/CardFraToplist.vue';
+import config from '@/config/category';
+import { computed } from 'vue';
 
 
 
@@ -91,26 +99,157 @@ const listAssessmentDetail = [
 
 const listCategoryCard = [
   {
-    color: colors.communication,
+    color: config.colors.communication,
     title: 'Communication',
     description: 'Dokumen FRA terkait Layanan jasa teleponi.',
   },
   {
-    color: colors.datacomm,
+    color: config.colors.datacomm,
     title: 'Datacomm',
     description: 'Dokumen FRA terkait produk untuk memenuhi komunikasi data antara nodes jaringan.',
   },
   {
-    color: colors.wireless,
+    color: config.colors.wireless,
     title: 'Wireless',
     description: 'Dokumen FRA terkait produk untuk memenuhi komunikasi data antara nodes jaringan.',
   },
   {
-    color: colors.internet,
+    color: config.colors.internet,
     title: 'Internet',
     description: 'Dokumen FRA terkait Layanan internet.',
   },
 ]
+
+const listTop = [
+  {
+    title: 'Recently Viewed',
+    subtitle: '5 Top Assassment Document Viewed',
+    type: 'category',
+    list: [
+      {
+        title: 'Dokumen FRA_SD Wan Fortinet_2023',
+        category: 'Communication',
+      },
+      {
+        title: 'Dokumen FRA_SD Wan Fortinet_2023',
+        category: 'Datacomm',
+      },
+      {
+        title: 'Dokumen FRA_SD Wan Fortinet_2023',
+        category: 'Wireless',
+      },
+      {
+        title: 'Dokumen FRA_SD Wan Fortinet_2023',
+        category: 'Internet',
+      },
+      {
+        title: 'Dokumen FRA_SD Wan Fortinet_2023',
+        category: 'Datacomm',
+      },
+    ]
+  },
+  {
+    title: 'Top Search',
+    subtitle: '5 Top Assassment Document Searched',
+    type: 'category',
+    list: [
+      {
+        title: 'Dokumen FRA_SD Wan Fortinet_2023',
+        category: 'Datacomm',
+      },
+      {
+        title: 'Dokumen FRA_SD Wan Fortinet_2023',
+        category: 'Wireless',
+      },
+      {
+        title: 'Dokumen FRA_SD Wan Fortinet_2023',
+        category: 'Internet',
+      },
+      {
+        title: 'Dokumen FRA_SD Wan Fortinet_2023',
+        category: 'Datacomm',
+      },
+      {
+        title: 'Dokumen FRA_SD Wan Fortinet_2023',
+        category: 'Communication',
+      },
+      {
+        title: 'Dokumen FRA_SD Wan Fortinet_2023',
+        category: 'Datacomm',
+      },
+      {
+        title: 'Dokumen FRA_SD Wan Fortinet_2023',
+        category: 'Wireless',
+      },
+      {
+        title: 'Dokumen FRA_SD Wan Fortinet_2023',
+        category: 'Internet',
+      },
+      {
+        title: 'Dokumen FRA_SD Wan Fortinet_2023',
+        category: 'Datacomm',
+      },
+    ]
+  },
+  {
+    title: 'User Active in a Month',
+    subtitle: '10 Top Active User',
+    type: 'user',
+    list: [
+      {
+        username: '999999',
+        name: 'John Doe'
+      },
+      {
+        username: '999999',
+        name: 'John Doe'
+      },
+      {
+        username: '999999',
+        name: 'John Doe'
+      },
+      {
+        username: '999999',
+        name: 'John Doe'
+      },
+      {
+        username: '999999',
+        name: 'John Doe'
+      },
+      {
+        username: '999999',
+        name: 'John Doe'
+      },
+      {
+        username: '999999',
+        name: 'John Doe'
+      },
+    ]
+  },
+]
+
+const computedListTop = computed(() => {
+  return listTop.map(item => {
+    let list
+    if (item.type === 'category') {
+      list = item.list.map(listItem => {
+        return {
+          title: listItem.title,
+          subtitle: `<span class="text-${config.colors[listItem.category.toLowerCase()]}">${listItem.category}</span>`
+        }
+      })
+    } else if (item.type === 'user') {
+      list = item.list.map(listItem => {
+        return {
+          title: `<span class="text-primary"> ${listItem.username} </span> ${listItem.name}`
+        }
+      })
+    } else {
+      list = item.list
+    }
+    return { ...item, list }
+  })
+})
 </script>
 
 <style lang="scss" scoped>
@@ -182,5 +321,9 @@ const listCategoryCard = [
 
 .list-category-card {
   height: 220px;
+}
+
+.list-top-card {
+  height: 400px;
 }
 </style>
