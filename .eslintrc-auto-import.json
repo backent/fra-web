@@ -350,6 +350,7 @@
     "watchTriggerable": true,
     "watchWithFilter": true,
     "whenever": true,
-    "useClipboardItems": true
+    "useClipboardItems": true,
+    "formatCompleteTime": true
   }
 }
