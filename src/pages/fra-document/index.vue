@@ -1,6 +1,6 @@
 <template>
   <VContainer>
-    <VRow>
+    <VRow class="align-strech">
       <VCol class="assessment-total">
         <VCard>
           <VCardText>
@@ -16,12 +16,7 @@
                     <VCol v-for="(item, idx) in listAssessmentDetail" :key="idx" cols="4">
                       <div class="detail__info-card d-flex align-center">
                         <div class="detail__info-card__left">
-                          <VAvatar
-                            rounded
-                            size="34"
-                            :color="item.color"
-                            variant="tonal"
-                          >
+                          <VAvatar rounded size="34" :color="item.color" variant="tonal">
                             <VIcon :icon="item.icon" />
                           </VAvatar>
                         </div>
@@ -29,11 +24,7 @@
                           <span class="detail__info-card__right__title">{{ item.title }}</span>
                           <span><span class="detail__info-card__right__count">{{ item.count }}</span> assessment</span>
                           <span class="detail__info-card__right__progress">
-                            <VProgressLinear
-                              model-value="100"
-                              :bg-color="item.color"
-                              :color="item.color"
-                            />
+                            <VProgressLinear model-value="100" :bg-color="item.color" :color="item.color" />
 
                           </span>
                         </div>
@@ -49,28 +40,34 @@
       </VCol>
       <VCol class="assessment-creation">
         <VCard>
-          <VCardText class="d-flex flex-column align-center">
-            <div>Add New Assessement</div>
+          <VCardText class="card d-flex flex-column align-center">
+            <div class="text-h5">Add New Assessement</div>
             <VBtn color="primary" variant="tonal">
-              <VIcon
-                start
-                icon="tabler-upload"
-              /> Document Upload
+              <VIcon start icon="tabler-upload" /> Document Upload
             </VBtn>
             <VBtn color="primary" variant="tonal">
-              <VIcon
-                start
-                icon="tabler-clipboard"
-              /> Create Document
+              <VIcon start icon="tabler-clipboard" /> Create Document
             </VBtn>
           </VCardText>
         </VCard>
+      </VCol>
+    </VRow>
+
+    <VRow class="list-category-card align-stretch">
+      <VCol cols="3" v-for="item in listCategoryCard" :key="item.title">
+        <CardFraCategory :title="item.title" :description="item.description" :color-theme="item.color"
+          style="height: 100%;" />
       </VCol>
     </VRow>
   </VContainer>
 </template>
 
 <script setup>
+import CardFraCategory from '@/components/CardFraCategory.vue';
+import { colors } from '@/config/category';
+
+
+
 const listAssessmentDetail = [
   {
     color: 'success',
@@ -91,6 +88,29 @@ const listAssessmentDetail = [
     count: 28,
   },
 ]
+
+const listCategoryCard = [
+  {
+    color: colors.communication,
+    title: 'Communication',
+    description: 'Dokumen FRA terkait Layanan jasa teleponi.',
+  },
+  {
+    color: colors.datacomm,
+    title: 'Datacomm',
+    description: 'Dokumen FRA terkait produk untuk memenuhi komunikasi data antara nodes jaringan.',
+  },
+  {
+    color: colors.wireless,
+    title: 'Wireless',
+    description: 'Dokumen FRA terkait produk untuk memenuhi komunikasi data antara nodes jaringan.',
+  },
+  {
+    color: colors.internet,
+    title: 'Internet',
+    description: 'Dokumen FRA terkait Layanan internet.',
+  },
+]
 </script>
 
 <style lang="scss" scoped>
@@ -101,14 +121,17 @@ const listAssessmentDetail = [
     flex-direction: column;
     gap: 2px;
     align-items: center;
-    & > * {
+
+    &>* {
       text-align: center;
     }
-    & > span:nth-child(2) {
+
+    &>span:nth-child(2) {
       color: rgb(var(--v-theme-secondary));
       font-size: 0.7rem;
     }
-    & > span:nth-child(3) {
+
+    &>span:nth-child(3) {
       font-weight: 700;
       font-size: 2rem;
     }
@@ -116,14 +139,16 @@ const listAssessmentDetail = [
 
   &__detail__card {
     border-radius: 6px;
-    border: 1px solid #EAEAEA; 
+    border: 1px solid #EAEAEA;
     height: 100%;
     display: flex;
     align-items: center;
     padding: 20px;
   }
+
   .detail__info-card {
     gap: 10px;
+
     &__right {
       gap: 6px;
 
@@ -135,13 +160,27 @@ const listAssessmentDetail = [
         font-weight: 500;
       }
 
-      &__progress > * {
+      &__progress>* {
         height: 6px !important;
       }
     }
   }
 }
+
 .assessment-creation {
   max-width: 300px;
+
+  .card {
+    gap: 8px;
+
+    &>*:first-child {
+      align-self: flex-start;
+
+    }
+  }
+}
+
+.list-category-card {
+  height: 220px;
 }
 </style>
