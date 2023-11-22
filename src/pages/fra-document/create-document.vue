@@ -69,7 +69,7 @@
         <VBtn v-show="currentStep === 0" color="primary" variant="flat" @click="currentStep++">
           Next
         </VBtn>
-        <VBtn v-show="currentStep === 1" color="secondary" variant="flat" @click="currentStep--">
+        <VBtn v-show="currentStep === 1" color="secondary" variant="tonal" @click="currentStep--">
           Previous
         </VBtn>
         <VBtn v-show="currentStep === 1" color="primary" variant="outlined" :loading="isSaveLoading"

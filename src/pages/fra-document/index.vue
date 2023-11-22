@@ -178,22 +178,6 @@ const listTop = [
         title: 'Dokumen FRA_SD Wan Fortinet_2023',
         category: 'Communication',
       },
-      {
-        title: 'Dokumen FRA_SD Wan Fortinet_2023',
-        category: 'Datacomm',
-      },
-      {
-        title: 'Dokumen FRA_SD Wan Fortinet_2023',
-        category: 'Wireless',
-      },
-      {
-        title: 'Dokumen FRA_SD Wan Fortinet_2023',
-        category: 'Internet',
-      },
-      {
-        title: 'Dokumen FRA_SD Wan Fortinet_2023',
-        category: 'Datacomm',
-      },
     ]
   },
   {
@@ -201,6 +185,18 @@ const listTop = [
     subtitle: '10 Top Active User',
     type: 'user',
     list: [
+      {
+        username: '999999',
+        name: 'John Doe'
+      },
+      {
+        username: '999999',
+        name: 'John Doe'
+      },
+      {
+        username: '999999',
+        name: 'John Doe'
+      },
       {
         username: '999999',
         name: 'John Doe'
