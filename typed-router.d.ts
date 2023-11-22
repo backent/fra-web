@@ -42,6 +42,7 @@ declare module 'vue-router/auto/routes' {
     'root': RouteRecordInfo<'root', '/', Record<never, never>, Record<never, never>>,
     '$error': RouteRecordInfo<'$error', '/:error(.*)', { error: ParamValue<true> }, { error: ParamValue<false> }>,
     'fra-document': RouteRecordInfo<'fra-document', '/fra-document', Record<never, never>, Record<never, never>>,
+    'fra-document-create-document': RouteRecordInfo<'fra-document-create-document', '/fra-document/create-document', Record<never, never>, Record<never, never>>,
     'login': RouteRecordInfo<'login', '/login', Record<never, never>, Record<never, never>>,
     'monitoring-evaluation': RouteRecordInfo<'monitoring-evaluation', '/monitoring-evaluation', Record<never, never>, Record<never, never>>,
     'second-page': RouteRecordInfo<'second-page', '/second-page', Record<never, never>, Record<never, never>>,

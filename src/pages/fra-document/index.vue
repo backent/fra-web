@@ -45,9 +45,11 @@
             <VBtn color="primary" variant="tonal" @click="openDocumentUpload">
               <VIcon start icon="tabler-upload" /> Document Upload
             </VBtn>
-            <VBtn color="primary" variant="tonal">
-              <VIcon start icon="tabler-clipboard" /> Create Document
-            </VBtn>
+            <RouterLink :to="{ name: 'fra-document-create-document' }">
+              <VBtn color="primary" variant="tonal">
+                <VIcon start icon="tabler-clipboard" /> Create Document
+              </VBtn>
+            </RouterLink>
           </VCardText>
         </VCard>
       </VCol>
