@@ -42,7 +42,7 @@
         <VCard>
           <VCardText class="card d-flex flex-column align-center">
             <div class="text-h5">Add New Assessement</div>
-            <VBtn color="primary" variant="tonal">
+            <VBtn color="primary" variant="tonal" @click="openDocumentUpload">
               <VIcon start icon="tabler-upload" /> Document Upload
             </VBtn>
             <VBtn color="primary" variant="tonal">
@@ -65,12 +65,15 @@
         <CardFraTopList :title="item.title" :subtitle="item.subtitle" :list="item.list" style="height: 100%;" />
       </VCol>
     </VRow>
+
+    <UploadFraDocumentDialog v-model:active="uploadDocumentDialog" />
   </VContainer>
 </template>
 
 <script setup>
 import CardFraCategory from '@/components/CardFraCategory.vue';
 import CardFraTopList from '@/components/CardFraToplist.vue';
+import UploadFraDocumentDialog from '@/components/UploadFraDocumentDialog.vue';
 import config from '@/config/category';
 import { computed } from 'vue';
 
@@ -228,6 +231,7 @@ const listTop = [
   },
 ]
 
+const uploadDocumentDialog = ref(false)
 const computedListTop = computed(() => {
   return listTop.map(item => {
     let list
@@ -250,6 +254,10 @@ const computedListTop = computed(() => {
     return { ...item, list }
   })
 })
+
+const openDocumentUpload = function () {
+  uploadDocumentDialog.value = true
+}
 </script>
 
 <style lang="scss" scoped>

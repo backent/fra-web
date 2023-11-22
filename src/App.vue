@@ -1,5 +1,4 @@
 <script setup>
-import { useTheme } from 'vuetify'
 import ScrollToTop from '@core/components/ScrollToTop.vue'
 import initCore from '@core/initCore'
 import {
@@ -7,6 +6,9 @@ import {
   useConfigStore,
 } from '@core/stores/config'
 import { hexToRgb } from '@layouts/utils'
+import { storeToRefs } from 'pinia'
+import { useTheme } from 'vuetify'
+import { useAppStore } from './@core/stores/app'
 
 const { global } = useTheme()
 
@@ -15,6 +17,8 @@ initCore()
 initConfigStore()
 
 const configStore = useConfigStore()
+const appStore = useAppStore()
+const { isSnackbarOpen, snackbarMessage, snackbarTimeout, snackbarColor } = storeToRefs(appStore)
 </script>
 
 <template>
@@ -25,5 +29,8 @@ const configStore = useConfigStore()
 
       <ScrollToTop />
     </VApp>
+    <VSnackbar v-model="isSnackbarOpen" :timeout="snackbarTimeout" :color="snackbarColor">
+      {{ snackbarMessage }}
+    </VSnackbar>
   </VLocaleProvider>
 </template>
