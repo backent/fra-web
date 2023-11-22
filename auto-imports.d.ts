@@ -51,6 +51,7 @@ declare global {
   const formatCompleteTime: typeof import('./src/utils/formatter.js')['formatCompleteTime']
   const formatDate: typeof import('./src/@core/utils/formatters.js')['formatDate']
   const formatDateToMonthShort: typeof import('./src/@core/utils/formatters.js')['formatDateToMonthShort']
+  const formatTableDate: typeof import('./src/utils/formatter.js')['formatTableDate']
   const getActivePinia: typeof import('pinia')['getActivePinia']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
@@ -402,6 +403,7 @@ declare module 'vue' {
     readonly formatCompleteTime: UnwrapRef<typeof import('./src/utils/formatter.js')['formatCompleteTime']>
     readonly formatDate: UnwrapRef<typeof import('./src/@core/utils/formatters.js')['formatDate']>
     readonly formatDateToMonthShort: UnwrapRef<typeof import('./src/@core/utils/formatters.js')['formatDateToMonthShort']>
+    readonly formatTableDate: UnwrapRef<typeof import('./src/utils/formatter.js')['formatTableDate']>
     readonly getActivePinia: UnwrapRef<typeof import('pinia')['getActivePinia']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
@@ -747,6 +749,7 @@ declare module '@vue/runtime-core' {
     readonly formatCompleteTime: UnwrapRef<typeof import('./src/utils/formatter.js')['formatCompleteTime']>
     readonly formatDate: UnwrapRef<typeof import('./src/@core/utils/formatters.js')['formatDate']>
     readonly formatDateToMonthShort: UnwrapRef<typeof import('./src/@core/utils/formatters.js')['formatDateToMonthShort']>
+    readonly formatTableDate: UnwrapRef<typeof import('./src/utils/formatter.js')['formatTableDate']>
     readonly getActivePinia: UnwrapRef<typeof import('pinia')['getActivePinia']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>

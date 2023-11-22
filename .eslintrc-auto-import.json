@@ -351,6 +351,7 @@
     "watchWithFilter": true,
     "whenever": true,
     "useClipboardItems": true,
-    "formatCompleteTime": true
+    "formatCompleteTime": true,
+    "formatTableDate": true
   }
 }
