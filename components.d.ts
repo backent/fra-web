@@ -29,7 +29,6 @@ declare module 'vue' {
     BuyNow: typeof import('./src/@core/components/BuyNow.vue')['default']
     CardAddEditDialog: typeof import('./src/components/dialogs/CardAddEditDialog.vue')['default']
     CardFraCategory: typeof import('./src/components/CardFraCategory.vue')['default']
-    CardFraDocument: typeof import('./src/components/CardFraDocument.vue')['default']
     CardFraToplist: typeof import('./src/components/CardFraToplist.vue')['default']
     CardHome: typeof import('./src/components/CardHome.vue')['default']
     CardStatisticsHorizontal: typeof import('./src/@core/components/cards/CardStatisticsHorizontal.vue')['default']
