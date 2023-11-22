@@ -234,7 +234,7 @@ const computedListTop = computed(() => {
     if (item.type === 'category') {
       list = item.list.map(listItem => {
         return {
-          title: listItem.title,
+          title: `<div class="truncate">${listItem.title}</div>`,
           subtitle: `<span class="text-${config.colors[listItem.category.toLowerCase()]}">${listItem.category}</span>`
         }
       })
@@ -320,7 +320,7 @@ const computedListTop = computed(() => {
 }
 
 .list-category-card {
-  height: 220px;
+  height: 250px;
 }
 
 .list-top-card {

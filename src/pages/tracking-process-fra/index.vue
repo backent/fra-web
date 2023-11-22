@@ -166,6 +166,8 @@ const result = [
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  padding: 6px 0;
 }
 
 :deep(.result-item button) {
