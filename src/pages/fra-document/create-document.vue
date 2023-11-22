@@ -37,13 +37,13 @@
           <div class="text-h6 mb-4">Fraud Schemes Assessment</div>
           <div class="d-flex">
             <VCol cols="4" class="pl-0">
-              <AppTextField class="mb-3" label="Likehood" placeholder="Select Likehood" />
+              <AppTextField class="mb-3" label="Likehood" placeholder="Select Likehood" readonly />
             </VCol>
             <VCol cols="4">
-              <AppTextField class="mb-3" label="Impact" placeholder="Select Impact" />
+              <AppTextField class="mb-3" label="Impact" placeholder="Select Impact" readonly />
             </VCol>
             <VCol cols="4" class="pr-0">
-              <AppTextField class="mb-3" label="Risk Level" placeholder="Please select likelihood & impact" readonly
+              <AppTextField class="mb-3" label="Risk Level" placeholder="Please select likelihood & impact" disabled
                 color="secondary" />
             </VCol>
           </div>
