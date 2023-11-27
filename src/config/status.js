@@ -1,6 +1,8 @@
 const colors = {
   'approved': 'success',
-  'on progress': 'secondary'
+  'on progress': 'secondary',
+  'reject': 'error',
+  'new': 'info',
 }
 
 const getColorFromStatus = function(status) {

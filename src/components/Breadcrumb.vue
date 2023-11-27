@@ -14,21 +14,20 @@ import { useRoute } from 'vue-router';
 const route = useRoute()
 
 const generatedBreadcrumb = computed(() => {
-  const reducedRoute = route.matched.reduce((pre, curr) => {
-    if (pre[curr.path]) {
-      return pre
-    }
-    const splitted = curr.path.split('/')
+  const reducedRoute = route.fullPath.split('/').splice(1).reduce((pre, curr) => {
     return {
-      ...pre,
-      [curr.path]: {
-        name: splitted[splitted.length - 1].replaceAll('-', ' '),
-        path: curr.path
-      }
+      prePath: pre.prePath + `/${curr}`,
+      mapped: [...pre.mapped, {
+        name: curr.replaceAll('-', ' '),
+        path: pre.prePath + `/${curr}`
+      }]
     }
-  }, {})
+  }, {
+    prePath: '',
+    mapped: []
+  })
 
-  return Object.values(reducedRoute)
+  return reducedRoute.mapped
 })
 </script>
 

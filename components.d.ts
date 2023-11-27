@@ -61,6 +61,7 @@ declare module 'vue' {
     TheCustomizer: typeof import('./src/@core/components/TheCustomizer.vue')['default']
     ThemeSwitcher: typeof import('./src/@core/components/ThemeSwitcher.vue')['default']
     TiptapEditor: typeof import('./src/@core/components/TiptapEditor.vue')['default']
+    TitlePage: typeof import('./src/components/TitlePage.vue')['default']
     TwoFactorAuthDialog: typeof import('./src/components/dialogs/TwoFactorAuthDialog.vue')['default']
     UploadFraDocumentDialog: typeof import('./src/components/UploadFraDocumentDialog.vue')['default']
     UserInfoEditDialog: typeof import('./src/components/dialogs/UserInfoEditDialog.vue')['default']

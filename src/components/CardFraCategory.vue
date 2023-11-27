@@ -12,8 +12,10 @@
       </div>
     </VCardText>
     <div class="card-action">
-      Document list
-      <VIcon icon="tabler-chevron-right" />
+      <RouterLink :to="`/fra-document/${title.toLowerCase()}-list`">
+        Document list
+        <VIcon icon="tabler-chevron-right" />
+      </RouterLink>
     </div>
   </VCard>
 </template>

@@ -2,7 +2,7 @@
   <VContainer>
     <Breadcrumb class="mb-5" />
 
-    <div class="text-h4 mb-2">Create <span class="text-secondary">Document</span></div>
+    <TitlePage primary-text="Create" secondary-text="Document" />
 
     <VCard>
       <VCardText>
@@ -88,6 +88,7 @@
 <script setup>
 import { useAppStore } from '@/@core/stores/app';
 import Breadcrumb from '@/components/Breadcrumb.vue';
+import TitlePage from '@/components/TitlePage.vue';
 import { useRouter } from 'vue-router';
 
 const appStore = useAppStore()

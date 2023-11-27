@@ -8,7 +8,7 @@
       </VRow>
 
       <VRow class="flex-column">
-        <div class="text-h3">{{ selectedPeriode }} <span class="text-secondary">Periode</span></div>
+        <TitlePage :primary-text="selectedPeriode" secondary-text="Periode" />
         <VCard>
           <VCardText>
             <VDataTable :headers="headers" :items="data" :items-per-page="5">
@@ -29,6 +29,7 @@
 </template>
 
 <script setup>
+import TitlePage from '@/components/TitlePage.vue';
 import { getColorFromStatus } from '@/config/status';
 import { formatTableDate } from '@/utils/formatter';
 import { ref } from 'vue';
