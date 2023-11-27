@@ -5,7 +5,7 @@ const formatCompleteTime = function(timestamp) {
 }
 
 const formatTableDate = function(timestamp) {
-  return dayjs(timestamp).format('D/MM/YYYY')
+  return dayjs(timestamp).format('D MMMM YYYY')
 }
 
 export {
