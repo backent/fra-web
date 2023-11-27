@@ -1,4 +1,5 @@
 <script setup>
+import ApplyForAnAccountDialog from '@/components/ApplyForAnAccountDialog.vue';
 import authV1BottomShape from '@images/svg/auth-v1-bottom-shape.svg?raw';
 import authV1TopShape from '@images/svg/auth-v1-top-shape.svg?raw';
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer';
@@ -13,28 +14,22 @@ const form = ref({
 })
 
 const isPasswordVisible = ref(false)
+const applyDialog = ref(false)
 </script>
 
 <template>
   <div class="auth-wrapper d-flex align-center justify-center pa-4">
     <div class="position-relative my-sm-16">
       <!-- 👉 Top shape -->
-      <VNodeRenderer
-        :nodes="h('div', { innerHTML: authV1TopShape })"
-        class="text-primary auth-v1-top-shape d-none d-sm-block"
-      />
+      <VNodeRenderer :nodes="h('div', { innerHTML: authV1TopShape })"
+        class="text-primary auth-v1-top-shape d-none d-sm-block" />
 
       <!-- 👉 Bottom shape -->
-      <VNodeRenderer
-        :nodes="h('div', { innerHTML: authV1BottomShape })"
-        class="text-primary auth-v1-bottom-shape d-none d-sm-block"
-      />
+      <VNodeRenderer :nodes="h('div', { innerHTML: authV1BottomShape })"
+        class="text-primary auth-v1-bottom-shape d-none d-sm-block" />
 
       <!-- 👉 Auth Card -->
-      <VCard
-        class="auth-card pa-4"
-        max-width="448"
-      >
+      <VCard class="auth-card pa-4" max-width="448">
         <VCardItem class="justify-center">
           <VCardTitle class="font-weight-bold text-uppercase text-h3 py-1">
             {{ themeConfig.app.title }}
@@ -43,7 +38,7 @@ const isPasswordVisible = ref(false)
 
         <VCardText class="pt-1">
           <p class="mb-0 text-center">
-            Fraud Risk Assessment Online 
+            Fraud Risk Assessment Online
           </p>
         </VCardText>
 
@@ -57,57 +52,37 @@ const isPasswordVisible = ref(false)
         </VCardText>
 
         <VCardText>
-          <VForm @submit.prevent="() => {}">
+          <VForm @submit.prevent="() => { }">
             <VRow>
               <!-- email -->
               <VCol cols="12">
-                <AppTextField
-                  v-model="form.email"
-                  autofocus
-                  label="NIK or Username"
-                  type="email"
-                  placeholder="NIK or username"
-                />
+                <AppTextField v-model="form.email" autofocus label="NIK or Username" type="email"
+                  placeholder="NIK or username" />
               </VCol>
 
               <!-- password -->
               <VCol cols="12" class="mb-5">
-                <AppTextField
-                  v-model="form.password"
-                  label="Password"
-                  placeholder="············"
+                <AppTextField v-model="form.password" label="Password" placeholder="············"
                   :type="isPasswordVisible ? 'text' : 'password'"
                   :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
-                  @click:append-inner="isPasswordVisible = !isPasswordVisible"
-                />
+                  @click:append-inner="isPasswordVisible = !isPasswordVisible" />
 
               </VCol>
-              
+
               <VCol>
                 <!-- login button -->
-                <RouterLink
-                  to="/"
-                >
-                  <VBtn
-                    block
-                    type="submit"
-                  >
+                <RouterLink to="/">
+                  <VBtn block type="submit">
                     Login
                   </VBtn>
                 </RouterLink>
               </VCol>
 
               <!-- create account -->
-              <VCol
-                cols="12"
-                class="text-center text-base"
-              >
-                <RouterLink
-                  class="text-primary ms-2"
-                  :to="{ name: 'login' }"
-                >
+              <VCol cols="12" class="text-center text-base">
+                <duv class="text-primary ms-2 cursor-pointer" @click="applyDialog = true">
                   Apply for an account
-                </RouterLink>
+                </duv>
               </VCol>
 
             </VRow>
@@ -115,6 +90,7 @@ const isPasswordVisible = ref(false)
         </VCardText>
       </VCard>
     </div>
+    <ApplyForAnAccountDialog v-model:active="applyDialog" />
   </div>
 </template>
 
