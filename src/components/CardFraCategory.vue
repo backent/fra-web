@@ -11,12 +11,12 @@
         {{ description }}
       </div>
     </VCardText>
-    <div class="card-action">
-      <RouterLink :to="`/fra-document/${title.toLowerCase()}-list`">
+    <RouterLink :to="`/fra-document/${title.toLowerCase()}-list`" class="card-action">
+      <div>
         Document list
         <VIcon icon="tabler-chevron-right" />
-      </RouterLink>
-    </div>
+      </div>
+    </RouterLink>
   </VCard>
 </template>
 
