@@ -4,6 +4,7 @@ import { themeConfig } from '@themeConfig'
 
 // Components
 import NavSearchBar from '@/layouts/components/NavSearchBar.vue'
+import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import UserProfile from '@/layouts/components/UserProfile.vue'
 import NavBarI18n from '@core/components/I18n.vue'
 
@@ -29,17 +30,10 @@ watch([
 <template>
   <VerticalNavLayout :nav-items="navItems">
     <!-- 👉 navbar -->
-    <template #navbar="{ toggleVerticalOverlayNavActive }">
-      <div class="d-flex h-100 align-center">
-        <IconBtn
-          id="vertical-nav-toggle-btn"
-          class="ms-n3 d-lg-none"
-          @click="toggleVerticalOverlayNavActive(true)"
-        >
-          <VIcon
-            size="26"
-            icon="tabler-menu-2"
-          />
+  <template #navbar="{ toggleVerticalOverlayNavActive }">
+    <div class="d-flex h-100 align-center">
+        <IconBtn id="vertical-nav-toggle-btn" class="ms-n3 d-lg-none" @click="toggleVerticalOverlayNavActive(true)">
+          <VIcon size="26" icon="tabler-menu-2" />
         </IconBtn>
 
         <!-- <NavbarThemeSwitcher /> -->
@@ -47,10 +41,9 @@ watch([
 
         <VSpacer />
 
-        <NavBarI18n
-          v-if="themeConfig.app.i18n.enable && themeConfig.app.i18n.langConfig?.length"
-          :languages="themeConfig.app.i18n.langConfig"
-        />
+        <NavBarI18n v-if="themeConfig.app.i18n.enable && themeConfig.app.i18n.langConfig?.length"
+          :languages="themeConfig.app.i18n.langConfig" />
+        <NavbarThemeSwitcher class="mr-3" />
         <UserProfile />
       </div>
     </template>
@@ -59,19 +52,15 @@ watch([
 
     <!-- 👉 Pages -->
     <RouterView v-slot="{ Component }">
-      <Suspense
-        :timeout="0"
-        @fallback="isFallbackStateActive = true"
-        @resolve="isFallbackStateActive = false"
-      >
+      <Suspense :timeout="0" @fallback="isFallbackStateActive = true" @resolve="isFallbackStateActive = false">
         <Component :is="Component" />
       </Suspense>
     </RouterView>
 
     <!-- 👉 Footer -->
     <!-- <template #footer>
-      <Footer />
-    </template> -->
+          <Footer />
+        </template> -->
 
     <!-- 👉 Customizer -->
     <!-- <TheCustomizer /> -->
