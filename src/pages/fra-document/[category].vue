@@ -15,7 +15,7 @@
             <span class="text-capitalize" :class="`text-${getColorFromStatus(value)}`">{{ value }}</span>
           </template>
           <template #item.action="{ value }" class="d-flex justify-around">
-            <VBtn variant="tonel" color="info" size="38">
+            <VBtn variant="tonel" color="info" size="38" @click="openDetailDialog()">
               <VIcon icon="tabler-eye" size="22" />
             </VBtn>
             <VBtn variant="tonel" color="success" size="38">
@@ -34,11 +34,13 @@
         </VDataTable>
       </VCardText>
     </VCard>
+    <DocumentDetailDialog v-model:active="detailDialog" />
   </VContainer>
 </template>
 
 <script setup>
 import Breadcrumb from '@/components/Breadcrumb.vue';
+import DocumentDetailDialog from '@/components/DocumentDetailDialog.vue';
 import TitlePage from '@/components/TitlePage.vue';
 import { getColorFromRisk } from '@/config/risk';
 import { getColorFromStatus } from '@/config/status';
@@ -118,13 +120,16 @@ const data = [
     action: 'action',
   },
 ]
-
-
 const route = useRoute()
+const detailDialog = ref(false)
 
 const currentCategory = computed(() => {
   const categoryParam = route?.params?.category ?? ''
   return categoryParam.split('-')[0]
 })
+
+const openDetailDialog = function () {
+  detailDialog.value = true
+}
 
 </script>
