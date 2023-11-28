@@ -58,9 +58,15 @@ import imageCard2 from '@images/pages/home-page-tracking-process-fra.png';
 definePage({ meta: { layout: 'blank' } })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .homepage {
   background-color: #FFFAFA;
+}
+
+@media (prefers-color-scheme: dark) {
+  .homepage {
+    background-color: rgb(var(--v-theme-surface));
+  }
 }
 
 .search-input {
