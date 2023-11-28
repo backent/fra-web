@@ -14,16 +14,24 @@
           <template #item.status="{ value }">
             <span class="text-capitalize" :class="`text-${getColorFromStatus(value)}`">{{ value }}</span>
           </template>
-          <template #item.action="{ value }" class="d-flex justify-around">
-            <VBtn variant="tonel" color="info" size="38" @click="openDetailDialog()">
-              <VIcon icon="tabler-eye" size="22" />
-            </VBtn>
-            <VBtn variant="tonel" color="success" size="38" @click="openApproveDialog()">
-              <VIcon icon="tabler-check" size="22" />
-            </VBtn>
-            <VBtn variant="tonel" color="error" size="38" @click="openRejectDialog()">
-              <VIcon icon="tabler-x" size="22" />
-            </VBtn>
+          <template #item.action="{ value }">
+            <VRow>
+              <VCol cols="4">
+                <VBtn variant="tonel" color="info" size="38" @click="openDetailDialog()">
+                  <VIcon icon="tabler-eye" size="22" />
+                </VBtn>
+              </VCol>
+              <VCol cols="4">
+                <VBtn variant="tonel" color="success" size="38" @click="openApproveDialog()">
+                  <VIcon icon="tabler-check" size="22" />
+                </VBtn>
+              </VCol>
+              <VCol cols="4">
+                <VBtn variant="tonel" color="error" size="38" @click="openRejectDialog()">
+                  <VIcon icon="tabler-x" size="22" />
+                </VBtn>
+              </VCol>
+            </VRow>
           </template>
           <template #item.created_at="{ item }">
             {{ formatTableDate(item.created_at) }}
