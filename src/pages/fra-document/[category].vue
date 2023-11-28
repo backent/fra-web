@@ -18,10 +18,10 @@
             <VBtn variant="tonel" color="info" size="38" @click="openDetailDialog()">
               <VIcon icon="tabler-eye" size="22" />
             </VBtn>
-            <VBtn variant="tonel" color="success" size="38">
+            <VBtn variant="tonel" color="success" size="38" @click="openApproveDialog()">
               <VIcon icon="tabler-check" size="22" />
             </VBtn>
-            <VBtn variant="tonel" color="error" size="38">
+            <VBtn variant="tonel" color="error" size="38" @click="openRejectDialog()">
               <VIcon icon="tabler-x" size="22" />
             </VBtn>
           </template>
@@ -34,7 +34,7 @@
         </VDataTable>
       </VCardText>
     </VCard>
-    <DocumentDetailDialog v-model:active="detailDialog" />
+    <DocumentDetailDialog v-model:active="detailDialog" v-model:mode="detailMode" />
   </VContainer>
 </template>
 
@@ -122,6 +122,7 @@ const data = [
 ]
 const route = useRoute()
 const detailDialog = ref(false)
+const detailMode = ref('overall')
 
 const currentCategory = computed(() => {
   const categoryParam = route?.params?.category ?? ''
@@ -130,6 +131,17 @@ const currentCategory = computed(() => {
 
 const openDetailDialog = function () {
   detailDialog.value = true
+  detailMode.value = 'overall'
+}
+
+const openApproveDialog = function () {
+  detailDialog.value = true
+  detailMode.value = 'approve'
+}
+
+const openRejectDialog = function () {
+  detailDialog.value = true
+  detailMode.value = 'reject'
 }
 
 </script>

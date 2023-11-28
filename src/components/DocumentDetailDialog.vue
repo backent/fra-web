@@ -44,6 +44,9 @@
           <VCol cols="10">
             Hacking ONT Telkom kemudian melakukan panggilan ke nomor premium call cantik milik fraudster
           </VCol>
+          <VCol cols="12">
+            <AppTextarea v-show="mode === 'reject'" label="Reject Note" placeholder="Reject note..." />
+          </VCol>
         </VRow>
 
         <VRow class="align-stretch standard-row mb-5">
@@ -72,6 +75,12 @@
               </VCardText>
             </VCard>
           </VCol>
+          <VCol cols="6">
+            <AppTextarea v-show="mode === 'reject'" label="Reject Note" placeholder="Reject note..." />
+          </VCol>
+          <VCol cols="6">
+            <AppTextarea v-show="mode === 'reject'" label="Reject Note" placeholder="Reject note..." />
+          </VCol>
         </VRow>
         <VDivider class="mb-5" />
         <VRow class="mb-5">
@@ -81,6 +90,9 @@
           <VCol cols="10">
             1. Kebocoran revenue <br>
             2. Reputasi Telkom di mata pelanggan
+          </VCol>
+          <VCol cols="12">
+            <AppTextarea v-show="mode === 'reject'" label="Reject Note" placeholder="Reject note..." />
           </VCol>
         </VRow>
         <VDivider class="mb-5" />
@@ -104,9 +116,12 @@
               Low
             </VChip>
           </VCol>
+          <VCol cols="12">
+            <AppTextarea v-show="mode === 'reject'" label="Reject Note" placeholder="Reject note..." />
+          </VCol>
         </VRow>
         <VDivider class="mb-5" />
-        <div class="text-h5 mb-3">Dampak Kualitatif:</div>
+        <div class="text-h5 mb-3">Justifikasi</div>
         <VRow class="mb-5">
           <VCol cols="2">
             Likelihood:
@@ -128,6 +143,9 @@
             2. Namun demikian kami menilai impact yang besar akan terjadi pada ketidakpuasan pelanggan yang memicu
             diadakannya pertemuan pembahasan formal yang hasilnya dituangkan secara tertulis
           </VCol>
+          <VCol cols="12">
+            <AppTextarea v-show="mode === 'reject'" label="Reject Note" placeholder="Reject note..." />
+          </VCol>
         </VRow>
         <VDivider class="mb-5" />
         <VCard class="mb-5">
@@ -136,11 +154,23 @@
             Product bisa dilanjutkan dengan catatan seluruh cotrol sudah siap dan akan dilaksanakan
           </VCardText>
         </VCard>
+        <AppTextarea v-show="mode === 'reject'" label="Reject Note" placeholder="Reject note..." />
         <div class="actions">
           <VDivider class="mb-5" />
-          <div class="d-flex justify-end">
-            <VBtn color="primary" @click="close()">
+          <div class="d-flex justify-end gap-3">
+            <VBtn variant="outlined" color="primary" @click="close()">
               Cancel
+            </VBtn>
+            <VBtn v-show="isApproveBtnVisible" :disabled="isRejectLoading" :loading="isApproveLoading" color="success"
+              @click="approve()">
+              Approve
+            </VBtn>
+            <VBtn v-show="isRejectBtnVisible" :disabled="isApproveLoading" color="error" @click="reject()">
+              Reject
+            </VBtn>
+            <VBtn v-show="isSubmitBtnVisible" :disabled="isApproveLoading" :loading="isRejectLoading" color="error"
+              @click="submit()">
+              Submit
             </VBtn>
           </div>
         </div>
@@ -151,39 +181,84 @@
 
 
 <script setup>
+import AppTextarea from '@/@core/components/app-form-elements/AppTextarea.vue';
 import { useAppStore } from '@/@core/stores/app';
 
 const props = defineProps({
   active: {
     type: Boolean,
     default: false
+  },
+  mode: {
+    type: String,
+    default: 'overall'
   }
 })
-const emits = defineEmits(['update:active'])
+const emits = defineEmits(['update:active', 'update:mode'])
 
 const appStore = useAppStore()
 const dialogValue = ref(false)
-const loadingApply = ref(false)
+const isLoading = ref(false)
+const actionOn = ref('')
 
 watchEffect(() => {
   dialogValue.value = props.active
+})
+
+const isApproveLoading = computed(() => {
+  return isLoading.value && actionOn.value === 'approve'
+})
+
+const isRejectLoading = computed(() => {
+  return isLoading.value && actionOn.value === 'reject'
+})
+
+const isApproveBtnVisible = computed(() => {
+  return props.mode === 'overall' || props.mode === 'approve'
+})
+
+const isRejectBtnVisible = computed(() => {
+  return props.mode === 'overall'
+})
+
+const isSubmitBtnVisible = computed(() => {
+  return props.mode === 'reject'
 })
 
 const close = function () {
   emits('update:active', false)
 }
 
-const apply = function () {
-  loadingApply.value = true
+const approve = function () {
+  isLoading.value = true
+  actionOn.value = 'approve'
   setTimeout(() => {
-    loadingApply.value = false
+    isLoading.value = false
     appStore.openSnackbar({
-      message: "Successfully Apply an Account",
+      message: "Successfully Approve Document",
       color: 'success',
       timeout: 1000
     })
     close()
   }, 1000)
+}
+
+const submit = function () {
+  isLoading.value = true
+  actionOn.value = 'reject'
+  setTimeout(() => {
+    isLoading.value = false
+    appStore.openSnackbar({
+      message: "Successfully Reject Document",
+      color: 'success',
+      timeout: 1000
+    })
+    close()
+  }, 1000)
+}
+
+const reject = function () {
+  emits('update:mode', 'reject')
 }
 
 </script>
