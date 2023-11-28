@@ -37,14 +37,16 @@
           <div class="text-h6 mb-4">Fraud Schemes Assessment</div>
           <div class="d-flex">
             <VCol cols="4" class="pl-0">
-              <AppTextField class="mb-3" label="Likehood" placeholder="Select Likehood" readonly />
+              <AppTextField v-model="likelihoodAssessment" class="mb-3" label="Likehood" placeholder="Select Likehood"
+                readonly @click="openLikelihoodSelectionDialog()" />
             </VCol>
             <VCol cols="4">
-              <AppTextField class="mb-3" label="Impact" placeholder="Select Impact" readonly />
+              <AppTextField v-model="impactAssessment" class="mb-3" label="Impact" placeholder="Select Impact" readonly
+                @click="openImpactSelectionDialog()" />
             </VCol>
             <VCol cols="4" class="pr-0">
-              <AppTextField class="mb-3" label="Risk Level" placeholder="Please select likelihood & impact" disabled
-                color="secondary" />
+              <AppTextField :model-value="calculateRiskLevel(likelihoodAssessment, impactAssessment)" class="mb-3"
+                label="Risk Level" placeholder="Please select likelihood & impact" disabled color="secondary" />
             </VCol>
           </div>
           <div class="alert-text">
@@ -82,13 +84,18 @@
         </VBtn>
       </VCardActions>
     </VCard>
+    <LikelihoodSelectionDialog v-model:active="likelihoodSelectionDialog" @submit="onLikelihoodSubmitHandler" />
+    <ImpactSelectionDialog v-model:active="impactSelectionDialog" @submit="onImpactSubmitHandler" />
   </VContainer>
 </template>
 
 <script setup>
 import { useAppStore } from '@/@core/stores/app';
 import Breadcrumb from '@/components/Breadcrumb.vue';
+import ImpactSelectionDialog from '@/components/ImpactSelectionDialog.vue';
+import LikelihoodSelectionDialog from '@/components/LikelihoodSelectionDialog.vue';
 import TitlePage from '@/components/TitlePage.vue';
+import { calculateRiskLevel } from '@/config/fraud';
 import { useRouter } from 'vue-router';
 
 const appStore = useAppStore()
@@ -96,7 +103,10 @@ const router = useRouter()
 
 const isLoading = ref(false)
 const actionOn = ref('')
-
+const likelihoodSelectionDialog = ref(false)
+const likelihoodAssessment = ref('')
+const impactSelectionDialog = ref(false)
+const impactAssessment = ref('')
 
 const numberedSteps = [
   {
@@ -155,6 +165,22 @@ const submit = function () {
 
 const save = function () {
   postSave()
+}
+
+const openLikelihoodSelectionDialog = function () {
+  likelihoodSelectionDialog.value = true
+}
+
+const onLikelihoodSubmitHandler = function (val) {
+  likelihoodAssessment.value = val
+}
+
+const openImpactSelectionDialog = function () {
+  impactSelectionDialog.value = true
+}
+
+const onImpactSubmitHandler = function (val) {
+  impactAssessment.value = val
 }
 
 
