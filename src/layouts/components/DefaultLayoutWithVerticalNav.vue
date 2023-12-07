@@ -7,8 +7,8 @@ import NavSearchBar from '@/layouts/components/NavSearchBar.vue'
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import UserProfile from '@/layouts/components/UserProfile.vue'
 import NavBarI18n from '@core/components/I18n.vue'
-
 // @layouts plugin
+import NavBarNotifications from '@/layouts/components/NavBarNotifications.vue'
 import { VerticalNavLayout } from '@layouts'
 
 // SECTION: Loading Indicator
@@ -30,8 +30,8 @@ watch([
 <template>
   <VerticalNavLayout :nav-items="navItems">
     <!-- 👉 navbar -->
-  <template #navbar="{ toggleVerticalOverlayNavActive }">
-    <div class="d-flex h-100 align-center">
+    <template #navbar="{ toggleVerticalOverlayNavActive }">
+      <div class="d-flex h-100 align-center">
         <IconBtn id="vertical-nav-toggle-btn" class="ms-n3 d-lg-none" @click="toggleVerticalOverlayNavActive(true)">
           <VIcon size="26" icon="tabler-menu-2" />
         </IconBtn>
@@ -44,6 +44,7 @@ watch([
         <NavBarI18n v-if="themeConfig.app.i18n.enable && themeConfig.app.i18n.langConfig?.length"
           :languages="themeConfig.app.i18n.langConfig" />
         <NavbarThemeSwitcher class="mr-3" />
+        <NavBarNotifications class="mr-3" />
         <UserProfile />
       </div>
     </template>

@@ -1,50 +1,21 @@
 <script setup>
-import avatar3 from '@images/avatars/avatar-3.png'
-import avatar4 from '@images/avatars/avatar-4.png'
-import avatar5 from '@images/avatars/avatar-5.png'
-import paypal from '@images/svg/paypal.svg'
 
 const notifications = ref([
   {
     id: 1,
-    img: avatar4,
-    title: 'Congratulation Flora! 🎉',
-    subtitle: 'Won the monthly best seller badge',
+    color: 'warning',
+    title: 'Your Assessment Has Feedback',
+    subtitle: 'Your assessment "Toll Fraud SLI 2" get feedback from reviewers.',
     time: 'Today',
     isSeen: true,
   },
   {
     id: 2,
-    text: 'Tom Holland',
-    title: 'New user registered.',
-    subtitle: '5 hours ago',
+    color: 'success',
+    title: 'Your Assessment Has Been Released',
+    subtitle: 'Your assessment "Toll Fraud SLI" has been released.',
     time: 'Yesterday',
     isSeen: false,
-  },
-  {
-    id: 3,
-    img: avatar5,
-    title: 'New message received 👋🏻',
-    subtitle: 'You have 10 unread messages',
-    time: '11 Aug',
-    isSeen: true,
-  },
-  {
-    id: 4,
-    img: paypal,
-    title: 'PayPal',
-    subtitle: 'Received Payment',
-    time: '25 May',
-    isSeen: false,
-    color: 'error',
-  },
-  {
-    id: 5,
-    img: avatar3,
-    title: 'Received Order 📦',
-    subtitle: 'New order received from john',
-    time: '19 Mar',
-    isSeen: true,
   },
 ])
 
@@ -80,11 +51,6 @@ const handleNotificationClick = notification => {
 </script>
 
 <template>
-  <Notifications
-    :notifications="notifications"
-    @remove="removeNotification"
-    @read="markRead"
-    @unread="markUnRead"
-    @click:notification="handleNotificationClick"
-  />
+  <Notifications :notifications="notifications" @remove="removeNotification" @read="markRead" @unread="markUnRead"
+    @click:notification="handleNotificationClick" />
 </template>
