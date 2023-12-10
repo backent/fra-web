@@ -11,4 +11,8 @@ export default [
     title: 'Monitoring & Evaluation',
     to: { name: 'monitoring-evaluation' },
   },
+  {
+    title: 'Account Request',
+    to: { name: 'account-request' },
+  },
 ]
