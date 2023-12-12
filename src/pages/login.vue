@@ -2,8 +2,8 @@
 import ApplyForAnAccountDialog from '@/components/ApplyForAnAccountDialog.vue';
 import authV1BottomShape from '@images/svg/auth-v1-bottom-shape.svg?raw';
 import authV1TopShape from '@images/svg/auth-v1-top-shape.svg?raw';
+import { layoutConfig } from '@layouts';
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer';
-import { themeConfig } from '@themeConfig';
 
 definePage({ meta: { layout: 'blank' } })
 
@@ -30,17 +30,9 @@ const applyDialog = ref(false)
 
       <!-- 👉 Auth Card -->
       <VCard class="auth-card pa-4" max-width="448">
-        <VCardItem class="justify-center">
-          <VCardTitle class="font-weight-bold text-uppercase text-h3 py-1">
-            {{ themeConfig.app.title }}
-          </VCardTitle>
-        </VCardItem>
-
-        <VCardText class="pt-1">
-          <p class="mb-0 text-center">
-            Fraud Risk Assessment Online
-          </p>
-        </VCardText>
+        <div class="d-flex justify-center">
+          <VNodeRenderer class="img-logo" :nodes="layoutConfig.app.logo" />
+        </div>
 
         <VCardText class="pt-1">
           <h4 class="text-h4 mb-1">
@@ -94,6 +86,11 @@ const applyDialog = ref(false)
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @use "@core/scss/template/pages/page-auth.scss";
+
+img {
+  max-width: 160px;
+  height: auto;
+}
 </style>
