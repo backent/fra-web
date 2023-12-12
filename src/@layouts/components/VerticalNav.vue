@@ -8,7 +8,6 @@ import {
 import { useLayoutConfigStore } from '@layouts/stores/config'
 import { injectionKeyIsVerticalNavHovered } from '@layouts/symbols'
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
-import { VNodeRenderer } from './VNodeRenderer'
 
 const props = defineProps({
   tag: {
@@ -83,7 +82,7 @@ const hideTitleAndIcon = configStore.isVerticalNavMini(isHovered)
       <slot name="nav-header">
         <div class="app-logo app-title-wrapper flex-column">
           <RouterLink to="/">
-            <VNodeRenderer :nodes="layoutConfig.app.logo" />
+            <img src="@/assets/logo.png" />
           </RouterLink>
         </div>
         <!-- 👉 Vertical nav actions -->

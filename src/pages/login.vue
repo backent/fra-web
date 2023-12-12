@@ -2,7 +2,6 @@
 import ApplyForAnAccountDialog from '@/components/ApplyForAnAccountDialog.vue';
 import authV1BottomShape from '@images/svg/auth-v1-bottom-shape.svg?raw';
 import authV1TopShape from '@images/svg/auth-v1-top-shape.svg?raw';
-import { layoutConfig } from '@layouts';
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer';
 
 definePage({ meta: { layout: 'blank' } })
@@ -31,7 +30,7 @@ const applyDialog = ref(false)
       <!-- 👉 Auth Card -->
       <VCard class="auth-card pa-4" max-width="448">
         <div class="d-flex justify-center">
-          <VNodeRenderer class="img-logo" :nodes="layoutConfig.app.logo" />
+          <img class="img-logo" src="@/assets/logo.png" />
         </div>
 
         <VCardText class="pt-1">
