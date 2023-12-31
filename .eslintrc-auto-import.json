@@ -352,6 +352,10 @@
     "whenever": true,
     "useClipboardItems": true,
     "formatCompleteTime": true,
-    "formatTableDate": true
+    "formatTableDate": true,
+    "DeleteApi": true,
+    "GetApi": true,
+    "PostApi": true,
+    "PutApi": true
   }
 }

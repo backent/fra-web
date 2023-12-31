@@ -4,16 +4,25 @@ import authV1BottomShape from '@images/svg/auth-v1-bottom-shape.svg?raw';
 import authV1TopShape from '@images/svg/auth-v1-top-shape.svg?raw';
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer';
 
+import { useAuthStore } from '@/store/auth';
+
 definePage({ meta: { layout: 'blank' } })
 
+const authStore = useAuthStore()
+
 const form = ref({
-  email: '',
+  nik: '',
   password: '',
   remember: false,
 })
 
 const isPasswordVisible = ref(false)
 const applyDialog = ref(false)
+
+const login = function () {
+  return authStore.login(form.value)
+}
+
 </script>
 
 <template>
@@ -35,7 +44,7 @@ const applyDialog = ref(false)
 
         <VCardText class="pt-1">
           <h4 class="text-h4 mb-1">
-            Login
+            Login aewf
           </h4>
           <p class="mb-0">
             Lorem ipsum is the dummy text.
@@ -43,11 +52,11 @@ const applyDialog = ref(false)
         </VCardText>
 
         <VCardText>
-          <VForm @submit.prevent="() => { }">
+          <VForm @submit.prevent="login()">
             <VRow>
-              <!-- email -->
+              <!-- nik -->
               <VCol cols="12">
-                <AppTextField v-model="form.email" autofocus label="NIK or Username" type="email"
+                <AppTextField v-model="form.nik" autofocus label="NIK or Username" type="email"
                   placeholder="NIK or username" />
               </VCol>
 
@@ -62,18 +71,16 @@ const applyDialog = ref(false)
 
               <VCol>
                 <!-- login button -->
-                <RouterLink to="/">
-                  <VBtn block type="submit">
-                    Login
-                  </VBtn>
-                </RouterLink>
+                <VBtn block type="submit">
+                  Login
+                </VBtn>
               </VCol>
 
               <!-- create account -->
               <VCol cols="12" class="text-center text-base">
-                <duv class="text-primary ms-2 cursor-pointer" @click="applyDialog = true">
+                <div class="text-primary ms-2 cursor-pointer" @click="applyDialog = true">
                   Apply for an account
-                </duv>
+                </div>
               </VCol>
 
             </VRow>

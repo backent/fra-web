@@ -1,6 +1,6 @@
-import { fileURLToPath } from 'node:url'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
+import { fileURLToPath } from 'node:url'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { VueRouterAutoImports, getPascalCaseRouteName } from 'unplugin-vue-router'
@@ -102,4 +102,13 @@ export default defineConfig({
       './src/**/*.vue',
     ],
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8022',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      }
+    }
+  }
 })

@@ -7,7 +7,11 @@ export {}
 declare global {
   const $api: typeof import('./src/utils/api.js')['$api']
   const COOKIE_MAX_AGE_1_YEAR: typeof import('./src/utils/constants.js')['COOKIE_MAX_AGE_1_YEAR']
+  const DeleteApi: typeof import('./src/utils/api.js')['DeleteApi']
   const EffectScope: typeof import('vue')['EffectScope']
+  const GetApi: typeof import('./src/utils/api.js')['GetApi']
+  const PostApi: typeof import('./src/utils/api.js')['PostApi']
+  const PutApi: typeof import('./src/utils/api.js')['PutApi']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
   const alphaDashValidator: typeof import('./src/@core/utils/validators.js')['alphaDashValidator']
   const alphaValidator: typeof import('./src/@core/utils/validators.js')['alphaValidator']
@@ -359,7 +363,11 @@ declare module 'vue' {
   interface ComponentCustomProperties {
     readonly $api: UnwrapRef<typeof import('./src/utils/api.js')['$api']>
     readonly COOKIE_MAX_AGE_1_YEAR: UnwrapRef<typeof import('./src/utils/constants.js')['COOKIE_MAX_AGE_1_YEAR']>
+    readonly DeleteApi: UnwrapRef<typeof import('./src/utils/api.js')['DeleteApi']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
+    readonly GetApi: UnwrapRef<typeof import('./src/utils/api.js')['GetApi']>
+    readonly PostApi: UnwrapRef<typeof import('./src/utils/api.js')['PostApi']>
+    readonly PutApi: UnwrapRef<typeof import('./src/utils/api.js')['PutApi']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
     readonly alphaDashValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['alphaDashValidator']>
     readonly alphaValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['alphaValidator']>
@@ -705,7 +713,11 @@ declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     readonly $api: UnwrapRef<typeof import('./src/utils/api.js')['$api']>
     readonly COOKIE_MAX_AGE_1_YEAR: UnwrapRef<typeof import('./src/utils/constants.js')['COOKIE_MAX_AGE_1_YEAR']>
+    readonly DeleteApi: UnwrapRef<typeof import('./src/utils/api.js')['DeleteApi']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
+    readonly GetApi: UnwrapRef<typeof import('./src/utils/api.js')['GetApi']>
+    readonly PostApi: UnwrapRef<typeof import('./src/utils/api.js')['PostApi']>
+    readonly PutApi: UnwrapRef<typeof import('./src/utils/api.js')['PutApi']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
     readonly alphaDashValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['alphaDashValidator']>
     readonly alphaValidator: UnwrapRef<typeof import('./src/@core/utils/validators.js')['alphaValidator']>
