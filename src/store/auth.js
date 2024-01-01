@@ -5,13 +5,18 @@ import { defineStore } from "pinia";
 export const useAuthStore = defineStore('auth', {
   state() {
     return {
-      currentUser: {},
+      currentUser: {
+        id: null
+      },
       currentToken: useStorage('token', null)
     }
   },
   getters: {
     isTokenExist() {
       return !!this.currentToken && this.currentToken !== 'undefined' && this.currentToken !== 'null'
+    },
+    currentUserExists() {
+      return !!this.currentUser.id
     }
   },
   actions: {
@@ -19,6 +24,9 @@ export const useAuthStore = defineStore('auth', {
       return postAuth(body)
         .then(res => {
           this.storeToken(res.data.token)
+          // need to change code to actual currentUser data from be
+          this.currentUser.id = 1
+          console.log('after set', this.currentUser)
           return res
         })
     },
@@ -27,9 +35,14 @@ export const useAuthStore = defineStore('auth', {
     },
     async fetchCurrentUser() {
       return getCurrentUser()
+        .then(res => {
+          // need to change code to actual currentUser data from be
+          this.currentUser.id = 1
+          return res
+        })
     },
     async initializeCurrentUser() {
-      if (this.isTokenExist) {
+      if (this.currentUserExists) {
         return Promise.resolve()
       } else {
         return this.fetchCurrentUser()
