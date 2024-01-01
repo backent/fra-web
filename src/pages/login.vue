@@ -5,13 +5,15 @@ import authV1TopShape from '@images/svg/auth-v1-top-shape.svg?raw';
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer';
 
 import { useAuthStore } from '@/store/auth';
+import { useRouter } from 'vue-router';
 
 definePage({ meta: { layout: 'blank' } })
 
 const authStore = useAuthStore()
+const router = useRouter()
 
 const form = ref({
-  nik: '',
+  username: '',
   password: '',
   remember: false,
 })
@@ -21,6 +23,10 @@ const applyDialog = ref(false)
 
 const login = function () {
   return authStore.login(form.value)
+    .then(authStore.initializeCurrentUser)
+    .then(() => {
+      router.push('/')
+    })
 }
 
 </script>
@@ -54,9 +60,9 @@ const login = function () {
         <VCardText>
           <VForm @submit.prevent="login()">
             <VRow>
-              <!-- nik -->
+              <!-- username -->
               <VCol cols="12">
-                <AppTextField v-model="form.nik" autofocus label="NIK or Username" type="email"
+                <AppTextField v-model="form.username" autofocus label="NIK or Username" type="email"
                   placeholder="NIK or username" />
               </VCol>
 

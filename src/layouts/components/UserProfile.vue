@@ -1,5 +1,15 @@
 <script setup>
+import { useAuthStore } from '@/store/auth';
 import avatar1 from '@images/avatars/avatar-1.png';
+import { useRouter } from 'vue-router';
+
+const authStore = useAuthStore()
+const router = useRouter()
+
+const logout = function () {
+  authStore.logout()
+  router.push('/login')
+}
 </script>
 
 <template>
@@ -28,10 +38,10 @@ import avatar1 from '@images/avatars/avatar-1.png';
             <VListItemSubtitle>Admin</VListItemSubtitle>
           </VListItem>
 
-        <!-- <VDivider class="my-2" /> -->
+          <!-- <VDivider class="my-2" /> -->
 
-        <!-- 👉 Profile -->
-        <!-- <VListItem link>
+          <!-- 👉 Profile -->
+          <!-- <VListItem link>
             <template #prepend>
               <VIcon
                 class="me-2"
@@ -43,8 +53,8 @@ import avatar1 from '@images/avatars/avatar-1.png';
               <VListItemTitle>Profile</VListItemTitle>
           </VListItem> -->
 
-        <!-- 👉 Settings -->
-        <!-- <VListItem link>
+          <!-- 👉 Settings -->
+          <!-- <VListItem link>
             <template #prepend>
               <VIcon
                 class="me-2"
@@ -56,8 +66,8 @@ import avatar1 from '@images/avatars/avatar-1.png';
               <VListItemTitle>Settings</VListItemTitle>
           </VListItem> -->
 
-        <!-- 👉 Pricing -->
-        <!-- <VListItem link>
+          <!-- 👉 Pricing -->
+          <!-- <VListItem link>
             <template #prepend>
               <VIcon
                 class="me-2"
@@ -69,8 +79,8 @@ import avatar1 from '@images/avatars/avatar-1.png';
               <VListItemTitle>Pricing</VListItemTitle>
           </VListItem> -->
 
-        <!-- 👉 FAQ -->
-        <!-- <VListItem link>
+          <!-- 👉 FAQ -->
+          <!-- <VListItem link>
             <template #prepend>
               <VIcon
                 class="me-2"
@@ -86,7 +96,7 @@ import avatar1 from '@images/avatars/avatar-1.png';
           <VDivider class="my-2" />
 
           <!-- 👉 Logout -->
-          <VListItem to="/login">
+          <VListItem @click="logout()">
             <template #prepend>
               <VIcon class="me-2" icon="tabler-logout" size="22" />
             </template>

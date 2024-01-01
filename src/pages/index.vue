@@ -55,7 +55,7 @@ import imageCard1 from '@images/pages/home-page-document-fra.png';
 import imageCard3 from '@images/pages/home-page-monitoring-evaluation.png';
 import imageCard2 from '@images/pages/home-page-tracking-process-fra.png';
 
-definePage({ meta: { layout: 'blank' } })
+definePage({ meta: { layout: 'blank-auth' } })
 </script>
 
 <style lang="scss" scoped>

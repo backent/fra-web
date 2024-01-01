@@ -1,14 +1,18 @@
-import { ofetch } from 'ofetch'
+import { useStorage } from '@vueuse/core';
+import { ofetch } from 'ofetch';
 
 const baseApiConfig = {
   baseURL: '/api',
   async onRequest({ options }) {
-    const accessToken = useCookie('accessToken').value
-    if (accessToken) {
-      options.headers = {
-        ...options.headers,
-        Authorization: `Bearer ${accessToken}`,
-      }
+    const token = useStorage('token').value
+    options.headers = {
+      ...options.headers,
+      Authorization: token,
+    }
+  },
+  async onResponseError({ response }) {
+    if (response.status === 401) {
+      window.location.href = '/login'
     }
   },
 }
