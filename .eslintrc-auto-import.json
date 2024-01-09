@@ -356,6 +356,7 @@
     "DeleteApi": true,
     "GetApi": true,
     "PostApi": true,
-    "PutApi": true
+    "PutApi": true,
+    "pathParse": true
   }
 }
