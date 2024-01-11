@@ -5,7 +5,8 @@
 
     <VCard>
       <VCardText>
-        <VDataTable :headers="headers" :items="data" :items-per-page="5">
+        <VDataTableServer :headers="headers" :items="data" v-model:items-per-page="query.take" v-model:page="query.page"
+          :items-length="data.length" @update:options="onUpdateOptions">
           <template #item.risk_level="{ value }">
             <VChip :color="getColorFromRisk(value)" variant="elevated">
               <span class="text-capitalize">{{ value }}</span>
@@ -39,7 +40,7 @@
           <template #item.updated_at="{ item }">
             {{ formatTableDate(item.updated_at) }}
           </template>
-        </VDataTable>
+        </VDataTableServer>
       </VCardText>
     </VCard>
     <DocumentDetailDialog v-model:active="detailDialog" v-model:mode="detailMode" />
@@ -52,17 +53,18 @@ import DocumentDetailDialog from '@/components/DocumentDetailDialog.vue';
 import TitlePage from '@/components/TitlePage.vue';
 import { getColorFromRisk } from '@/config/risk';
 import { getColorFromStatus } from '@/config/status';
+import { useDocumentStore } from '@/store/document';
 import { formatTableDate } from '@/utils/formatter';
-import { computed } from 'vue';
+import { computed, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { VDataTable } from 'vuetify/labs/VDataTable';
+import { VDataTableServer } from 'vuetify/labs/VDataTable';
 
 const headers = [
   {
-    title: 'Title', key: 'title', sortable: false
+    title: 'Title', key: 'risk_name', sortable: true
   },
   {
-    title: 'Sumber Resiko', key: 'source_risk', sortable: false
+    title: 'Sumber Resiko', key: 'source_risk', sortable: true
   },
   {
     title: 'Risk Level', key: 'risk_level', sortable: false
@@ -81,61 +83,44 @@ const headers = [
   },
 ]
 
-const data = [
-  {
-    title: 'Toll Fraud SLI',
-    source_risk: 'Internal & Ekternal',
-    risk_level: 'low',
-    created_at: 1700492127549,
-    updated_at: 1700492127549,
-    status: 'new',
-    action: 'action',
-  },
-  {
-    title: 'Toll Fraud SLI',
-    source_risk: 'Internal & Ekternal',
-    risk_level: 'medium',
-    created_at: 1700492127549,
-    updated_at: 1700492127549,
-    status: 'reject',
-    action: 'action',
-  },
-  {
-    title: 'Toll Fraud SLI',
-    source_risk: 'Internal & Ekternal',
-    risk_level: 'high',
-    created_at: 1700492127549,
-    updated_at: 1700492127549,
-    status: 'reject',
-    action: 'action',
-  },
-  {
-    title: 'Toll Fraud SLI',
-    source_risk: 'Internal & Ekternal',
-    risk_level: 'high',
-    created_at: 1700492127549,
-    updated_at: 1700492127549,
-    status: 'approved',
-    action: 'action',
-  },
-  {
-    title: 'Toll Fraud SLI',
-    source_risk: 'Internal & Ekternal',
-    risk_level: 'low',
-    created_at: 1700492127549,
-    updated_at: 1700492127549,
-    status: 'approved',
-    action: 'action',
-  },
-]
+const data = ref([])
+
+const defaultQuery = {
+  orderBy: 'created_at',
+  orderDirection: 'desc',
+  take: 10,
+  skip: 0
+}
 const route = useRoute()
+const documentStore = useDocumentStore()
 const detailDialog = ref(false)
 const detailMode = ref('overall')
+const query = ref({
+  ...defaultQuery,
+  page: 1
+})
+
+const take = ref(10)
 
 const currentCategory = computed(() => {
   const categoryParam = route?.params?.category ?? ''
   return categoryParam.split('-')[0]
 })
+
+watch(query, () => {
+  fetchDocuments()
+}, { deep: true })
+
+onMounted(() => {
+  fetchDocuments()
+})
+
+const fetchDocuments = function () {
+  documentStore.fetchDocuments(query.value)
+    .then(res => {
+      data.value = documentStore.documentResponseToTable(res)
+    })
+}
 
 const openDetailDialog = function () {
   detailDialog.value = true
@@ -152,4 +137,10 @@ const openRejectDialog = function () {
   detailMode.value = 'reject'
 }
 
+const onUpdateOptions = function (options) {
+  if (options.sortBy.length > 0) {
+    query.value.orderBy = options.sortBy[0].key
+    query.value.orderDirection = options.sortBy[0].order
+  }
+}
 </script>

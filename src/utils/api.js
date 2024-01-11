@@ -78,7 +78,7 @@ export const pathParse = function(url, params) {
   })
 
   if (Object.entries(params).length > 0 ) {
-    newUrl + objectToUrlParams(newParams)
+    newUrl +=  '?' + objectToUrlParams(newParams)
   }
 
   return newUrl
