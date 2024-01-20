@@ -121,7 +121,7 @@ onMounted(() => {
 })
 
 const fetchDocuments = function () {
-  documentStore.fetchDocuments(query.value)
+  documentStore.fetchDocuments({ ...query.value, take: query.value.take === -1 ? 9999 : query.value.take })
     .then(res => {
       data.value = documentStore.documentResponseToTable(res.data)
       totalData.value = res.extras.total
