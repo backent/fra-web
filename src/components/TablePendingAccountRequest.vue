@@ -3,12 +3,12 @@
     <template #item.action="{ item }">
       <VRow>
         <VCol cols="4">
-          <VBtn variant="tonel" color="success" size="38">
+          <VBtn variant="tonal" color="success" size="38">
             <VIcon icon="tabler-check" size="22" />
           </VBtn>
         </VCol>
         <VCol cols="4">
-          <VBtn variant="tonel" color="error" size="38">
+          <VBtn variant="tonal" color="error" size="38">
             <VIcon icon="tabler-x" size="22" />
           </VBtn>
         </VCol>

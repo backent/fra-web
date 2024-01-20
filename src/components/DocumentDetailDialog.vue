@@ -5,44 +5,57 @@
 
     <!-- Dialog Content -->
     <VCard>
-      <VCardTitle>
-        <span class="title mr-3">Toll Fraud SLI</span>
+      <VCardText v-show="!modelValue.id">
+        <div class="loader">
+          <VProgressCircular indeterminate color="primary" />
+        </div>
+      </VCardText>
+      <VCardTitle v-show="modelValue.id">
+        <span class="title mr-3">{{ modelValue.product_name }}</span>
         <VChip color="info" variant="elevated">
           <span class="text-capitalize">New</span>
         </VChip>
       </VCardTitle>
-      <VCardText>
-        <div class="d-flex gap-2 mb-5">
-          <VChip label color="info">
-            Internal & Eksternal
-          </VChip>
+      <VCardText v-show="modelValue.id">
+        <div class="d-flex justify-space-between align-center  mb-5">
+          <div class="d-flex gap-2">
+            <VChip label color="info">
+              Internal & Eksternal
+            </VChip>
 
-          <VChip label color="warning">
-            Dapat Diterima
-          </VChip>
+            <VChip label color="warning">
+              {{ displayedRisk.strategy_agreement }}
+            </VChip>
+          </div>
 
+          <div class="d-flex align-center">
+            <div class="d-flex align-center gap-2">
+              <span>Risk:</span>
+              <AppSelect class="filter-select" v-model="computedSelectedRisk" :items="computedRisksOptions"
+                item-title="text" item-value="value" return-object />
+            </div>
+          </div>
         </div>
 
         <div class="text-h5 mb-3">Deskripsi Risiko</div>
-
         <VRow>
           <VCol cols="2">
             Skema Fraud
           </VCol>
           <VCol cols="10">
-            International revenue sharing fraud
+            {{ displayedRisk.fraud_schema }}
           </VCol>
           <VCol cols="2">
             Motif Fraud
           </VCol>
           <VCol cols="10">
-            Mendapatkan keuntungan finansial
+            {{ displayedRisk.fraud_motive }}
           </VCol>
           <VCol cols="2">
             Teknik Fraud
           </VCol>
           <VCol cols="10">
-            Hacking ONT Telkom kemudian melakukan panggilan ke nomor premium call cantik milik fraudster
+            {{ displayedRisk.fraud_technique }}
           </VCol>
           <VCol cols="12">
             <AppTextarea v-show="mode === 'reject'" label="Reject Note" placeholder="Reject note..." />
@@ -53,25 +66,14 @@
           <VCol cols="6">
             <VCard class="card" title="Akar Penyebab:">
               <VCardText>
-                1a. Kelemahan ONT tidak memiliki binding Voice <br>
-                1b. Password SIP di OLT disimpan dalam mode clear text <br>
-                1c. Menggunakan password default di ONT <br>
-                1d. Level Firewall masih low <br>
-                Kelemahan security di perangkat pelanggan
+                <div class="pre-text">{{ displayedRisk.root_cause }}</div>
               </VCardText>
             </VCard>
           </VCol>
           <VCol cols="6">
             <VCard class="card" title="Control / Prosedure (Bisro):">
               <VCardText>
-                1a. Membuat password berbeda-beda untuk setiap number (kombinasi karakter unik besar kecil, etc) <br>
-                1b. Monitoring rutin ONT <br>
-                1c. Peningkatan level firewall di ONT <br>
-                2a. Perlu ditambahkan kebijakan demarkasi di buku produk <br>
-                2b. Perlu ada kalusul di kontrak dengan pelanggan, jika terjadi penggilan dari sisi perangkat pelanggan
-                maka sepenuhnya menjadi tanggung jawab pelanggan <br>
-                Normally close SLI untuk pelanggan baru <br>
-                Menginformasi ke DWS jika terjadi penghapusan tagihan akibat fraud
+                <div class="pre-text">{{ displayedRisk.bispro_control_procedure }}</div>
               </VCardText>
             </VCard>
           </VCol>
@@ -88,8 +90,7 @@
             <div class="text-h5">Dampak Kualitatif:</div>
           </VCol>
           <VCol cols="10">
-            1. Kebocoran revenue <br>
-            2. Reputasi Telkom di mata pelanggan
+            <div class="pre-text">{{ displayedRisk.qualitative_impact }}</div>
           </VCol>
           <VCol cols="12">
             <AppTextarea v-show="mode === 'reject'" label="Reject Note" placeholder="Reject note..." />
@@ -100,20 +101,20 @@
         <VRow class="mb-5">
           <VCol cols="4" class="d-flex align-center gap-5">
             <div class="mr-5">Likelihood:</div>
-            <VChip color="success">
-              Very Low
+            <VChip :color="getColorFromRisk(displayedRisk.assessment_likehood)">
+              <span class="text-capitalize">{{ displayedRisk.assessment_likehood }}</span>
             </VChip>
           </VCol>
           <VCol cols="4" class="d-flex align-center gap-5">
             <div class="mr-5">Impact:</div>
-            <VChip color="error">
-              Medium
+            <VChip :color="getColorFromRisk(displayedRisk.assessment_impact)">
+              <span class="text-capitalize">{{ displayedRisk.assessment_impact }}</span>
             </VChip>
           </VCol>
           <VCol cols="4" class="d-flex align-center gap-5">
             <div class="mr-5">Risk Level:</div>
-            <VChip color="warning">
-              Low
+            <VChip :color="getColorFromRisk(displayedRisk.assessment_risk_level)">
+              <span class="text-capitalize">{{ displayedRisk.assessment_risk_level }}</span>
             </VChip>
           </VCol>
           <VCol cols="12">
@@ -127,21 +128,13 @@
             Likelihood:
           </VCol>
           <VCol cols="10">
-            1. Secara historis SLI Toll Fraud (ribuan record):4,92 (2017). 2,81(2018), 5,2(1019), 5,7(2020), 6,4(2021).
-            <br>
-            2. Mitigasi sudah dibuatkan dan diharapkan diterapkan secara ketat, sehingga diprediksi presentasi kemungkinan
-            terjadi lebih kecil sekitar 0-5% dari volume total dalam satu periode
+            <div class="pre-text">{{ displayedRisk.likehood_justification }}</div>
           </VCol>
           <VCol cols="2">
             Impact:
           </VCol>
           <VCol cols="10">
-            1. Data historis dari tahun 2017
-            s.d 2022 total potensial loss akibat fraud ini mencapai:1. SLI Toll Fraud (Miliar):3,22 (2017),
-            1,85 (2018), 3,72 ( 2019), 3,7(2020), 5,4 (2021), 5,98
-            (2022) <br>
-            2. Namun demikian kami menilai impact yang besar akan terjadi pada ketidakpuasan pelanggan yang memicu
-            diadakannya pertemuan pembahasan formal yang hasilnya dituangkan secara tertulis
+            <div class="pre-text">{{ displayedRisk.impact_justification }}</div>
           </VCol>
           <VCol cols="12">
             <AppTextarea v-show="mode === 'reject'" label="Reject Note" placeholder="Reject note..." />
@@ -151,7 +144,7 @@
         <VCard class="mb-5">
           <VCardText>
             <div class="text-h5 mb-3">Rekomendasi:</div>
-            Product bisa dilanjutkan dengan catatan seluruh cotrol sudah siap dan akan dilaksanakan
+            <div class="pre-text">{{ displayedRisk.strategy_recomendation }}</div>
           </VCardText>
         </VCard>
         <AppTextarea v-show="mode === 'reject'" label="Reject Note" placeholder="Reject note..." />
@@ -183,6 +176,7 @@
 <script setup>
 import AppTextarea from '@/@core/components/app-form-elements/AppTextarea.vue';
 import { useAppStore } from '@/@core/stores/app';
+import { getColorFromRisk, templateWithDetail } from '@/config/risk';
 
 const props = defineProps({
   active: {
@@ -192,17 +186,28 @@ const props = defineProps({
   mode: {
     type: String,
     default: 'overall'
+  },
+  modelValue: {
+    type: Object,
+    default: () => ({ ...templateWithDetail })
   }
 })
-const emits = defineEmits(['update:active', 'update:mode'])
+const emits = defineEmits(['update:active', 'update:mode', 'update:modelValue'])
 
 const appStore = useAppStore()
 const dialogValue = ref(false)
 const isLoading = ref(false)
 const actionOn = ref('')
+const selectedRisk = ref('')
 
 watchEffect(() => {
   dialogValue.value = props.active
+})
+
+watch(() => props.active, (val) => {
+  if (!val) {
+    reset()
+  }
 })
 
 const isApproveLoading = computed(() => {
@@ -223,6 +228,48 @@ const isRejectBtnVisible = computed(() => {
 
 const isSubmitBtnVisible = computed(() => {
   return props.mode === 'reject'
+})
+
+const computedRisksOptions = computed(() => {
+  return props.modelValue.risk_detail.map(item => {
+    return {
+      text: item.risk_name,
+      value: item.id
+    }
+  })
+})
+
+const computedSelectedRisk = computed({
+  get() {
+    return !selectedRisk.value ? (computedRisksOptions.value[0] ?? { text: '', value: null }) : selectedRisk.value
+  },
+  set(v) {
+    selectedRisk.value = v
+  }
+})
+
+const displayedRisk = computed(() => {
+  return props.modelValue.risk_detail.find(risk => risk.id === computedSelectedRisk.value.value) ?? {
+    id: '',
+    document_id: '',
+    risk_name: '',
+    fraud_schema: '',
+    fraud_motive: '',
+    fraud_technique: '',
+    risk_source: '',
+    root_cause: '',
+    bispro_control_procedure: '',
+    qualitative_impact: '',
+    likehood_justification: '',
+    impact_justification: '',
+    strategy_agreement: '',
+    strategy_recomendation: '',
+    assessment_likehood: '',
+    assessment_impact: '',
+    assessment_risk_level: '',
+    created_at: '',
+    updated_at: ''
+  }
 })
 
 const close = function () {
@@ -261,6 +308,10 @@ const reject = function () {
   emits('update:mode', 'reject')
 }
 
+const reset = function () {
+  emits('update:modelValue', { ...templateWithDetail })
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -273,5 +324,22 @@ const reject = function () {
   bottom: 20px;
 
   background-color: rgba(var(--v-theme-surface), 0.8);
+}
+
+.loader {
+  height: 60vh;
+  width: 100%;
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.pre-text {
+  white-space: pre-wrap;
+}
+
+.filter-select {
+  min-width: 200px;
 }
 </style>

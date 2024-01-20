@@ -10,7 +10,7 @@ export const getDocuments = function(query) {
   return GetApi(newUrl)
 }
 
-export const getDocumentByUUID = function(query) {
-  const newUrl = pathParse(apis.current_user, query)
+export const getDocumentById = function(query) {
+  const newUrl = pathParse(apis.get_document_by_id, query)
   return GetApi(newUrl)
 }

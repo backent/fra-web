@@ -1,4 +1,4 @@
-import { getDocuments, postDocument } from "@/http/document";
+import { getDocumentById, getDocuments, postDocument } from "@/http/document";
 import { defineStore } from "pinia";
 
 export const useDocumentStore = defineStore('document', {
@@ -17,6 +17,9 @@ export const useDocumentStore = defineStore('document', {
   actions: {
     async fetchDocuments(query) {
       return getDocuments(query)
+    },
+    async fetchDocumentById(query) {
+      return getDocumentById(query)
         .then(res => res.data)
     },
     async submitDocument(body) {
@@ -25,9 +28,8 @@ export const useDocumentStore = defineStore('document', {
     documentResponseToTable(response) {
       return response.map(item => {
         return {
-          risk_name: item.risk_name,
-          source_risk: item.risk_source,
-          risk_level: item.assessment_risk_level,
+          id: item.id,
+          product_name: item.product_name,
           created_at: item.created_at,
           updated_at: item.updated_at,
           status: item.action,

@@ -1,7 +1,9 @@
 const colors = {
-  'low': 'yellow', 
+  'very low': 'success',
+  'low': 'success', 
   'medium': 'warning',
-  'high': 'error'
+  'high': 'error',
+  'very high': 'error'
 }
 
 const getColorFromRisk = function(risk) {
@@ -29,8 +31,13 @@ const template = {
   assessment_risk_level: '',
 }
 
+const templateWithDetail = {
+  ...template,
+  risk_detail: []
+}
+
 
 export {
-  colors, getColorFromRisk, template
+  colors, getColorFromRisk, template, templateWithDetail
 }
 

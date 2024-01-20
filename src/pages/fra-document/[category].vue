@@ -5,9 +5,9 @@
 
     <VCard>
       <VCardText>
-        <VDataTableServer :headers="headers" :items="data" v-model:items-per-page="query.take" v-model:page="query.page"
-          :items-length="data.length" @update:options="onUpdateOptions">
-          <template #item.risk_level="{ value }">
+        <VDataTableServer :headers="headers" :items="data" v-model:items-per-page="query.take" v-model:page="page"
+          :items-length="totalData" @update:options="onUpdateOptions">
+          <template #item.risk_level="{ value, item }">
             <VChip :color="getColorFromRisk(value)" variant="elevated">
               <span class="text-capitalize">{{ value }}</span>
             </VChip>
@@ -15,20 +15,20 @@
           <template #item.status="{ value }">
             <span class="text-capitalize" :class="`text-${getColorFromStatus(value)}`">{{ value }}</span>
           </template>
-          <template #item.action="{ value }">
+          <template #item.action="{ item }">
             <VRow>
               <VCol cols="4">
-                <VBtn variant="tonel" color="info" size="38" @click="openDetailDialog()">
+                <VBtn variant="tonal" color="info" size="38" @click="openDetailDialog(item.id)">
                   <VIcon icon="tabler-eye" size="22" />
                 </VBtn>
               </VCol>
               <VCol cols="4">
-                <VBtn variant="tonel" color="success" size="38" @click="openApproveDialog()">
+                <VBtn variant="tonal" color="success" size="38" @click="openApproveDialog(item.id)">
                   <VIcon icon="tabler-check" size="22" />
                 </VBtn>
               </VCol>
               <VCol cols="4">
-                <VBtn variant="tonel" color="error" size="38" @click="openRejectDialog()">
+                <VBtn variant="tonal" color="error" size="38" @click="openRejectDialog(item.id)">
                   <VIcon icon="tabler-x" size="22" />
                 </VBtn>
               </VCol>
@@ -43,7 +43,7 @@
         </VDataTableServer>
       </VCardText>
     </VCard>
-    <DocumentDetailDialog v-model:active="detailDialog" v-model:mode="detailMode" />
+    <DocumentDetailDialog v-model="selectedDocument" v-model:active="detailDialog" v-model:mode="detailMode" />
   </VContainer>
 </template>
 
@@ -51,7 +51,7 @@
 import Breadcrumb from '@/components/Breadcrumb.vue';
 import DocumentDetailDialog from '@/components/DocumentDetailDialog.vue';
 import TitlePage from '@/components/TitlePage.vue';
-import { getColorFromRisk } from '@/config/risk';
+import { getColorFromRisk, templateWithDetail } from '@/config/risk';
 import { getColorFromStatus } from '@/config/status';
 import { useDocumentStore } from '@/store/document';
 import { formatTableDate } from '@/utils/formatter';
@@ -61,19 +61,13 @@ import { VDataTableServer } from 'vuetify/labs/VDataTable';
 
 const headers = [
   {
-    title: 'Title', key: 'risk_name', sortable: true
+    title: 'Title', key: 'product_name', sortable: true
   },
   {
-    title: 'Sumber Resiko', key: 'source_risk', sortable: true
+    title: 'Created', key: 'created_at', sortable: true
   },
   {
-    title: 'Risk Level', key: 'risk_level', sortable: false
-  },
-  {
-    title: 'Created', key: 'created_at', sortable: false
-  },
-  {
-    title: 'Updated', key: 'updated_at', sortable: false
+    title: 'Updated', key: 'updated_at', sortable: true
   },
   {
     title: 'Status', key: 'status', sortable: false
@@ -84,6 +78,7 @@ const headers = [
 ]
 
 const data = ref([])
+const totalData = ref(0)
 
 const defaultQuery = {
   orderBy: 'created_at',
@@ -97,10 +92,20 @@ const detailDialog = ref(false)
 const detailMode = ref('overall')
 const query = ref({
   ...defaultQuery,
-  page: 1
+})
+
+const page = computed({
+  get() {
+    return (query.value.skip / query.value.take) + 1
+  },
+  set(v) {
+    query.value.skip = (v - 1) * query.value.take
+  }
 })
 
 const take = ref(10)
+
+const selectedDocument = ref({ ...templateWithDetail })
 
 const currentCategory = computed(() => {
   const categoryParam = route?.params?.category ?? ''
@@ -118,21 +123,31 @@ onMounted(() => {
 const fetchDocuments = function () {
   documentStore.fetchDocuments(query.value)
     .then(res => {
-      data.value = documentStore.documentResponseToTable(res)
+      data.value = documentStore.documentResponseToTable(res.data)
+      totalData.value = res.extras.total
     })
 }
 
-const openDetailDialog = function () {
+const fetchDocumentById = function (id) {
+  documentStore.fetchDocumentById({ id })
+    .then(res => {
+      selectedDocument.value = { ...res }
+    })
+}
+const openDetailDialog = function (id) {
+  fetchDocumentById(id)
   detailDialog.value = true
   detailMode.value = 'overall'
 }
 
-const openApproveDialog = function () {
+const openApproveDialog = function (id) {
+  fetchDocumentById(id)
   detailDialog.value = true
   detailMode.value = 'approve'
 }
 
-const openRejectDialog = function () {
+const openRejectDialog = function (id) {
+  fetchDocumentById(id)
   detailDialog.value = true
   detailMode.value = 'reject'
 }
