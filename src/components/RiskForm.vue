@@ -9,23 +9,28 @@
       <VWindow v-model="currentStep">
         <VWindowItem value="item-1">
           <VCardText>
-            <AppTextField v-model="form.risk_name" label="Nama Risiko" placeholder="Nama Risiko" />
+            <AppTextField v-model="form.risk_name" label="Nama Risiko" placeholder="Nama Risiko" :readonly="isReadonly" />
           </VCardText>
           <VDivider />
           <VCardText>
             <div class="text-h6 mb-4">Deskripsi Risiko</div>
-            <AppTextField v-model="form.fraud_schema" class="mb-3" label="Skema Fraud" placeholder="Skema Fraud" />
-            <AppTextField v-model="form.fraud_motive" class="mb-3" label="Motif Fraud" placeholder="Motif Fraud" />
-            <AppTextField v-model="form.fraud_technique" class="mb-3" label="Teknik Fraud" placeholder="Teknik Fraud" />
+            <AppTextField v-model="form.fraud_schema" class="mb-3" label="Skema Fraud" placeholder="Skema Fraud"
+              :readonly="isReadonly" />
+            <AppTextField v-model="form.fraud_motive" class="mb-3" label="Motif Fraud" placeholder="Motif Fraud"
+              :readonly="isReadonly" />
+            <AppTextField v-model="form.fraud_technique" class="mb-3" label="Teknik Fraud" placeholder="Teknik Fraud"
+              :readonly="isReadonly" />
           </VCardText>
           <VDivider />
           <VCardText>
-            <AppTextarea v-model="form.risk_source" class="mb-3" label="Sumber Risiko" placeholder="Sumber Risiko" />
-            <AppTextarea v-model="form.root_cause" class="mb-3" label="Akar Penyebab" placeholder="Akar Penyebab" />
+            <AppTextarea v-model="form.risk_source" class="mb-3" label="Sumber Risiko" placeholder="Sumber Risiko"
+              :readonly="isReadonly" />
+            <AppTextarea v-model="form.root_cause" class="mb-3" label="Akar Penyebab" placeholder="Akar Penyebab"
+              :readonly="isReadonly" />
             <AppTextarea v-model="form.bispro_control_procedure" class="mb-3" label="Control / Procedure (Bispro)"
-              placeholder="Control / Procedure (Bispro)" />
+              placeholder="Control / Procedure (Bispro)" :readonly="isReadonly" />
             <AppTextarea v-model="form.qualitative_impact" class="mb-3" label="Dampak Kualitatif"
-              placeholder="Dampak Kualitatif" />
+              placeholder="Dampak Kualitatif" :readonly="isReadonly" />
           </VCardText>
         </VWindowItem>
         <VWindowItem value="item-2">
@@ -52,16 +57,18 @@
           <VDivider />
           <VCardText>
             <div class="text-h6 mb-4">Justifikasi</div>
-            <AppTextarea v-model="form.likehood_justification" class="mb-3" label="Likehood" placeholder="Likehood" />
-            <AppTextarea v-model="form.impact_justification" class="mb-3" label="Impact" placeholder="Impact" />
+            <AppTextarea v-model="form.likehood_justification" class="mb-3" label="Likehood" placeholder="Likehood"
+              :readonly="isReadonly" />
+            <AppTextarea v-model="form.impact_justification" class="mb-3" label="Impact" placeholder="Impact"
+              :readonly="isReadonly" />
           </VCardText>
           <VDivider />
           <VCardText>
             <div class="text-h6 mb-4">Strategi Response</div>
             <AppTextField v-model="form.strategy_agreement" class="mb-3" label="Diterima / Tidak Diterima"
-              placeholder="Diterima / Tidak Diterima" />
-            <AppTextarea v-model="form.strategy_recomendation" class="mb-3" label="Rekomendasi"
-              placeholder="Rekomendasi" />
+              placeholder="Diterima / Tidak Diterima" :readonly="isReadonly" />
+            <AppTextarea v-model="form.strategy_recomendation" class="mb-3" label="Rekomendasi" placeholder="Rekomendasi"
+              :readonly="isReadonly" />
           </VCardText>
 
         </VWindowItem>
@@ -92,6 +99,10 @@ const props = defineProps({
     default: () => {
       return { ...template }
     }
+  },
+  isReadonly: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -116,7 +127,9 @@ watchEffect(() => {
 })
 
 const openLikelihoodSelectionDialog = function () {
-  likelihoodSelectionDialog.value = true
+  if (!props.isReadonly) {
+    likelihoodSelectionDialog.value = true
+  }
 }
 
 const onLikelihoodSubmitHandler = function (val) {
@@ -124,7 +137,9 @@ const onLikelihoodSubmitHandler = function (val) {
 }
 
 const openImpactSelectionDialog = function () {
-  impactSelectionDialog.value = true
+  if (!props.isReadonly) {
+    impactSelectionDialog.value = true
+  }
 }
 
 const onImpactSubmitHandler = function (val) {

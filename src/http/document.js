@@ -14,3 +14,8 @@ export const getDocumentById = function(query) {
   const newUrl = pathParse(apis.get_document_by_id, query)
   return GetApi(newUrl)
 }
+
+export const getDocumentsDistinctProductName = function(query) {
+  const newUrl = pathParse(apis.get_document_distinct_product_name, query)
+  return GetApi(newUrl)
+}

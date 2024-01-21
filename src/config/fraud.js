@@ -111,8 +111,8 @@ const riskLevel = [
 ]
 
 const calculateRiskLevel = function(likelihoodLevel, impactLevel) {
-  const likelihoodIndex = riskLevel.findIndex(level => level === likelihoodLevel)
-  const impactIndex = riskLevel.findIndex(level => level === impactLevel)
+  const likelihoodIndex = riskLevel.findIndex(level => level.toLowerCase() === likelihoodLevel.toLowerCase())
+  const impactIndex = riskLevel.findIndex(level => level.toLowerCase() === impactLevel.toLowerCase())
   if (likelihoodIndex < 0 || impactIndex < 0) {
     return ''
   } else {

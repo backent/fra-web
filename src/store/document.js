@@ -1,4 +1,4 @@
-import { getDocumentById, getDocuments, postDocument } from "@/http/document";
+import { getDocumentById, getDocuments, getDocumentsDistinctProductName, postDocument } from "@/http/document";
 import { defineStore } from "pinia";
 
 export const useDocumentStore = defineStore('document', {
@@ -17,6 +17,9 @@ export const useDocumentStore = defineStore('document', {
   actions: {
     async fetchDocuments(query) {
       return getDocuments(query)
+    },
+    async fetchDocumentsDistinctProductName(query) {
+      return getDocumentsDistinctProductName(query)
     },
     async fetchDocumentById(query) {
       return getDocumentById(query)

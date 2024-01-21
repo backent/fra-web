@@ -68,6 +68,9 @@ function objectToUrlParams(obj) {
 
 
 export const pathParse = function(url, params) {
+  if (!params) {
+    return url
+  }
   let newUrl = url
   let newParams = { ...params }
   Object.entries(params).forEach(([key, value]) => {

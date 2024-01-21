@@ -6,12 +6,14 @@
 
     <VCard>
       <VCardText>
-        <AppTextField v-model="productName" class="mb-5" label="Nama Produk" placeholder="Nama Produk" />
+        <AppCombobox v-model="productName" class="mb-5" label="Nama Produk" placeholder="Nama Produk"
+          :items="productReference" item-title="text" />
         <div class="d-flex">
           <div class="risk-list">
             <div>List risk</div>
             <div v-for="(risk, index) in listRisk" :key="index" class="risk-item">
-              <div class="risk-box" :class="{ active: index === activeIndexList }" @click="setActiveRisk(index)">
+              <div class="risk-box" :class="{ active: index === activeIndexList && !isOnPreviewSuggestion }"
+                @click="setActiveRisk(index)">
                 <span>{{ risk.risk_name }}</span>
               </div>
               <div class="risk-action">
@@ -30,9 +32,22 @@
                 </VBtn>
               </div>
             </div>
+
+            <div v-show="listRiskSuggestion.length > 0">Risk Suggestion</div>
+            <div v-for="(risk, index) in listRiskSuggestion" :key="index" class="risk-item">
+              <div class="risk-box" :class="{ active: index === activeIndexList && isOnPreviewSuggestion }"
+                @click="setActiveRiskSuggestion(index)">
+                <span>{{ risk.risk_name }}</span>
+              </div>
+              <div class="risk-action">
+                <VBtn size="38" variant="plain" @click="addSuggestionToRiskList(index)">
+                  <VIcon icon="tabler-square-plus" size="22" />
+                </VBtn>
+              </div>
+            </div>
           </div>
           <div class="risk-form">
-            <RiskForm v-if="listRisk.length > 0" v-model="listRisk[activeIndexList]" />
+            <RiskForm v-if="listRisk.length > 0" v-model="modelRiskForm" :is-readonly="isOnPreviewSuggestion" />
           </div>
         </div>
       </VCardText>
@@ -57,6 +72,7 @@ import RiskForm from '@/components/RiskForm.vue';
 import TitlePage from '@/components/TitlePage.vue';
 import { template } from '@/config/risk';
 import { useDocumentStore } from '@/store/document';
+import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 const appStore = useAppStore()
@@ -64,13 +80,16 @@ const router = useRouter()
 const documentStore = useDocumentStore()
 
 const isLoading = ref(false)
-const productName = ref('')
+const productNameTempStore = ref('')
 const actionOn = ref('')
 const listRisk = ref([
   { ...template, risk_name: 'Risk 1' }
 ])
 const activeIndexList = ref(0)
 const riskName = ref('')
+const productReference = ref([])
+const listRiskSuggestion = ref([])
+const isOnPreviewSuggestion = ref(false)
 
 
 const isSaveLoading = computed(() => {
@@ -81,6 +100,56 @@ const isSubmitLoading = computed(() => {
   return isLoading.value && actionOn.value === 'submit'
 })
 
+const modelRiskForm = computed({
+  get() {
+    if (isOnPreviewSuggestion.value) {
+      return listRiskSuggestion.value[activeIndexList.value]
+    } else {
+      return listRisk.value[activeIndexList.value]
+    }
+  },
+  set(v) {
+    if (!isOnPreviewSuggestion.value) {
+      listRisk.value[activeIndexList.value] = v
+    }
+  }
+})
+
+const productName = computed({
+  get() {
+    if (typeof productNameTempStore.value === 'string') {
+      return productNameTempStore.value
+    } else if (productNameTempStore.value?.text) {
+      return productNameTempStore.value.text
+    } else {
+      return ''
+    }
+  },
+  set(v) {
+    if (v?.id) {
+      fetchDocumentById(v.id)
+    }
+
+    return productNameTempStore.value = v
+  }
+})
+
+
+onMounted(() => {
+  fetchDocumentsDistinctProductName()
+})
+
+const fetchDocumentsDistinctProductName = function () {
+  documentStore.fetchDocumentsDistinctProductName()
+    .then(res => {
+      productReference.value = res.data.map(item => {
+        return {
+          ...item,
+          text: item.product_name
+        }
+      })
+    })
+}
 
 const postSubmit = function () {
   isLoading.value = true
@@ -163,6 +232,12 @@ const onFinallyDocument = function () {
 
 const setActiveRisk = function (index) {
   activeIndexList.value = index
+  isOnPreviewSuggestion.value = false
+}
+
+const setActiveRiskSuggestion = function (index) {
+  activeIndexList.value = index
+  isOnPreviewSuggestion.value = true
 }
 
 const addRisk = function () {
@@ -185,7 +260,21 @@ const removeRisk = function (index) {
     } else if (index < activeIndexList.value) {
       activeIndexList.value -= 1
     }
+    isOnPreviewSuggestion.value = false
   }
+}
+
+const fetchDocumentById = function (id) {
+  documentStore.fetchDocumentById({ id })
+    .then(res => {
+      listRiskSuggestion.value = [...res.risk_detail]
+    })
+}
+
+const addSuggestionToRiskList = function (index) {
+  listRisk.value.push({ ...listRiskSuggestion.value[index] })
+  listRiskSuggestion.value.splice(index, 1)
+  isOnPreviewSuggestion.value = true
 }
 
 </script>
