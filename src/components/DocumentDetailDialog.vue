@@ -63,6 +63,16 @@
         </VRow>
 
         <VRow class="align-stretch standard-row mb-5">
+          <VCol cols="12">
+            <VCard class="card" title="Risk Source:">
+              <VCardText>
+                <div class="pre-text">{{ displayedRisk.risk_source }}</div>
+              </VCardText>
+            </VCard>
+          </VCol>
+          <VCol cols="12">
+            <AppTextarea v-show="mode === 'reject'" label="Reject Note" placeholder="Reject note..." />
+          </VCol>
           <VCol cols="6">
             <VCard class="card" title="Root Cause:">
               <VCardText>
