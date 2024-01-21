@@ -9,28 +9,28 @@
       <VWindow v-model="currentStep">
         <VWindowItem value="item-1">
           <VCardText>
-            <AppTextField v-model="form.risk_name" label="Nama Risiko" placeholder="Nama Risiko" :readonly="isReadonly" />
+            <AppTextField v-model="form.risk_name" label="Risk Name" placeholder="Risk Name" :readonly="isReadonly" />
           </VCardText>
           <VDivider />
           <VCardText>
-            <div class="text-h6 mb-4">Deskripsi Risiko</div>
-            <AppTextField v-model="form.fraud_schema" class="mb-3" label="Skema Fraud" placeholder="Skema Fraud"
+            <div class="text-h6 mb-4">Risk Description</div>
+            <AppTextField v-model="form.fraud_schema" class="mb-3" label="Fraud Schema" placeholder="Fraud Schema"
               :readonly="isReadonly" />
-            <AppTextField v-model="form.fraud_motive" class="mb-3" label="Motif Fraud" placeholder="Motif Fraud"
+            <AppTextField v-model="form.fraud_motive" class="mb-3" label="Fraud Motive" placeholder="Fraud Motive"
               :readonly="isReadonly" />
-            <AppTextField v-model="form.fraud_technique" class="mb-3" label="Teknik Fraud" placeholder="Teknik Fraud"
-              :readonly="isReadonly" />
+            <AppTextField v-model="form.fraud_technique" class="mb-3" label="Fraud Technique"
+              placeholder="Fraud Technique" :readonly="isReadonly" />
           </VCardText>
           <VDivider />
           <VCardText>
-            <AppTextarea v-model="form.risk_source" class="mb-3" label="Sumber Risiko" placeholder="Sumber Risiko"
+            <AppTextarea v-model="form.risk_source" class="mb-3" label="Risk Source" placeholder="Risk Source"
               :readonly="isReadonly" />
-            <AppTextarea v-model="form.root_cause" class="mb-3" label="Akar Penyebab" placeholder="Akar Penyebab"
+            <AppTextarea v-model="form.root_cause" class="mb-3" label="Root Cause" placeholder="Root Cause"
               :readonly="isReadonly" />
             <AppTextarea v-model="form.bispro_control_procedure" class="mb-3" label="Control / Procedure (Bispro)"
               placeholder="Control / Procedure (Bispro)" :readonly="isReadonly" />
-            <AppTextarea v-model="form.qualitative_impact" class="mb-3" label="Dampak Kualitatif"
-              placeholder="Dampak Kualitatif" :readonly="isReadonly" />
+            <AppTextarea v-model="form.qualitative_impact" class="mb-3" label="Qualitative Impact"
+              placeholder="Qualitative Impact" :readonly="isReadonly" />
           </VCardText>
         </VWindowItem>
         <VWindowItem value="item-2">
@@ -56,7 +56,7 @@
           </VCardText>
           <VDivider />
           <VCardText>
-            <div class="text-h6 mb-4">Justifikasi</div>
+            <div class="text-h6 mb-4">Justification</div>
             <AppTextarea v-model="form.likehood_justification" class="mb-3" label="Likehood" placeholder="Likehood"
               :readonly="isReadonly" />
             <AppTextarea v-model="form.impact_justification" class="mb-3" label="Impact" placeholder="Impact"
@@ -65,10 +65,10 @@
           <VDivider />
           <VCardText>
             <div class="text-h6 mb-4">Strategi Response</div>
-            <AppTextField v-model="form.strategy_agreement" class="mb-3" label="Diterima / Tidak Diterima"
-              placeholder="Diterima / Tidak Diterima" :readonly="isReadonly" />
-            <AppTextarea v-model="form.strategy_recomendation" class="mb-3" label="Rekomendasi" placeholder="Rekomendasi"
-              :readonly="isReadonly" />
+            <AppTextField v-model="form.strategy_agreement" class="mb-3" label="Accepted / Rejected"
+              placeholder="Accepted / Rejected" :readonly="isReadonly" />
+            <AppTextarea v-model="form.strategy_recomendation" class="mb-3" label="Recommendation"
+              placeholder="Recommendation" :readonly="isReadonly" />
           </VCardText>
 
         </VWindowItem>

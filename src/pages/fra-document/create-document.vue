@@ -6,11 +6,11 @@
 
     <VCard>
       <VCardText>
-        <AppCombobox v-model="productName" class="mb-5" label="Nama Produk" placeholder="Nama Produk"
+        <AppCombobox v-model="productName" class="mb-5" label="Product Name" placeholder="Product Name"
           :items="productReference" item-title="text" />
         <div class="d-flex">
           <div class="risk-list">
-            <div>List risk</div>
+            <div>List of Risks</div>
             <div v-for="(risk, index) in listRisk" :key="index" class="risk-item">
               <div class="risk-box" :class="{ active: index === activeIndexList && !isOnPreviewSuggestion }"
                 @click="setActiveRisk(index)">
@@ -24,7 +24,7 @@
             </div>
             <div class="risk-item">
               <div class="risk-input">
-                <AppTextField v-model="riskName" placeholder="Nama Risiko" />
+                <AppTextField v-model="riskName" placeholder="Risk Name" />
               </div>
               <div class="risk-action">
                 <VBtn size="38" variant="plain" @click="addRisk">
@@ -33,7 +33,9 @@
               </div>
             </div>
 
-            <div v-show="listRiskSuggestion.length > 0">Risk Suggestion</div>
+            <VDivider v-show="listRiskSuggestion.length > 0" class="my-2" />
+            <div v-show="listRiskSuggestion.length > 0">List of Risk Suggestion
+            </div>
             <div v-for="(risk, index) in listRiskSuggestion" :key="index" class="risk-item">
               <div class="risk-box" :class="{ active: index === activeIndexList && isOnPreviewSuggestion }"
                 @click="setActiveRiskSuggestion(index)">

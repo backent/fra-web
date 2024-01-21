@@ -37,22 +37,22 @@
           </div>
         </div>
 
-        <div class="text-h5 mb-3">Deskripsi Risiko</div>
+        <div class="text-h5 mb-3">Risk Description</div>
         <VRow>
           <VCol cols="2">
-            Skema Fraud
+            Fraud Schema
           </VCol>
           <VCol cols="10">
             {{ displayedRisk.fraud_schema }}
           </VCol>
           <VCol cols="2">
-            Motif Fraud
+            Fraud Motive
           </VCol>
           <VCol cols="10">
             {{ displayedRisk.fraud_motive }}
           </VCol>
           <VCol cols="2">
-            Teknik Fraud
+            Fraud Technique
           </VCol>
           <VCol cols="10">
             {{ displayedRisk.fraud_technique }}
@@ -64,7 +64,7 @@
 
         <VRow class="align-stretch standard-row mb-5">
           <VCol cols="6">
-            <VCard class="card" title="Akar Penyebab:">
+            <VCard class="card" title="Root Cause:">
               <VCardText>
                 <div class="pre-text">{{ displayedRisk.root_cause }}</div>
               </VCardText>
@@ -87,7 +87,7 @@
         <VDivider class="mb-5" />
         <VRow class="mb-5">
           <VCol cols="2">
-            <div class="text-h5">Dampak Kualitatif:</div>
+            <div class="text-h5">Qualitative Impact:</div>
           </VCol>
           <VCol cols="10">
             <div class="pre-text">{{ displayedRisk.qualitative_impact }}</div>
@@ -97,7 +97,7 @@
           </VCol>
         </VRow>
         <VDivider class="mb-5" />
-        <div class="text-h5 mb-3">Fraud Scemes Assessment</div>
+        <div class="text-h5 mb-3">Fraud Schemes Assessment</div>
         <VRow class="mb-5">
           <VCol cols="4" class="d-flex align-center gap-5">
             <div class="mr-5">Likelihood:</div>
@@ -122,7 +122,7 @@
           </VCol>
         </VRow>
         <VDivider class="mb-5" />
-        <div class="text-h5 mb-3">Justifikasi</div>
+        <div class="text-h5 mb-3">Justification</div>
         <VRow class="mb-5">
           <VCol cols="2">
             Likelihood:
@@ -143,7 +143,7 @@
         <VDivider class="mb-5" />
         <VCard class="mb-5">
           <VCardText>
-            <div class="text-h5 mb-3">Rekomendasi:</div>
+            <div class="text-h5 mb-3">Recommendation:</div>
             <div class="pre-text">{{ displayedRisk.strategy_recomendation }}</div>
           </VCardText>
         </VCard>

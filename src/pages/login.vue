@@ -50,7 +50,7 @@ const login = function () {
 
         <VCardText class="pt-1">
           <h4 class="text-h4 mb-1">
-            Login aewf
+            Login
           </h4>
           <p class="mb-0">
             Lorem ipsum is the dummy text.
