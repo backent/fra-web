@@ -6,7 +6,10 @@ export const useAuthStore = defineStore('auth', {
   state() {
     return {
       currentUser: {
-        id: null
+        id: null,
+        nik: '',
+        name: '',
+        role: ''
       },
       currentToken: useStorage('token', null)
     }
@@ -17,6 +20,12 @@ export const useAuthStore = defineStore('auth', {
     },
     currentUserExists() {
       return !!this.currentUser.id
+    },
+    isReviewer(){
+      return this.currentUser.role.toLowerCase() === 'reviewer'
+    },
+    isAuthor() {
+      return this.currentUser.role.toLowerCase() === 'author'
     }
   },
   actions: {
@@ -25,8 +34,6 @@ export const useAuthStore = defineStore('auth', {
         .then(res => {
           this.storeToken(res.data.token)
           // need to change code to actual currentUser data from be
-          this.currentUser.id = 1
-          console.log('after set', this.currentUser)
           return res
         })
     },
@@ -37,7 +44,7 @@ export const useAuthStore = defineStore('auth', {
       return getCurrentUser()
         .then(res => {
           // need to change code to actual currentUser data from be
-          this.currentUser.id = 1
+          this.currentUser = { ...res.data }
           return res
         })
     },

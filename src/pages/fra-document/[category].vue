@@ -23,11 +23,16 @@
                 </VBtn>
               </VCol>
               <VCol cols="4">
+                <VBtn variant="tonal" color="warning" size="38" @click="openEdit(item.id)">
+                  <VIcon icon="tabler-edit" size="22" />
+                </VBtn>
+              </VCol>
+              <VCol v-show="authStore.isReviewer" cols="4">
                 <VBtn variant="tonal" color="success" size="38" @click="openApproveDialog(item.id)">
                   <VIcon icon="tabler-check" size="22" />
                 </VBtn>
               </VCol>
-              <VCol cols="4">
+              <VCol v-show="authStore.isReviewer" cols="4">
                 <VBtn variant="tonal" color="error" size="38" @click="openRejectDialog(item.id)">
                   <VIcon icon="tabler-x" size="22" />
                 </VBtn>
@@ -53,6 +58,7 @@ import DocumentDetailDialog from '@/components/DocumentDetailDialog.vue';
 import TitlePage from '@/components/TitlePage.vue';
 import { getColorFromRisk, templateWithDetail } from '@/config/risk';
 import { getColorFromStatus } from '@/config/status';
+import { useAuthStore } from '@/store/auth';
 import { useDocumentStore } from '@/store/document';
 import { formatTableDate } from '@/utils/formatter';
 import { computed, onMounted, watch } from 'vue';
@@ -88,6 +94,7 @@ const defaultQuery = {
 }
 const route = useRoute()
 const documentStore = useDocumentStore()
+const authStore = useAuthStore()
 const detailDialog = ref(false)
 const detailMode = ref('overall')
 const query = ref({
@@ -150,6 +157,10 @@ const openRejectDialog = function (id) {
   fetchDocumentById(id)
   detailDialog.value = true
   detailMode.value = 'reject'
+}
+
+const openEdit = function (id) {
+  // need to be implement
 }
 
 const onUpdateOptions = function (options) {

@@ -32,10 +32,10 @@ const logout = function () {
               </VListItemAction>
             </template>
 
-            <VListItemTitle class="font-weight-semibold">
-              John Doe
+            <VListItemTitle class="font-weight-semibold text-capitalize">
+              {{ authStore.currentUser.name }}
             </VListItemTitle>
-            <VListItemSubtitle>Admin</VListItemSubtitle>
+            <VListItemSubtitle><span class="text-capitalize">{{ authStore.currentUser.role }}</span></VListItemSubtitle>
           </VListItem>
 
           <!-- <VDivider class="my-2" /> -->
