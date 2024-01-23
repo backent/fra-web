@@ -187,6 +187,7 @@
 import AppTextarea from '@/@core/components/app-form-elements/AppTextarea.vue';
 import { useAppStore } from '@/@core/stores/app';
 import { getColorFromRisk, templateWithDetail } from '@/config/risk';
+import { useAuthStore } from '@/store/auth';
 
 const props = defineProps({
   active: {
@@ -205,6 +206,7 @@ const props = defineProps({
 const emits = defineEmits(['update:active', 'update:mode', 'update:modelValue'])
 
 const appStore = useAppStore()
+const authStore = useAuthStore()
 const dialogValue = ref(false)
 const isLoading = ref(false)
 const actionOn = ref('')
@@ -229,15 +231,15 @@ const isRejectLoading = computed(() => {
 })
 
 const isApproveBtnVisible = computed(() => {
-  return props.mode === 'overall' || props.mode === 'approve'
+  return authStore.isReviewer && (props.mode === 'overall' || props.mode === 'approve')
 })
 
 const isRejectBtnVisible = computed(() => {
-  return props.mode === 'overall'
+  return authStore.isReviewer && (props.mode === 'overall')
 })
 
 const isSubmitBtnVisible = computed(() => {
-  return props.mode === 'reject'
+  return authStore.isReviewer && (props.mode === 'reject')
 })
 
 const computedRisksOptions = computed(() => {

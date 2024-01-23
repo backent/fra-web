@@ -22,7 +22,7 @@
                   <VIcon icon="tabler-eye" size="22" />
                 </VBtn>
               </VCol>
-              <VCol cols="4">
+              <VCol v-show="authStore.isAuthor" cols="4">
                 <VBtn variant="tonal" color="warning" size="38" @click="openEdit(item.id)">
                   <VIcon icon="tabler-edit" size="22" />
                 </VBtn>
@@ -62,7 +62,7 @@ import { useAuthStore } from '@/store/auth';
 import { useDocumentStore } from '@/store/document';
 import { formatTableDate } from '@/utils/formatter';
 import { computed, onMounted, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { VDataTableServer } from 'vuetify/labs/VDataTable';
 
 const headers = [
@@ -93,6 +93,7 @@ const defaultQuery = {
   skip: 0
 }
 const route = useRoute()
+const router = useRouter()
 const documentStore = useDocumentStore()
 const authStore = useAuthStore()
 const detailDialog = ref(false)
@@ -160,7 +161,7 @@ const openRejectDialog = function (id) {
 }
 
 const openEdit = function (id) {
-  // need to be implement
+  router.push(`/fra-document/update-document/${id}`)
 }
 
 const onUpdateOptions = function (options) {

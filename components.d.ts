@@ -49,6 +49,7 @@ declare module 'vue' {
     DocumentDetailDialog: typeof import('./src/components/DocumentDetailDialog.vue')['default']
     EnableOneTimePasswordDialog: typeof import('./src/components/dialogs/EnableOneTimePasswordDialog.vue')['default']
     ErrorHeader: typeof import('./src/components/ErrorHeader.vue')['default']
+    FormDocument: typeof import('./src/components/FormDocument.vue')['default']
     I18n: typeof import('./src/@core/components/I18n.vue')['default']
     ImpactSelectionDialog: typeof import('./src/components/ImpactSelectionDialog.vue')['default']
     LikelihoodSelectionDialog: typeof import('./src/components/LikelihoodSelectionDialog.vue')['default']

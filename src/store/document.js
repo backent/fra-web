@@ -32,6 +32,7 @@ export const useDocumentStore = defineStore('document', {
       return response.map(item => {
         return {
           id: item.id,
+          uuid: item.uuid,
           product_name: item.product_name,
           created_at: item.created_at,
           updated_at: item.updated_at,

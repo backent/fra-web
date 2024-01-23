@@ -45,6 +45,7 @@ declare module 'vue-router/auto/routes' {
     'fra-document': RouteRecordInfo<'fra-document', '/fra-document', Record<never, never>, Record<never, never>>,
     'fra-document-category': RouteRecordInfo<'fra-document-category', '/fra-document/:category', { category: ParamValue<true> }, { category: ParamValue<false> }>,
     'fra-document-create-document': RouteRecordInfo<'fra-document-create-document', '/fra-document/create-document', Record<never, never>, Record<never, never>>,
+    'fra-document-update-document-uuid': RouteRecordInfo<'fra-document-update-document-uuid', '/fra-document/update-document/:uuid', { uuid: ParamValue<true> }, { uuid: ParamValue<false> }>,
     'login': RouteRecordInfo<'login', '/login', Record<never, never>, Record<never, never>>,
     'monitoring-evaluation': RouteRecordInfo<'monitoring-evaluation', '/monitoring-evaluation', Record<never, never>, Record<never, never>>,
     'second-page': RouteRecordInfo<'second-page', '/second-page', Record<never, never>, Record<never, never>>,
