@@ -19,3 +19,7 @@ export const getDocumentsDistinctProductName = function(query) {
   const newUrl = pathParse(apis.get_document_distinct_product_name, query)
   return GetApi(newUrl)
 }
+
+export const approveDocument = function(body) {
+  return PostApi(apis.approve_document, body)
+}

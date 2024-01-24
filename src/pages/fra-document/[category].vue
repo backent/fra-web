@@ -102,6 +102,12 @@ const query = ref({
   ...defaultQuery,
 })
 
+watch(detailDialog, (val) => {
+  if (!val) {
+    fetchDocuments()
+  }
+})
+
 const page = computed({
   get() {
     return (query.value.skip / query.value.take) + 1

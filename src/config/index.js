@@ -5,5 +5,6 @@ export const apis = {
   get_documents: '/documents',
   get_document_by_uuid: '/documents/:id',
   get_document_by_id: '/documents/:id',
-  get_document_distinct_product_name: '/documents-product-name'
+  get_document_distinct_product_name: '/documents-product-name',
+  approve_document: '/documents-approve'
 }

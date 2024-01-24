@@ -188,6 +188,7 @@ import AppTextarea from '@/@core/components/app-form-elements/AppTextarea.vue';
 import { useAppStore } from '@/@core/stores/app';
 import { getColorFromRisk, templateWithDetail } from '@/config/risk';
 import { useAuthStore } from '@/store/auth';
+import { useDocumentStore } from '@/store/document';
 
 const props = defineProps({
   active: {
@@ -207,6 +208,7 @@ const emits = defineEmits(['update:active', 'update:mode', 'update:modelValue'])
 
 const appStore = useAppStore()
 const authStore = useAuthStore()
+const documentStore = useDocumentStore()
 const dialogValue = ref(false)
 const isLoading = ref(false)
 const actionOn = ref('')
@@ -291,15 +293,25 @@ const close = function () {
 const approve = function () {
   isLoading.value = true
   actionOn.value = 'approve'
-  setTimeout(() => {
-    isLoading.value = false
-    appStore.openSnackbar({
-      message: "Successfully Approve Document",
-      color: 'success',
-      timeout: 1000
+  documentStore.approveDocument(props.modelValue.id)
+    .then(() => {
+      appStore.openSnackbar({
+        message: "Successfully Approve Document",
+        color: 'success',
+        timeout: 3000
+      })
     })
-    close()
-  }, 1000)
+    .catch(() => {
+      appStore.openSnackbar({
+        message: "Error While Approve Document. Please Contact your administrator",
+        color: 'error',
+        timeout: 3000
+      })
+    })
+    .finally(() => {
+      isLoading.value = false
+      close()
+    })
 }
 
 const submit = function () {

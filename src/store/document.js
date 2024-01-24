@@ -1,4 +1,4 @@
-import { getDocumentById, getDocuments, getDocumentsDistinctProductName, postDocument } from "@/http/document";
+import { approveDocument, getDocumentById, getDocuments, getDocumentsDistinctProductName, postDocument } from "@/http/document";
 import { defineStore } from "pinia";
 
 export const useDocumentStore = defineStore('document', {
@@ -27,6 +27,9 @@ export const useDocumentStore = defineStore('document', {
     },
     async submitDocument(body) {
       return postDocument(body)
+    },
+    async approveDocument(id) {
+      return approveDocument({ id })
     },
     documentResponseToTable(response) {
       return response.map(item => {
