@@ -12,27 +12,27 @@
               <span class="text-capitalize">{{ value }}</span>
             </VChip>
           </template>
-          <template #item.status="{ value }">
+          <template #item.action="{ value }">
             <span class="text-capitalize" :class="`text-${getColorFromStatus(value)}`">{{ value }}</span>
           </template>
-          <template #item.action="{ item }">
+          <template #item.actions="{ item }">
             <VRow>
               <VCol cols="4">
                 <VBtn variant="tonal" color="info" size="38" @click="openDetailDialog(item.id)">
                   <VIcon icon="tabler-eye" size="22" />
                 </VBtn>
               </VCol>
-              <VCol v-show="authStore.isAuthor" cols="4">
+              <VCol v-show="isEditBtnVisible(item)" cols="4">
                 <VBtn variant="tonal" color="warning" size="38" @click="openEdit(item.id)">
                   <VIcon icon="tabler-edit" size="22" />
                 </VBtn>
               </VCol>
-              <VCol v-show="authStore.isReviewer" cols="4">
+              <VCol v-show="isApproveBtnVisible(item)" cols="4">
                 <VBtn variant="tonal" color="success" size="38" @click="openApproveDialog(item.id)">
                   <VIcon icon="tabler-check" size="22" />
                 </VBtn>
               </VCol>
-              <VCol v-show="authStore.isReviewer" cols="4">
+              <VCol v-show="isRejectBtnVisible(item)" cols="4">
                 <VBtn variant="tonal" color="error" size="38" @click="openRejectDialog(item.id)">
                   <VIcon icon="tabler-x" size="22" />
                 </VBtn>
@@ -76,10 +76,10 @@ const headers = [
     title: 'Updated', key: 'updated_at', sortable: true
   },
   {
-    title: 'Status', key: 'status', sortable: false
+    title: 'Status', key: 'action', sortable: false
   },
   {
-    title: 'Action', key: 'action', sortable: false
+    title: 'Action', key: 'actions', sortable: false
   },
 ]
 
@@ -125,6 +125,18 @@ const currentCategory = computed(() => {
   const categoryParam = route?.params?.category ?? ''
   return categoryParam.split('-')[0]
 })
+
+const isEditBtnVisible = function (document) {
+  return authStore.isAuthor && (document.action === 'draft' || document.action === 'reject')
+}
+
+const isApproveBtnVisible = function (document) {
+  return authStore.isReviewer && document.action === 'submit'
+}
+
+const isRejectBtnVisible = function (document) {
+  return authStore.isReviewer && document.action === 'submit'
+}
 
 watch(query, () => {
   fetchDocuments()

@@ -39,8 +39,7 @@ export const useDocumentStore = defineStore('document', {
           product_name: item.product_name,
           created_at: item.created_at,
           updated_at: item.updated_at,
-          status: item.action,
-          action: 'action'
+          action: item.action
         }
       })
     }

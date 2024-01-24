@@ -233,15 +233,15 @@ const isRejectLoading = computed(() => {
 })
 
 const isApproveBtnVisible = computed(() => {
-  return authStore.isReviewer && (props.mode === 'overall' || props.mode === 'approve')
+  return authStore.isReviewer && (props.mode === 'overall' || props.mode === 'approve') && props.modelValue.action === 'submit'
 })
 
 const isRejectBtnVisible = computed(() => {
-  return authStore.isReviewer && (props.mode === 'overall')
+  return authStore.isReviewer && (props.mode === 'overall') && props.modelValue.action === 'submit'
 })
 
 const isSubmitBtnVisible = computed(() => {
-  return authStore.isReviewer && (props.mode === 'reject')
+  return authStore.isReviewer && (props.mode === 'reject') && props.modelValue.action === 'submit'
 })
 
 const computedRisksOptions = computed(() => {
