@@ -1,4 +1,4 @@
-import { approveDocument, getDocumentById, getDocuments, getDocumentsDistinctProductName, postDocument } from "@/http/document";
+import { approveDocument, getDocumentById, getDocuments, getDocumentsDistinctProductName, postDocument, rejectDocument } from "@/http/document";
 import { defineStore } from "pinia";
 
 export const useDocumentStore = defineStore('document', {
@@ -30,6 +30,9 @@ export const useDocumentStore = defineStore('document', {
     },
     async approveDocument(id) {
       return approveDocument({ id })
+    },
+    async rejectDocument(payload) {
+      return rejectDocument(payload)
     },
     documentResponseToTable(response) {
       return response.map(item => {

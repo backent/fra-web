@@ -23,3 +23,7 @@ export const getDocumentsDistinctProductName = function(query) {
 export const approveDocument = function(body) {
   return PostApi(apis.approve_document, body)
 }
+
+export const rejectDocument = function(body) {
+  return PostApi(apis.reject_document, body)
+}

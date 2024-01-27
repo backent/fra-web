@@ -58,7 +58,8 @@
             {{ displayedRisk.fraud_technique }}
           </VCol>
           <VCol cols="12">
-            <AppTextarea v-show="mode === 'reject'" label="Reject Note" placeholder="Reject note..." />
+            <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteFraud" label="Reject Note"
+              placeholder="Reject note..." />
           </VCol>
         </VRow>
 
@@ -71,7 +72,8 @@
             </VCard>
           </VCol>
           <VCol cols="12">
-            <AppTextarea v-show="mode === 'reject'" label="Reject Note" placeholder="Reject note..." />
+            <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteRiskSource" label="Reject Note"
+              placeholder="Reject note..." />
           </VCol>
           <VCol cols="6">
             <VCard class="card" title="Root Cause:">
@@ -88,10 +90,12 @@
             </VCard>
           </VCol>
           <VCol cols="6">
-            <AppTextarea v-show="mode === 'reject'" label="Reject Note" placeholder="Reject note..." />
+            <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteRootCause" label="Reject Note"
+              placeholder="Reject note..." />
           </VCol>
           <VCol cols="6">
-            <AppTextarea v-show="mode === 'reject'" label="Reject Note" placeholder="Reject note..." />
+            <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteBisproControlProcedure" label="Reject Note"
+              placeholder="Reject note..." />
           </VCol>
         </VRow>
         <VDivider class="mb-5" />
@@ -103,7 +107,8 @@
             <div class="pre-text">{{ displayedRisk.qualitative_impact }}</div>
           </VCol>
           <VCol cols="12">
-            <AppTextarea v-show="mode === 'reject'" label="Reject Note" placeholder="Reject note..." />
+            <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteQualitativeImpact" label="Reject Note"
+              placeholder="Reject note..." />
           </VCol>
         </VRow>
         <VDivider class="mb-5" />
@@ -128,7 +133,8 @@
             </VChip>
           </VCol>
           <VCol cols="12">
-            <AppTextarea v-show="mode === 'reject'" label="Reject Note" placeholder="Reject note..." />
+            <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteAssessment" label="Reject Note"
+              placeholder="Reject note..." />
           </VCol>
         </VRow>
         <VDivider class="mb-5" />
@@ -147,7 +153,8 @@
             <div class="pre-text">{{ displayedRisk.impact_justification }}</div>
           </VCol>
           <VCol cols="12">
-            <AppTextarea v-show="mode === 'reject'" label="Reject Note" placeholder="Reject note..." />
+            <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteJustification" label="Reject Note"
+              placeholder="Reject note..." />
           </VCol>
         </VRow>
         <VDivider class="mb-5" />
@@ -157,7 +164,8 @@
             <div class="pre-text">{{ displayedRisk.strategy_recomendation }}</div>
           </VCardText>
         </VCard>
-        <AppTextarea v-show="mode === 'reject'" label="Reject Note" placeholder="Reject note..." />
+        <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteStrategy" label="Reject Note"
+          placeholder="Reject note..." />
         <div class="actions">
           <VDivider class="mb-5" />
           <div class="d-flex justify-end gap-3">
@@ -213,6 +221,7 @@ const dialogValue = ref(false)
 const isLoading = ref(false)
 const actionOn = ref('')
 const selectedRisk = ref('')
+const rejectNote = ref({})
 
 watchEffect(() => {
   dialogValue.value = props.active
@@ -314,18 +323,51 @@ const approve = function () {
     })
 }
 
-const submit = function () {
+const submit = async function () {
+  const payload = {
+    id: parseInt(props.modelValue.id, 10),
+    reject_note: []
+  }
+  Object.entries(rejectNote.value).forEach(([riskId, item]) => {
+    const isAnyFieldFilled = Object.values(item).length > 0 && Object.values(item).some(val => !!val)
+    if (isAnyFieldFilled) {
+      payload.reject_note.push({
+        risk_id: parseInt(riskId, 10),
+        ...item
+      })
+    }
+  })
+
+  if (payload.reject_note.length <= 0) {
+    appStore.openSnackbar({
+      message: "Please fill any reject note before submit reject.",
+      color: 'error',
+      timeout: 3000
+    })
+    return
+  }
+
   isLoading.value = true
   actionOn.value = 'reject'
-  setTimeout(() => {
-    isLoading.value = false
-    appStore.openSnackbar({
-      message: "Successfully Reject Document",
-      color: 'success',
-      timeout: 1000
+  return documentStore.rejectDocument(payload)
+    .then(() => {
+      appStore.openSnackbar({
+        message: "Successfully Reject Document",
+        color: 'success',
+        timeout: 3000
+      })
     })
-    close()
-  }, 1000)
+    .catch(() => {
+      appStore.openSnackbar({
+        message: "Error While Reject Document. Please Contact your administrator",
+        color: 'error',
+        timeout: 3000
+      })
+    })
+    .finally(() => {
+      isLoading.value = false
+      close()
+    })
 }
 
 const reject = function () {
@@ -334,7 +376,36 @@ const reject = function () {
 
 const reset = function () {
   emits('update:modelValue', { ...templateWithDetail })
+  rejectNote.value = []
 }
+
+const setComputedRejectNote = function (field) {
+  return () => {
+    return computed({
+      get() {
+        if (rejectNote.value[computedSelectedRisk.value.value] && rejectNote.value[computedSelectedRisk.value.value][field]) {
+          return rejectNote.value[computedSelectedRisk.value.value][field]
+        }
+        return ''
+      },
+      set(v) {
+        if (!rejectNote.value[computedSelectedRisk.value.value]) {
+          rejectNote.value[computedSelectedRisk.value.value] = {}
+        }
+        rejectNote.value[computedSelectedRisk.value.value][field] = v
+      }
+    })
+  }
+}
+
+const computedRejectNoteFraud = setComputedRejectNote('fraud')()
+const computedRejectNoteRiskSource = setComputedRejectNote('risk_source')()
+const computedRejectNoteRootCause = setComputedRejectNote('root_cause')()
+const computedRejectNoteBisproControlProcedure = setComputedRejectNote('bispro_control_procedure')()
+const computedRejectNoteQualitativeImpact = setComputedRejectNote('qualitative_impact')()
+const computedRejectNoteAssessment = setComputedRejectNote('assessment')()
+const computedRejectNoteJustification = setComputedRejectNote('justification')()
+const computedRejectNoteStrategy = setComputedRejectNote('strategy')()
 
 </script>
 
