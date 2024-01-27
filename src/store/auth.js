@@ -39,6 +39,12 @@ export const useAuthStore = defineStore('auth', {
     },
     async logout() {
       this.currentToken = null
+      this.currentUser = {
+        id: null,
+        nik: '',
+        name: '',
+        role: ''
+      }
     },
     async fetchCurrentUser() {
       return getCurrentUser()
