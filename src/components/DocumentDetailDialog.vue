@@ -60,6 +60,7 @@
           <VCol cols="12">
             <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteFraud" label="Reject Note"
               placeholder="Reject note..." />
+            <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteFraud" />
           </VCol>
         </VRow>
 
@@ -74,6 +75,7 @@
           <VCol cols="12">
             <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteRiskSource" label="Reject Note"
               placeholder="Reject note..." />
+            <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteRiskSource" />
           </VCol>
           <VCol cols="6">
             <VCard class="card" title="Root Cause:">
@@ -92,10 +94,12 @@
           <VCol cols="6">
             <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteRootCause" label="Reject Note"
               placeholder="Reject note..." />
+            <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteRootCause" />
           </VCol>
           <VCol cols="6">
             <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteBisproControlProcedure" label="Reject Note"
               placeholder="Reject note..." />
+            <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteBisproControlProcedure" />
           </VCol>
         </VRow>
         <VDivider class="mb-5" />
@@ -109,6 +113,7 @@
           <VCol cols="12">
             <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteQualitativeImpact" label="Reject Note"
               placeholder="Reject note..." />
+            <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteQualitativeImpact" />
           </VCol>
         </VRow>
         <VDivider class="mb-5" />
@@ -135,6 +140,7 @@
           <VCol cols="12">
             <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteAssessment" label="Reject Note"
               placeholder="Reject note..." />
+            <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteAssessment" />
           </VCol>
         </VRow>
         <VDivider class="mb-5" />
@@ -155,6 +161,7 @@
           <VCol cols="12">
             <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteJustification" label="Reject Note"
               placeholder="Reject note..." />
+            <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteJustification" />
           </VCol>
         </VRow>
         <VDivider class="mb-5" />
@@ -166,6 +173,7 @@
         </VCard>
         <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteStrategy" label="Reject Note"
           placeholder="Reject note..." />
+        <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteStrategy" />
         <div class="actions">
           <VDivider class="mb-5" />
           <div class="d-flex justify-end gap-3">
@@ -194,9 +202,11 @@
 <script setup>
 import AppTextarea from '@/@core/components/app-form-elements/AppTextarea.vue';
 import { useAppStore } from '@/@core/stores/app';
+import RejectNote from '@/components//RejectNote.vue';
 import { getColorFromRisk, templateWithDetail } from '@/config/risk';
 import { useAuthStore } from '@/store/auth';
 import { useDocumentStore } from '@/store/document';
+import { watch } from 'vue';
 
 const props = defineProps({
   active: {
@@ -233,6 +243,10 @@ watch(() => props.active, (val) => {
   }
 })
 
+watch(() => props.modelValue.id, () => {
+  setRejectNote()
+})
+
 const isApproveLoading = computed(() => {
   return isLoading.value && actionOn.value === 'approve'
 })
@@ -251,6 +265,10 @@ const isRejectBtnVisible = computed(() => {
 
 const isSubmitBtnVisible = computed(() => {
   return authStore.isReviewer && (props.mode === 'reject') && props.modelValue.action === 'submit'
+})
+
+const isDisplayRejectNote = computed(() => {
+  return props.mode === 'overall' && props.modelValue.action === 'reject'
 })
 
 const computedRisksOptions = computed(() => {
@@ -377,6 +395,16 @@ const reject = function () {
 const reset = function () {
   emits('update:modelValue', { ...templateWithDetail })
   rejectNote.value = []
+  selectedRisk.value = ''
+  actionOn.value = ''
+}
+
+const setRejectNote = function () {
+  props.modelValue.risk_detail.forEach(risk => {
+    if (risk.reject_note_detail) {
+      rejectNote.value[risk.reject_note_detail.risk_id] = { ...risk.reject_note_detail }
+    }
+  })
 }
 
 const setComputedRejectNote = function (field) {
