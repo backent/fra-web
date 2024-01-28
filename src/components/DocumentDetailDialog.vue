@@ -65,38 +65,38 @@
         </VRow>
 
         <VRow class="align-stretch standard-row mb-5">
-          <VCol cols="12">
-            <VCard class="card" title="Risk Source:">
+          <VCol cols="4">
+            <VCard class="card" title="Source of Risk:">
               <VCardText>
                 <div class="pre-text">{{ displayedRisk.risk_source }}</div>
               </VCardText>
             </VCard>
           </VCol>
-          <VCol cols="12">
-            <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteRiskSource" label="Reject Note"
-              placeholder="Reject note..." />
-            <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteRiskSource" />
-          </VCol>
-          <VCol cols="6">
+          <VCol cols="4">
             <VCard class="card" title="Root Cause:">
               <VCardText>
                 <div class="pre-text">{{ displayedRisk.root_cause }}</div>
               </VCardText>
             </VCard>
           </VCol>
-          <VCol cols="6">
+          <VCol cols="4">
             <VCard class="card" title="Control / Prosedure (Bispro):">
               <VCardText>
                 <div class="pre-text">{{ displayedRisk.bispro_control_procedure }}</div>
               </VCardText>
             </VCard>
           </VCol>
-          <VCol cols="6">
+          <VCol cols="4">
+            <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteRiskSource" label="Reject Note"
+              placeholder="Reject note..." />
+            <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteRiskSource" />
+          </VCol>
+          <VCol cols="4">
             <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteRootCause" label="Reject Note"
               placeholder="Reject note..." />
             <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteRootCause" />
           </VCol>
-          <VCol cols="6">
+          <VCol cols="4">
             <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteBisproControlProcedure" label="Reject Note"
               placeholder="Reject note..." />
             <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteBisproControlProcedure" />

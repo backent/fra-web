@@ -1,8 +1,8 @@
 <template>
   <VCard :elevation="1">
     <VTabs v-model="currentStep">
-      <VTab>Data 1</VTab>
-      <VTab>Data 2</VTab>
+      <VTab>Form (1/2)</VTab>
+      <VTab>Form (2/2)</VTab>
     </VTabs>
 
     <VCardText>
@@ -23,7 +23,7 @@
           </VCardText>
           <VDivider />
           <VCardText>
-            <AppTextarea v-model="form.risk_source" class="mb-3" label="Risk Source" placeholder="Risk Source"
+            <AppTextarea v-model="form.risk_source" class="mb-3" label="Source of Risk" placeholder="Source of Risk"
               :readonly="isReadonly" />
             <AppTextarea v-model="form.root_cause" class="mb-3" label="Root Cause" placeholder="Root Cause"
               :readonly="isReadonly" />
