@@ -12,8 +12,8 @@
       </VCardText>
       <VCardTitle v-show="modelValue.id">
         <span class="title mr-3">{{ modelValue.product_name }}</span>
-        <VChip color="info" variant="elevated">
-          <span class="text-capitalize">New</span>
+        <VChip :color="getColorStatus(modelValue.action, authStore.currentUser.role)" variant="elevated">
+          <span class="text-capitalize">{{ getStatus(modelValue.action, authStore.currentUser.role) }}</span>
         </VChip>
       </VCardTitle>
       <VCardText v-show="modelValue.id">
@@ -85,7 +85,7 @@
             </VCard>
           </VCol>
           <VCol cols="6">
-            <VCard class="card" title="Control / Prosedure (Bisro):">
+            <VCard class="card" title="Control / Prosedure (Bispro):">
               <VCardText>
                 <div class="pre-text">{{ displayedRisk.bispro_control_procedure }}</div>
               </VCardText>
@@ -203,6 +203,7 @@
 import AppTextarea from '@/@core/components/app-form-elements/AppTextarea.vue';
 import { useAppStore } from '@/@core/stores/app';
 import RejectNote from '@/components//RejectNote.vue';
+import { getColorStatus, getStatus } from '@/config/document';
 import { getColorFromRisk, templateWithDetail } from '@/config/risk';
 import { useAuthStore } from '@/store/auth';
 import { useDocumentStore } from '@/store/document';

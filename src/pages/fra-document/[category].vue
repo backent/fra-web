@@ -13,7 +13,8 @@
             </VChip>
           </template>
           <template #item.action="{ value }">
-            <span class="text-capitalize" :class="`text-${getColorFromStatus(value)}`">{{ value }}</span>
+            <span class="text-capitalize" :class="`text-${getColorStatus(value, authStore.currentUser.role)}`">{{
+              getStatus(value, authStore.currentUser.role) }}</span>
           </template>
           <template #item.actions="{ item }">
             <VRow>
@@ -56,8 +57,8 @@
 import Breadcrumb from '@/components/Breadcrumb.vue';
 import DocumentDetailDialog from '@/components/DocumentDetailDialog.vue';
 import TitlePage from '@/components/TitlePage.vue';
+import { getColorStatus, getStatus } from '@/config/document';
 import { getColorFromRisk, templateWithDetail } from '@/config/risk';
-import { getColorFromStatus } from '@/config/status';
 import { useAuthStore } from '@/store/auth';
 import { useDocumentStore } from '@/store/document';
 import { formatTableDate } from '@/utils/formatter';
