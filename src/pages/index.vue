@@ -29,7 +29,7 @@
             <VCol>
               <HomeCard title="Document FRA"
                 subtitle1="Menu yang menampilkan List Dokumen FRA Product Digital Connectivity"
-                subtitle2="Pencarian Dokumen Repository FRA" :img="imageCard1" :to="{ name: 'fra-document' }" />
+                subtitle2="Pencarian Dokumen Repository FRA" :img="imageCard1" :to="{ name: 'dashboard' }" />
             </VCol>
             <VCol>
               <HomeCard title="Tracking Process FRA"

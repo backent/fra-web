@@ -180,7 +180,7 @@ const openRejectDialog = function (id) {
 }
 
 const openEdit = function (id) {
-  router.push(`/fra-document/update-document/${id}`)
+  router.push(`/dashboard/update-document/${id}`)
 }
 
 const onUpdateOptions = function (options) {

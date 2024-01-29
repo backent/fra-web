@@ -1,7 +1,7 @@
 export default [
   {
-    title: 'Fra Document',
-    to: { name: 'fra-document' },
+    title: 'Dashboard',
+    to: { name: 'dashboard' },
     icon: { icon: 'tabler-file-description' }
   },
   {

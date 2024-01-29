@@ -11,7 +11,7 @@
         {{ description }}
       </div>
     </VCardText>
-    <RouterLink :to="`/fra-document/${title.toLowerCase()}-list`" class="card-action">
+    <RouterLink :to="`/dashboard/${title.toLowerCase()}-list`" class="card-action">
       <div>
         Document list
         <VIcon icon="tabler-chevron-right" />

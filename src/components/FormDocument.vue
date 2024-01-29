@@ -215,7 +215,7 @@ const onThenDocument = function (message) {
       timeout: 2000,
       color: 'success'
     })
-    router.push({ name: 'fra-document' })
+    router.push({ name: 'dashboard' })
   }
 }
 
