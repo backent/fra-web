@@ -61,7 +61,8 @@ const measurement = computed(() => {
 })
 
 const levels = computed(() => {
-  return measurementAndLevels[selectedMeasurement.value] ?? []
+  const list = measurementAndLevels[selectedMeasurement.value] ?? []
+  return list.filter(item => !!item)
 })
 
 const selectedResult = computed(() => {
