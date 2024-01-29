@@ -50,7 +50,7 @@
                   placeholder="Please select likelihood & impact" disabled color="secondary" />
               </VCol>
             </div>
-            <div class="alert-text">
+            <div class="alert-text" @click="openRiskDocumentationDialog()">
               <VIcon size="24" icon="tabler-alert-circle" />Risk Acceptance Criteria Documentation
             </div>
           </VCardText>
@@ -84,6 +84,7 @@
   </VCard>
   <LikelihoodSelectionDialog v-model:active="likelihoodSelectionDialog" @submit="onLikelihoodSubmitHandler" />
   <ImpactSelectionDialog v-model:active="impactSelectionDialog" @submit="onImpactSubmitHandler" />
+  <RiskDocumentationDialog v-model:active="riskDocumentationDialog" />
 </template>
 
 <script setup>
@@ -92,6 +93,7 @@ import LikelihoodSelectionDialog from '@/components/LikelihoodSelectionDialog.vu
 import { calculateRiskLevel } from '@/config/fraud';
 import { template } from '@/config/risk';
 import { watchEffect } from 'vue';
+import RiskDocumentationDialog from './RiskDocumentationDialog.vue';
 
 const props = defineProps({
   modelValue: {
@@ -110,6 +112,7 @@ const emits = defineEmits('update:modelValue')
 
 const likelihoodSelectionDialog = ref(false)
 const impactSelectionDialog = ref(false)
+const riskDocumentationDialog = ref(false)
 
 const form = computed({
   get() {
@@ -145,6 +148,10 @@ const openImpactSelectionDialog = function () {
 const onImpactSubmitHandler = function (val) {
   form.value.assessment_impact = val
 }
+
+const openRiskDocumentationDialog = function () {
+  riskDocumentationDialog.value = true
+}
 </script>
 
 <style lang="scss" scoped>
@@ -152,5 +159,6 @@ const onImpactSubmitHandler = function (val) {
   display: flex;
   align-items: center;
   color: rgb(var(--v-theme-error));
+  cursor: pointer;
 }
 </style>
