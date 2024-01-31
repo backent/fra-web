@@ -10,11 +10,6 @@ export default [
     icon: { icon: 'tabler-checklist' }
   },
   {
-    title: 'Monitoring & Evaluation',
-    to: { name: 'monitoring-evaluation' },
-    icon: { icon: 'tabler-device-imac-check' }
-  },
-  {
     title: 'Account Request',
     to: { name: 'account-request' },
     icon: { icon: 'tabler-user-check' }

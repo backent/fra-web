@@ -27,3 +27,8 @@ export const approveDocument = function(body) {
 export const rejectDocument = function(body) {
   return PostApi(apis.reject_document, body)
 }
+
+export const getMonitoringDocuments = function(query) {
+  const newUrl = pathParse(apis.monitoring_document, query)
+  return GetApi(newUrl)
+}

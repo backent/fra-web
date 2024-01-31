@@ -1,4 +1,4 @@
-import { approveDocument, getDocumentById, getDocuments, getDocumentsDistinctProductName, postDocument, rejectDocument } from "@/http/document";
+import { approveDocument, getDocumentById, getDocuments, getDocumentsDistinctProductName, getMonitoringDocuments, postDocument, rejectDocument } from "@/http/document";
 import { formatTableDate } from "@/utils/formatter";
 import { defineStore } from "pinia";
 
@@ -39,6 +39,9 @@ export const useDocumentStore = defineStore('document', {
           }
         })
     },
+    async fetchMonitoringDocuments(query) {
+      return getMonitoringDocuments(query)
+    },
     async submitDocument(body) {
       return postDocument(body)
     },
@@ -56,6 +59,16 @@ export const useDocumentStore = defineStore('document', {
           product_name: item.product_name,
           created_at: item.created_at,
           updated_at: item.updated_at,
+          action: item.action
+        }
+      })
+    },
+    documentResponseToMonitoringTable(response) {
+      return response.map(item => {
+        return {
+          id: item.id,
+          product_name: item.product_name,
+          created_at: item.created_at,
           action: item.action
         }
       })

@@ -29,6 +29,30 @@
           </VList>
         </div>
       </VRow>
+      <VRow class="flex-column">
+        <TitlePage :primary-text="selectedPeriode.text" secondary-text="Periode" />
+        <VCard>
+          <VCardText>
+            <AppSelect v-model="selectedPeriode" class="periode-options" :items="periodeOptions" label="Choose Periode"
+              placeholder="Select Item" item-title="text" return-object />
+            <VDivider class="my-5" />
+            <VDataTableServer :headers="headers" :items="data" v-model:items-per-page="query.take" v-model:page="page"
+              :items-length="totalData" @update:options="onUpdateOptions">
+              <template #item.no="{ index }">
+                {{ ((page - 1) * query.take) + index + 1 }}
+              </template>
+              <template #item.action="{ value }">
+                <span class="text-capitalize" :class="`text-${getColorStatus(value, authStore.currentUser.role)}`">{{
+                  getStatus(value, authStore.currentUser.role) }}</span>
+              </template>
+              <template #item.created_at="{ item }">
+                {{ formatTableDate(item.created_at) }}
+              </template>
+            </VDataTableServer>
+          </VCardText>
+        </VCard>
+
+      </VRow>
       <VDialog v-model="dialogTracker" width="500">
 
         <!-- Dialog close btn -->
@@ -69,10 +93,15 @@
 </template>
 
 <script setup>
-import { formatCompleteTime } from '@/utils/formatter';
-import { watch } from 'vue';
+import { getColorStatus, getStatus } from '@/config/document';
+import { useAuthStore } from '@/store/auth';
+import { useDocumentStore } from '@/store/document';
+import { formatCompleteTime, formatTableDate } from '@/utils/formatter';
+import { onMounted, watch } from 'vue';
+import { VDataTableServer } from 'vuetify/labs/VDataTable';
 
-
+const documentStore = useDocumentStore()
+const authStore = useAuthStore()
 const searchText = ref('')
 const searchingDebounce = ref(null)
 const showResult = ref(false)
@@ -80,30 +109,20 @@ const dialogTracker = ref(false)
 const selectedTracker = ref({
   tracker: []
 })
+const totalData = ref(0)
 
-watch(searchText, () => {
-  onChangeHandler()
+const defaultQuery = {
+  orderBy: 'created_at',
+  orderDirection: 'desc',
+  take: 10,
+  skip: 0,
+  name: '',
+  month: 0
+}
+
+const query = ref({
+  ...defaultQuery,
 })
-const onChangeHandler = function () {
-  if (searchingDebounce.value) {
-    clearTimeout(searchingDebounce.value)
-  }
-  searchingDebounce.value = setTimeout(fetchSearchDocument, 700)
-}
-
-const fetchSearchDocument = function () {
-  console.log('searching ...')
-  if (searchText.value) {
-    showResult.value = true
-  } else {
-    showResult.value = false
-  }
-}
-
-const onCheckHandler = function (item) {
-  selectedTracker.value = item
-  dialogTracker.value = true
-}
 
 const result = [
   {
@@ -155,6 +174,103 @@ const result = [
     ]
   }
 ]
+
+const periodeOptions = [{ text: 'All', value: 0, }, { text: 'January', value: 1, }, { text: 'February', value: 2, }, { text: 'March', value: 3, }, { text: 'April', value: 4, }, { text: 'May', value: 5, }, { text: 'June', value: 6, }, { text: 'July', value: 7, }, { text: 'August', value: 8, }, { text: 'September', value: 9, }, { text: 'October', value: 10, }, { text: 'November', value: 11, }, { text: 'December', value: 12, },]
+
+const headers = [
+  {
+    title: 'No', key: 'no', sortable: false
+  },
+  {
+    title: 'DOCUMENT NAME', key: 'product_name', sortable: false
+  },
+  {
+    title: 'DATE', key: 'created_at', sortable: false
+  },
+  {
+    title: 'STATUS', key: 'action', sortable: false
+  },
+]
+
+const data = ref([])
+
+const selectedPeriode = ref({
+  text: 'All',
+  value: 0,
+})
+
+
+onMounted(() => {
+  fetchMonitoringDocuments()
+})
+
+const page = computed({
+  get() {
+    return (query.value.skip / query.value.take) + 1
+  },
+  set(v) {
+    query.value.skip = (v - 1) * query.value.take
+  }
+})
+
+
+const onChangeHandler = function () {
+  if (searchingDebounce.value) {
+    clearTimeout(searchingDebounce.value)
+  }
+  searchingDebounce.value = setTimeout(() => {
+    fetchSearchDocument()
+    query.value = {
+      ...query.value,
+      name: searchText.value.trim(),
+      skip: 0
+    }
+
+  }, 700)
+}
+
+const fetchSearchDocument = function () {
+  console.log('searching ...')
+  if (searchText.value) {
+    showResult.value = true
+  } else {
+    showResult.value = false
+  }
+}
+
+const onCheckHandler = function (item) {
+  selectedTracker.value = item
+  dialogTracker.value = true
+}
+
+
+const fetchMonitoringDocuments = function () {
+  documentStore.fetchMonitoringDocuments({ ...query.value, take: query.value.take === -1 ? 9999 : query.value.take })
+    .then(res => {
+      data.value = documentStore.documentResponseToMonitoringTable(res.data)
+      totalData.value = res.extras.total
+    })
+}
+
+const onUpdateOptions = function (options) {
+  if (options.sortBy.length > 0) {
+    query.value.orderBy = options.sortBy[0].key
+    query.value.orderDirection = options.sortBy[0].order
+  }
+}
+
+watch(searchText, () => {
+  onChangeHandler()
+})
+watch(query, () => {
+  fetchMonitoringDocuments()
+}, { deep: true })
+watch(selectedPeriode, (v) => {
+  query.value = {
+    ...query.value,
+    month: v.value
+  }
+})
 </script>
 
 <style lang="scss" scoped>
@@ -182,5 +298,15 @@ const result = [
   color: rgb(var(--v-theme-primary));
   cursor: pointer;
   text-decoration: underline;
+}
+
+.periode-options {
+  max-width: 300px;
+  background-color: rgb(var('--v-theme-surface'));
+
+}
+
+:deep(.periode-options .v-input) {
+  background-color: rgb(var(--v-theme-surface));
 }
 </style>
