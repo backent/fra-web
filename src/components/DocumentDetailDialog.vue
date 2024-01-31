@@ -5,36 +5,44 @@
 
     <!-- Dialog Content -->
     <VCard>
-      <VCardText v-show="!modelValue.id">
+      <VCardText v-show="!currentProduct.id">
         <div class="loader">
           <VProgressCircular indeterminate color="primary" />
         </div>
       </VCardText>
-      <VCardTitle v-show="modelValue.id">
-        <span class="title mr-3">{{ modelValue.product_name }}</span>
-        <VChip :color="getColorStatus(modelValue.action, authStore.currentUser.role)" variant="elevated">
-          <span class="text-capitalize">{{ getStatus(modelValue.action, authStore.currentUser.role) }}</span>
+      <VCardTitle v-show="currentProduct.id">
+        <span class="title mr-3">{{ currentProduct.product_name }}</span>
+        <VChip :color="getColorStatus(currentProduct.action, authStore.currentUser.role)" variant="elevated">
+          <span class="text-capitalize">{{ getStatus(currentProduct.action, authStore.currentUser.role) }}</span>
         </VChip>
       </VCardTitle>
-      <VCardText v-show="modelValue.id">
+      <VCardText v-show="currentProduct.id">
         <div class="d-flex justify-space-between align-center  mb-5">
-          <div class="d-flex gap-2">
-            <VChip label color="info">
-              Internal & Eksternal
-            </VChip>
-
-            <VChip label color="warning">
-              {{ displayedRisk.strategy_agreement }}
-            </VChip>
-          </div>
-
           <div class="d-flex align-center">
             <div class="d-flex align-center gap-2">
-              <span>Risk:</span>
               <AppSelect class="filter-select" v-model="computedSelectedRisk" :items="computedRisksOptions"
                 item-title="text" item-value="value" return-object />
             </div>
           </div>
+
+          <div class="d-flex align-center">
+            <div class="d-flex align-center gap-2">
+              <span>Updated Date:</span>
+
+              <AppSelect class="filter-select" v-model="computedSelectedUpdateDate" :items="computedUpdateDateOptions"
+                item-title="text" item-value="value" return-object />
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex gap-2 mb-5">
+          <VChip label color="info">
+            Internal & Eksternal
+          </VChip>
+
+          <VChip label color="warning">
+            {{ displayedRisk.strategy_agreement }}
+          </VChip>
         </div>
 
         <div class="text-h5 mb-3">Risk Description</div>
@@ -58,7 +66,7 @@
             {{ displayedRisk.fraud_technique }}
           </VCol>
           <VCol cols="12">
-            <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteFraud" label="Reject Note"
+            <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteFraud" label="Reject Note"
               placeholder="Reject note..." />
             <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteFraud" />
           </VCol>
@@ -87,17 +95,17 @@
             </VCard>
           </VCol>
           <VCol cols="4">
-            <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteRiskSource" label="Reject Note"
+            <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteRiskSource" label="Reject Note"
               placeholder="Reject note..." />
             <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteRiskSource" />
           </VCol>
           <VCol cols="4">
-            <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteRootCause" label="Reject Note"
+            <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteRootCause" label="Reject Note"
               placeholder="Reject note..." />
             <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteRootCause" />
           </VCol>
           <VCol cols="4">
-            <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteBisproControlProcedure" label="Reject Note"
+            <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteBisproControlProcedure" label="Reject Note"
               placeholder="Reject note..." />
             <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteBisproControlProcedure" />
           </VCol>
@@ -111,7 +119,7 @@
             <div class="pre-text">{{ displayedRisk.qualitative_impact }}</div>
           </VCol>
           <VCol cols="12">
-            <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteQualitativeImpact" label="Reject Note"
+            <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteQualitativeImpact" label="Reject Note"
               placeholder="Reject note..." />
             <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteQualitativeImpact" />
           </VCol>
@@ -138,7 +146,7 @@
             </VChip>
           </VCol>
           <VCol cols="12">
-            <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteAssessment" label="Reject Note"
+            <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteAssessment" label="Reject Note"
               placeholder="Reject note..." />
             <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteAssessment" />
           </VCol>
@@ -159,7 +167,7 @@
             <div class="pre-text">{{ displayedRisk.impact_justification }}</div>
           </VCol>
           <VCol cols="12">
-            <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteJustification" label="Reject Note"
+            <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteJustification" label="Reject Note"
               placeholder="Reject note..." />
             <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteJustification" />
           </VCol>
@@ -171,7 +179,7 @@
             <div class="pre-text">{{ displayedRisk.strategy_recomendation }}</div>
           </VCardText>
         </VCard>
-        <AppTextarea v-show="mode === 'reject'" v-model="computedRejectNoteStrategy" label="Reject Note"
+        <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteStrategy" label="Reject Note"
           placeholder="Reject note..." />
         <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteStrategy" />
         <div class="actions">
@@ -180,15 +188,16 @@
             <VBtn variant="outlined" color="primary" @click="close()">
               Cancel
             </VBtn>
-            <VBtn v-show="isApproveBtnVisible" :disabled="isRejectLoading" :loading="isApproveLoading" color="success"
-              @click="approve()">
+            <VBtn v-show="isApproveBtnVisible" :disabled="isRejectLoading || currentProduct.id !== modelValue.id"
+              :loading="isApproveLoading" color="success" @click="approve()">
               Approve
             </VBtn>
-            <VBtn v-show="isRejectBtnVisible" :disabled="isApproveLoading" color="error" @click="reject()">
+            <VBtn v-show="isRejectBtnVisible" :disabled="isApproveLoading || currentProduct.id !== modelValue.id"
+              color="error" @click="reject()">
               Reject
             </VBtn>
-            <VBtn v-show="isSubmitBtnVisible" :disabled="isApproveLoading" :loading="isRejectLoading" color="error"
-              @click="submit()">
+            <VBtn v-show="isSubmitBtnVisible" :disabled="isApproveLoading || currentProduct.id !== modelValue.id"
+              :loading="isRejectLoading" color="error" @click="submit()">
               Submit
             </VBtn>
           </div>
@@ -233,19 +242,18 @@ const isLoading = ref(false)
 const actionOn = ref('')
 const selectedRisk = ref('')
 const rejectNote = ref({})
+const selectedUpdatedDate = ref({})
+const relatedDocumentFullData = ref([])
 
-watchEffect(() => {
-  dialogValue.value = props.active
-})
 
-watch(() => props.active, (val) => {
-  if (!val) {
-    reset()
-  }
-})
 
-watch(() => props.modelValue.id, () => {
-  setRejectNote()
+
+const currentProduct = computed(() => {
+  const options = [
+    { ...props.modelValue },
+    ...relatedDocumentFullData.value
+  ]
+  return options.find(item => item.id === computedSelectedUpdateDate.value.value) ?? templateWithDetail
 })
 
 const isApproveLoading = computed(() => {
@@ -269,11 +277,15 @@ const isSubmitBtnVisible = computed(() => {
 })
 
 const isDisplayRejectNote = computed(() => {
-  return props.mode === 'overall' && props.modelValue.action === 'reject'
+  return currentProduct.value.action === 'reject' && !isOnRejectMode.value
+})
+
+const isOnRejectMode = computed(() => {
+  return props.mode === 'reject' && currentProduct.value.id === props.modelValue.id
 })
 
 const computedRisksOptions = computed(() => {
-  return props.modelValue.risk_detail.map(item => {
+  return currentProduct.value.risk_detail.map(item => {
     return {
       text: item.risk_name,
       value: item.id
@@ -290,8 +302,39 @@ const computedSelectedRisk = computed({
   }
 })
 
+const computedUpdateDateOptions = computed(() => {
+  return [
+    {
+      text: props.modelValue.created_at,
+      value: props.modelValue.id
+    },
+    ...props.modelValue.related_document_detail.map(item => {
+      return {
+        text: item.created_at,
+        value: item.id
+      }
+    })
+  ]
+})
+
+
+const computedSelectedUpdateDate = computed({
+  get() {
+    if (!selectedUpdatedDate.value.value) {
+      return {
+        text: props.modelValue.created_at,
+        value: props.modelValue.id
+      }
+    }
+    return selectedUpdatedDate.value
+  },
+  set(v) {
+    selectedUpdatedDate.value = v
+  }
+})
+
 const displayedRisk = computed(() => {
-  return props.modelValue.risk_detail.find(risk => risk.id === computedSelectedRisk.value.value) ?? {
+  return currentProduct.value.risk_detail.find(risk => risk.id === computedSelectedRisk.value.value) ?? {
     id: '',
     document_id: '',
     risk_name: '',
@@ -395,13 +438,16 @@ const reject = function () {
 
 const reset = function () {
   emits('update:modelValue', { ...templateWithDetail })
-  rejectNote.value = []
+  rejectNote.value = {}
   selectedRisk.value = ''
   actionOn.value = ''
+  selectedUpdatedDate.value = {}
+  relatedDocumentFullData.value = []
+
 }
 
 const setRejectNote = function () {
-  props.modelValue.risk_detail.forEach(risk => {
+  currentProduct.value.risk_detail.forEach(risk => {
     if (risk.reject_note_detail) {
       rejectNote.value[risk.reject_note_detail.risk_id] = { ...risk.reject_note_detail }
     }
@@ -436,6 +482,40 @@ const computedRejectNoteAssessment = setComputedRejectNote('assessment')()
 const computedRejectNoteJustification = setComputedRejectNote('justification')()
 const computedRejectNoteStrategy = setComputedRejectNote('strategy')()
 
+const updateRelatedDocument = function (documentId) {
+  if (props.modelValue.id === documentId) {
+    return
+  }
+  const isExists = relatedDocumentFullData.value.find(relatedDocument => relatedDocument.id === documentId)
+  if (!isExists) {
+    documentStore.fetchDocumentById({ id: documentId })
+      .then(res => {
+        relatedDocumentFullData.value.push(res)
+      })
+  }
+}
+
+watchEffect(() => {
+  dialogValue.value = props.active
+})
+
+watch(() => props.active, (val) => {
+  if (!val) {
+    reset()
+  }
+})
+
+watch(() => currentProduct.value.id, () => {
+  setRejectNote()
+})
+
+watch(selectedUpdatedDate, (v, old) => {
+  if (props.active && v?.value) {
+    updateRelatedDocument(v.value)
+    selectedRisk.value = ''
+  }
+})
+
 </script>
 
 <style lang="scss" scoped>
@@ -451,7 +531,7 @@ const computedRejectNoteStrategy = setComputedRejectNote('strategy')()
 }
 
 .loader {
-  height: 60vh;
+  height: 100vh;
   width: 100%;
   display: flex;
 

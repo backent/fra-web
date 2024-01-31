@@ -33,7 +33,9 @@ const template = {
 
 const templateWithDetail = {
   ...template,
-  risk_detail: []
+  risk_detail: [],
+  user_detail: {},
+  related_document_detail: []
 }
 
 

@@ -106,6 +106,7 @@ const query = ref({
 watch(detailDialog, (val) => {
   if (!val) {
     fetchDocuments()
+    selectedDocument.value = { ...templateWithDetail }
   }
 })
 

@@ -1,4 +1,5 @@
 import { approveDocument, getDocumentById, getDocuments, getDocumentsDistinctProductName, postDocument, rejectDocument } from "@/http/document";
+import { formatTableDate } from "@/utils/formatter";
 import { defineStore } from "pinia";
 
 export const useDocumentStore = defineStore('document', {
@@ -23,7 +24,20 @@ export const useDocumentStore = defineStore('document', {
     },
     async fetchDocumentById(query) {
       return getDocumentById(query)
-        .then(res => res.data)
+        .then(res => {
+          const formattedRelatedDocumentDetail = res.data.related_document_detail.map(item => {
+            return {
+              ...item,
+              created_at: formatTableDate(item.created_at)
+            }
+          })
+
+          return {
+            ...res.data,
+            created_at: formatTableDate(res.data.created_at),
+            related_document_detail: formattedRelatedDocumentDetail
+          }
+        })
     },
     async submitDocument(body) {
       return postDocument(body)
