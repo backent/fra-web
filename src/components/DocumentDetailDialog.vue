@@ -40,7 +40,7 @@
             Internal & Eksternal
           </VChip>
 
-          <VChip label color="warning">
+          <VChip label :color="getColorFromAcception(displayedRisk.strategy_agreement)">
             {{ displayedRisk.strategy_agreement }}
           </VChip>
         </div>
@@ -66,8 +66,8 @@
             {{ displayedRisk.fraud_technique }}
           </VCol>
           <VCol cols="12">
-            <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteFraud" label="Reject Note"
-              placeholder="Reject note..." />
+            <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteFraud" label="Return Note"
+              placeholder="Return note..." />
             <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteFraud" />
           </VCol>
         </VRow>
@@ -95,18 +95,18 @@
             </VCard>
           </VCol>
           <VCol cols="4">
-            <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteRiskSource" label="Reject Note"
-              placeholder="Reject note..." />
+            <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteRiskSource" label="Return Note"
+              placeholder="Return note..." />
             <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteRiskSource" />
           </VCol>
           <VCol cols="4">
-            <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteRootCause" label="Reject Note"
-              placeholder="Reject note..." />
+            <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteRootCause" label="Return Note"
+              placeholder="Return note..." />
             <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteRootCause" />
           </VCol>
           <VCol cols="4">
-            <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteBisproControlProcedure" label="Reject Note"
-              placeholder="Reject note..." />
+            <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteBisproControlProcedure" label="Return Note"
+              placeholder="Return note..." />
             <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteBisproControlProcedure" />
           </VCol>
         </VRow>
@@ -119,8 +119,8 @@
             <div class="pre-text">{{ displayedRisk.qualitative_impact }}</div>
           </VCol>
           <VCol cols="12">
-            <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteQualitativeImpact" label="Reject Note"
-              placeholder="Reject note..." />
+            <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteQualitativeImpact" label="Return Note"
+              placeholder="Return note..." />
             <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteQualitativeImpact" />
           </VCol>
         </VRow>
@@ -146,8 +146,8 @@
             </VChip>
           </VCol>
           <VCol cols="12">
-            <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteAssessment" label="Reject Note"
-              placeholder="Reject note..." />
+            <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteAssessment" label="Return Note"
+              placeholder="Return note..." />
             <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteAssessment" />
           </VCol>
         </VRow>
@@ -167,20 +167,29 @@
             <div class="pre-text">{{ displayedRisk.impact_justification }}</div>
           </VCol>
           <VCol cols="12">
-            <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteJustification" label="Reject Note"
-              placeholder="Reject note..." />
+            <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteJustification" label="Return Note"
+              placeholder="Return note..." />
             <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteJustification" />
           </VCol>
         </VRow>
         <VDivider class="mb-5" />
+        <div class="text-h5 mb-3">Strategic Response</div>
+        <VRow class="mb-5">
+          <VCol cols="4" class="d-flex align-center gap-5">
+            <div class="mr-5">Accepted / Not Accepted: <span
+                :class="`text-uppercase ml-2 font-weight-semibold text-${getColorFromAcception(displayedRisk.strategy_agreement)}`">{{
+                  displayedRisk.strategy_agreement
+                }}</span></div>
+          </VCol>
+        </VRow>
         <VCard class="mb-5">
           <VCardText>
             <div class="text-h5 mb-3">Recommendation:</div>
             <div class="pre-text">{{ displayedRisk.strategy_recomendation }}</div>
           </VCardText>
         </VCard>
-        <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteStrategy" label="Reject Note"
-          placeholder="Reject note..." />
+        <AppTextarea v-show="isOnRejectMode" v-model="computedRejectNoteStrategy" label="Return Note"
+          placeholder="Return note..." />
         <RejectNote v-show="isDisplayRejectNote" :value="computedRejectNoteStrategy" />
         <div class="actions">
           <VDivider class="mb-5" />
@@ -213,7 +222,7 @@ import AppTextarea from '@/@core/components/app-form-elements/AppTextarea.vue';
 import { useAppStore } from '@/@core/stores/app';
 import RejectNote from '@/components//RejectNote.vue';
 import { getColorStatus, getStatus } from '@/config/document';
-import { getColorFromRisk, templateWithDetail } from '@/config/risk';
+import { getColorFromAcception, getColorFromRisk, templateWithDetail } from '@/config/risk';
 import { useAuthStore } from '@/store/auth';
 import { useDocumentStore } from '@/store/document';
 import { watch } from 'vue';

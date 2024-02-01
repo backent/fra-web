@@ -1,6 +1,6 @@
 <template>
   <div class="box py-5 px-5">
-    <div class="font-weight-bold mb-2">Reject Note:</div>
+    <div class="font-weight-bold mb-2">Return Note:</div>
     <div class="value">{{ value }}</div>
   </div>
 </template>

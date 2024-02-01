@@ -65,8 +65,8 @@
           <VDivider />
           <VCardText>
             <div class="text-h6 mb-4">Strategi Response</div>
-            <AppTextField v-model="form.strategy_agreement" class="mb-3" label="Accepted / Rejected"
-              placeholder="Accepted / Rejected" :readonly="isReadonly" />
+            <AppSelect v-model="form.strategy_agreement" :items="['Accepted', 'Not Accepted']"
+              label="Accepted / Not Accepted" />
             <AppTextarea v-model="form.strategy_recomendation" class="mb-3" label="Recommendation"
               placeholder="Recommendation" :readonly="isReadonly" />
           </VCardText>

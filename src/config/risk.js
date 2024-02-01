@@ -10,6 +10,15 @@ const getColorFromRisk = function(risk) {
   return colors[risk.toLowerCase()]
 }
 
+const acceptionColors = {
+  'accepted': 'success',
+  'not accepted': 'warning'
+}
+
+const getColorFromAcception = function(acception) {
+  return acceptionColors[acception.toLowerCase()]
+}
+
 const template = {
   id: '',
   document_id: '',
@@ -40,6 +49,6 @@ const templateWithDetail = {
 
 
 export {
-  colors, getColorFromRisk, template, templateWithDetail
+  colors, getColorFromAcception, getColorFromRisk, template, templateWithDetail
 }
 
