@@ -133,11 +133,11 @@ const isEditBtnVisible = function (document) {
 }
 
 const isApproveBtnVisible = function (document) {
-  return authStore.isReviewer && document.action === 'submit'
+  return authStore.isReviewer && (document.action === 'submit' || document.action === 'update')
 }
 
 const isRejectBtnVisible = function (document) {
-  return authStore.isReviewer && document.action === 'submit'
+  return authStore.isReviewer && (document.action === 'submit' || document.action === 'update')
 }
 
 watch(query, () => {

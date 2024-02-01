@@ -265,15 +265,15 @@ const isRejectLoading = computed(() => {
 })
 
 const isApproveBtnVisible = computed(() => {
-  return authStore.isReviewer && (props.mode === 'overall' || props.mode === 'approve') && props.modelValue.action === 'submit'
+  return authStore.isReviewer && (props.mode === 'overall' || props.mode === 'approve') && (props.modelValue.action === 'submit' || props.modelValue.action === 'update')
 })
 
 const isRejectBtnVisible = computed(() => {
-  return authStore.isReviewer && (props.mode === 'overall') && props.modelValue.action === 'submit'
+  return authStore.isReviewer && (props.mode === 'overall') && (props.modelValue.action === 'submit' || props.modelValue.action === 'update')
 })
 
 const isSubmitBtnVisible = computed(() => {
-  return authStore.isReviewer && (props.mode === 'reject') && props.modelValue.action === 'submit'
+  return authStore.isReviewer && (props.mode === 'reject') && (props.modelValue.action === 'submit' || props.modelValue.action === 'update')
 })
 
 const isDisplayRejectNote = computed(() => {

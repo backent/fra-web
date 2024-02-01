@@ -41,7 +41,7 @@ const status = {
   },
   'update': {
     'author': {
-      text: 'Submit',
+      text: 'Updated',
       color: 'info',
     },
     'reviewer': {
