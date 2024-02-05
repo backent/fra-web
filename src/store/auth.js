@@ -1,6 +1,7 @@
 import { getCurrentUser, postAuth } from "@/http/auth";
 import { useStorage } from '@vueuse/core';
 import { defineStore } from "pinia";
+import { useNotificationStore } from "./notification";
 
 export const useAuthStore = defineStore('auth', {
   state() {
@@ -55,6 +56,12 @@ export const useAuthStore = defineStore('auth', {
         })
     },
     async initializeCurrentUser() {
+      try {
+        const notificationStore = useNotificationStore()
+        notificationStore.fetchAllNotification()
+      } catch (e) {
+        console.error("error while fetch notifications")
+      }
       if (this.currentUserExists) {
         return Promise.resolve()
       } else {

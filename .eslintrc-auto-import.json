@@ -357,6 +357,7 @@
     "GetApi": true,
     "PostApi": true,
     "PutApi": true,
-    "pathParse": true
+    "pathParse": true,
+    "getTimeAgo": true
   }
 }
