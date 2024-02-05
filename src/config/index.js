@@ -8,5 +8,6 @@ export const apis = {
   get_document_distinct_product_name: '/documents-product-name',
   approve_document: '/documents-approve',
   reject_document: '/documents-reject',
-  monitoring_document: '/documents-monitoring'
+  monitoring_document: '/documents-monitoring',
+  tracking_document: '/documents-tracker/:name',
 }

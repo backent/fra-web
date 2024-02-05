@@ -15,7 +15,7 @@
           </VTextField>
         </div>
 
-        <div v-show="showResult">
+        <div v-show="result.length > 0">
           <div class="mb-2">Search Result</div>
           <VList>
             <VListItem v-for="item in result" :key="item.id">
@@ -104,7 +104,6 @@ const documentStore = useDocumentStore()
 const authStore = useAuthStore()
 const searchText = ref('')
 const searchingDebounce = ref(null)
-const showResult = ref(false)
 const dialogTracker = ref(false)
 const selectedTracker = ref({
   tracker: []
@@ -124,56 +123,7 @@ const query = ref({
   ...defaultQuery,
 })
 
-const result = [
-  {
-    id: 1,
-    title: 'FRA_SD Wan Fortinet_2023',
-    tracker: [
-      {
-        title: 'FRA Submitted',
-        subtitle: '970042',
-        timestamp: 1700492127549,
-        type: 'info'
-      },
-      {
-        title: 'Review',
-        subtitle: '880042',
-        timestamp: 1700491127549,
-        type: 'upload'
-      },
-      {
-        title: 'Process Signing',
-        subtitle: '',
-        type: 'signing'
-      },
-    ]
-  },
-  {
-    id: 2,
-    title: 'FRA_SD Wan Fortinet_2025',
-    tracker: [
-      {
-        title: 'FRA Submitted',
-        subtitle: '970042',
-        timestamp: 1700492127549,
-        type: 'info'
-      },
-      {
-        title: 'Review',
-        subtitle: '880042',
-        timestamp: 1700491127549,
-        type: 'upload-done',
-        filename: 'Dokumen FRA Internet_HSI B2B_2023.xlsx'
-      },
-      {
-        title: 'Process Signing',
-        subtitle: '',
-        type: 'signin-onprocess',
-        filename: 'Dokumen FRA Internet_HSI B2B_2023'
-      },
-    ]
-  }
-]
+const result = ref([])
 
 const periodeOptions = [{ text: 'All', value: 0, }, { text: 'January', value: 1, }, { text: 'February', value: 2, }, { text: 'March', value: 3, }, { text: 'April', value: 4, }, { text: 'May', value: 5, }, { text: 'June', value: 6, }, { text: 'July', value: 7, }, { text: 'August', value: 8, }, { text: 'September', value: 9, }, { text: 'October', value: 10, }, { text: 'November', value: 11, }, { text: 'December', value: 12, },]
 
@@ -214,12 +164,12 @@ const page = computed({
 })
 
 
-const onChangeHandler = function () {
+const onChangeHandler = function (v) {
   if (searchingDebounce.value) {
     clearTimeout(searchingDebounce.value)
   }
   searchingDebounce.value = setTimeout(() => {
-    fetchSearchDocument()
+    fetchTrackingDocuments(v)
     query.value = {
       ...query.value,
       name: searchText.value.trim(),
@@ -227,15 +177,6 @@ const onChangeHandler = function () {
     }
 
   }, 700)
-}
-
-const fetchSearchDocument = function () {
-  console.log('searching ...')
-  if (searchText.value) {
-    showResult.value = true
-  } else {
-    showResult.value = false
-  }
 }
 
 const onCheckHandler = function (item) {
@@ -259,8 +200,16 @@ const onUpdateOptions = function (options) {
   }
 }
 
-watch(searchText, () => {
-  onChangeHandler()
+const fetchTrackingDocuments = function (name) {
+  documentStore.fetchTrackingDocuments({ name })
+    .then(data => {
+      result.value = documentStore.trackingResponseToTrackingList(data)
+    })
+}
+
+
+watch(searchText, (v) => {
+  onChangeHandler(v)
 })
 watch(query, () => {
   fetchMonitoringDocuments()

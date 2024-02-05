@@ -1,4 +1,4 @@
-import { approveDocument, getDocumentById, getDocuments, getDocumentsDistinctProductName, getMonitoringDocuments, postDocument, rejectDocument } from "@/http/document";
+import { approveDocument, getDocumentById, getDocuments, getDocumentsDistinctProductName, getMonitoringDocuments, getTrackingDocuments, postDocument, rejectDocument } from "@/http/document";
 import { formatTableDate } from "@/utils/formatter";
 import { defineStore } from "pinia";
 
@@ -42,6 +42,10 @@ export const useDocumentStore = defineStore('document', {
     async fetchMonitoringDocuments(query) {
       return getMonitoringDocuments(query)
     },
+    async fetchTrackingDocuments(query) {
+      return getTrackingDocuments(query)
+        .then(res => res.data)
+    },
     async submitDocument(body) {
       return postDocument(body)
     },
@@ -70,6 +74,32 @@ export const useDocumentStore = defineStore('document', {
           product_name: item.product_name,
           created_at: item.created_at,
           action: item.action
+        }
+      })
+    },
+    trackingResponseToTrackingList(response) {
+      return response.map(res => {
+        const parent = {
+          id: res.id,
+          title: res.product_name,
+          user_detail: res.user_detail
+        }
+
+        const tracker = [
+          {...res},
+          ...res.related_document_detail
+        ].map(item => {
+          return {
+            title: `FRA ${item.action}`,
+            subtitle: item.user_detail.nik,
+            timestamp: item.created_at,
+            type: 'info'
+          }
+        })
+
+        return {
+          ...parent,
+          tracker
         }
       })
     }
