@@ -86,8 +86,8 @@ export const useDocumentStore = defineStore('document', {
         }
 
         const tracker = [
-          {...res},
-          ...res.related_document_detail
+          ...res.related_document_detail,
+          {...res}
         ].map(item => {
           return {
             title: `FRA ${item.action}`,

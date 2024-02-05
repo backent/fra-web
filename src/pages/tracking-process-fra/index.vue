@@ -15,7 +15,7 @@
           </VTextField>
         </div>
 
-        <div v-show="result.length > 0">
+        <div v-show="displaySearchResult">
           <div class="mb-2">Search Result</div>
           <VList>
             <VListItem v-for="item in result" :key="item.id">
@@ -163,6 +163,9 @@ const page = computed({
   }
 })
 
+const displaySearchResult = computed(() => {
+  return result.value.length > 0
+})
 
 const onChangeHandler = function (v) {
   if (searchingDebounce.value) {
@@ -204,6 +207,9 @@ const fetchTrackingDocuments = function (name) {
   documentStore.fetchTrackingDocuments({ name })
     .then(data => {
       result.value = documentStore.trackingResponseToTrackingList(data)
+    })
+    .catch(() => {
+      result.value = []
     })
 }
 
