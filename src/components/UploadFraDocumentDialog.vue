@@ -52,10 +52,11 @@
             </div>
           </div>
         </div>
-        <div class="download-template" @click="downloadTemplate">
+        <a class="download-template" href="/template/FRA Document Template.xlsx">
           <VIcon icon="tabler-upload" />
           FRA Document Template.xlsx
-        </div>
+        </a>
+        <AppSelect v-model="category" class="my-5 category-field" :items="categoryOptions" label="Category" />
       </VCardText>
 
       <VCardText class="d-flex justify-end actions">
@@ -72,12 +73,15 @@
 
 <script setup>
 import { useAppStore } from '@/@core/stores/app';
+import { getUploadMappingFieldActualFieldRisk } from '@/config/document';
+import { useDocumentStore } from '@/store/document';
 import {
   useDropZone,
   useFileDialog,
   useObjectUrl,
 } from '@vueuse/core';
 import { watch, watchEffect } from 'vue';
+import { read, utils } from 'xlsx';
 
 const props = defineProps({
   active: {
@@ -87,9 +91,20 @@ const props = defineProps({
 })
 
 const appStore = useAppStore()
+const documentStore = useDocumentStore()
+
 const isUploadLoading = ref(false)
 const dropZoneRef = ref()
 const fileData = ref([])
+const category = ref('')
+const fileName = ref('')
+const risks = ref([])
+const categoryOptions = [
+  'communication',
+  'datacomm',
+  'wireless',
+  'internet',
+]
 const { open, onChange, reset: resetDropzone } = useFileDialog({ accept: '*', multiple: false })
 function onDrop(DroppedFiles) {
   DroppedFiles?.forEach(file => {
@@ -112,6 +127,8 @@ onChange(selectedFiles => {
       file,
       url: useObjectUrl(file).value ?? '',
     })
+    convertToJson(file)
+
   }
 })
 
@@ -130,6 +147,7 @@ watchEffect(() => {
 const emits = defineEmits(['update:active'])
 
 const upload = function () {
+  const payload = getPayload(fileName.value, risks.value, category.value, 'submit')
   if (fileData.value.length < 1) {
     appStore.openSnackbar({
       message: "Uploaded file is required",
@@ -139,19 +157,51 @@ const upload = function () {
   } else {
     // do upload
     isUploadLoading.value = true
-
-    setTimeout(() => {
-      appStore.openSnackbar({
-        message: "Successfuly upload file",
-        timeout: 1000,
-        color: 'success'
+    documentStore.submitDocument(payload)
+      .then(() => {
+        appStore.openSnackbar({
+          message: "Successfuly upload file",
+          timeout: 1000,
+          color: 'success'
+        })
+        emits('update:active', false)
+        reset()
       })
-      isUploadLoading.value = false
-      reset()
-      emits('update:active', false)
-    }, 1000)
+      .catch(onCatchDocument)
+      .finally(() => {
+        isUploadLoading.value = false
+      })
   }
 
+}
+
+const onCatchDocument = function (err) {
+  switch (err.status) {
+    case 400:
+      appStore.openSnackbar({
+        message: "Some field still missing.",
+        timeout: 4000,
+        color: 'error'
+      })
+      break;
+    case 409:
+      appStore.openSnackbar({
+        message: "Your document submission is incompatible due to the use of an outdated version.",
+        timeout: 4000,
+        color: 'error'
+      })
+      break;
+    case 500:
+      appStore.openSnackbar({
+        message: "There is something wrong on our server. Please contact your administrator.",
+        timeout: 4000,
+        color: 'error'
+      })
+      break;
+
+    default:
+      break;
+  }
 }
 
 const close = function () {
@@ -168,9 +218,40 @@ const reset = function () {
   resetDropzone()
 }
 
-const downloadTemplate = function () {
 
+
+const convertToJson = async (file) => {
+  const filenameArray = file.name.split(".")
+  filenameArray.splice(filenameArray.length - 1, 1)
+  const filename = filenameArray.join(".")
+  const data = await file.arrayBuffer()
+  const workbook = read(data)
+  const worksheet = workbook.Sheets[workbook.SheetNames[0]]
+  const rawData = utils.sheet_to_json(worksheet)
+  rawData.splice(0, 2)
+
+  const sanitizedRiskData = rawData.reduce((pre, curr) => {
+    const riskData = {}
+    Object.entries(curr).forEach(([key, value]) => {
+      riskData[getUploadMappingFieldActualFieldRisk(key)] = value
+    })
+    pre.push(riskData)
+    return pre
+  }, [])
+  fileName.value = filename
+  risks.value = sanitizedRiskData
 }
+
+const getPayload = function (fileName, risks, category, action) {
+  const payload = {
+    product_name: fileName,
+    category,
+    risks,
+    action
+  }
+  return payload
+}
+
 </script>
 
 <style lang="scss" scoped>
