@@ -42,14 +42,17 @@
         <VCard>
           <VCardText class="card d-flex flex-column align-center">
             <div class="text-h5">Add New Assessement</div>
-            <VBtn color="primary" variant="tonal" @click="openDocumentUpload">
+            <VBtn color="primary" variant="tonal" :disabled="authStore.isReviewer" @click="openDocumentUpload">
               <VIcon start icon="tabler-upload" /> Document Upload
             </VBtn>
-            <RouterLink :to="{ name: 'dashboard-create-document' }">
+            <RouterLink v-show="!authStore.isReviewer" :to="{ name: 'dashboard-create-document' }">
               <VBtn color="primary" variant="tonal">
                 <VIcon start icon="tabler-clipboard" /> Create Document
               </VBtn>
             </RouterLink>
+            <VBtn v-show="authStore.isReviewer" :disabled="authStore.isReviewer" color="primary" variant="tonal">
+              <VIcon start icon="tabler-clipboard" /> Create Document
+            </VBtn>
           </VCardText>
         </VCard>
       </VCol>
@@ -77,8 +80,11 @@ import CardFraCategory from '@/components/CardFraCategory.vue';
 import CardFraTopList from '@/components/CardFraToplist.vue';
 import UploadFraDocumentDialog from '@/components/UploadFraDocumentDialog.vue';
 import config from '@/config/category';
+import { useAuthStore } from '@/store/auth';
 import { computed } from 'vue';
 
+
+const authStore = useAuthStore()
 
 
 const listAssessmentDetail = [
