@@ -54,6 +54,7 @@ declare global {
   const extendRef: typeof import('@vueuse/core')['extendRef']
   const formatCompleteTime: typeof import('./src/utils/formatter.js')['formatCompleteTime']
   const formatDate: typeof import('./src/@core/utils/formatters.js')['formatDate']
+  const formatDateTime: typeof import('./src/utils/formatter.js')['formatDateTime']
   const formatDateToMonthShort: typeof import('./src/@core/utils/formatters.js')['formatDateToMonthShort']
   const formatTableDate: typeof import('./src/utils/formatter.js')['formatTableDate']
   const getActivePinia: typeof import('pinia')['getActivePinia']
@@ -412,6 +413,7 @@ declare module 'vue' {
     readonly extendRef: UnwrapRef<typeof import('@vueuse/core')['extendRef']>
     readonly formatCompleteTime: UnwrapRef<typeof import('./src/utils/formatter.js')['formatCompleteTime']>
     readonly formatDate: UnwrapRef<typeof import('./src/@core/utils/formatters.js')['formatDate']>
+    readonly formatDateTime: UnwrapRef<typeof import('./src/utils/formatter.js')['formatDateTime']>
     readonly formatDateToMonthShort: UnwrapRef<typeof import('./src/@core/utils/formatters.js')['formatDateToMonthShort']>
     readonly formatTableDate: UnwrapRef<typeof import('./src/utils/formatter.js')['formatTableDate']>
     readonly getActivePinia: UnwrapRef<typeof import('pinia')['getActivePinia']>
@@ -764,6 +766,7 @@ declare module '@vue/runtime-core' {
     readonly extendRef: UnwrapRef<typeof import('@vueuse/core')['extendRef']>
     readonly formatCompleteTime: UnwrapRef<typeof import('./src/utils/formatter.js')['formatCompleteTime']>
     readonly formatDate: UnwrapRef<typeof import('./src/@core/utils/formatters.js')['formatDate']>
+    readonly formatDateTime: UnwrapRef<typeof import('./src/utils/formatter.js')['formatDateTime']>
     readonly formatDateToMonthShort: UnwrapRef<typeof import('./src/@core/utils/formatters.js')['formatDateToMonthShort']>
     readonly formatTableDate: UnwrapRef<typeof import('./src/utils/formatter.js')['formatTableDate']>
     readonly getActivePinia: UnwrapRef<typeof import('pinia')['getActivePinia']>

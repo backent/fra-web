@@ -8,6 +8,10 @@ const formatTableDate = function(timestamp) {
   return dayjs(timestamp).format('D MMMM YYYY')
 }
 
+const formatDateTime = function(timestamp) {
+  return dayjs(timestamp).format('D MMMM YYYY HH:mm')
+}
+
 const getTimeAgo = function (timestamp) {
   const now = dayjs();
   const targetDate = dayjs(timestamp);
@@ -36,7 +40,6 @@ const getTimeAgo = function (timestamp) {
 }
 
 export {
-  formatCompleteTime,
-  formatTableDate,
-  getTimeAgo
+  formatCompleteTime, formatDateTime, formatTableDate, getTimeAgo
 }
+

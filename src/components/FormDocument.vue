@@ -86,6 +86,7 @@ const isLoading = ref(false)
 const productNameTempStore = ref('')
 const actionOn = ref('')
 const currentUUID = ref('')
+const currentId = ref(0)
 const listRisk = ref([
   { ...template, risk_name: 'Risk 1' }
 ])
@@ -200,6 +201,7 @@ const save = function () {
 
 const getPayload = function (action) {
   const payload = {
+    id: currentId.value,
     uuid: currentUUID.value,
     product_name: productName.value,
     risks: [...listRisk.value],
@@ -220,10 +222,18 @@ const onThenDocument = function (message) {
 }
 
 const onCatchDocument = function (err) {
+
   switch (err.status) {
     case 400:
       appStore.openSnackbar({
         message: "Some field still missing.",
+        timeout: 4000,
+        color: 'error'
+      })
+      break;
+    case 409:
+      appStore.openSnackbar({
+        message: "Your document submission is incompatible due to the use of an outdated version.",
         timeout: 4000,
         color: 'error'
       })
@@ -290,8 +300,9 @@ const fetchDocumentRiskSuggestionByDocumentId = function (id) {
 const fetchDocumentById = function (id) {
   documentStore.fetchDocumentById({ id })
     .then(res => {
-      const { risk_detail, product_name, uuid } = res
+      const { risk_detail, product_name, uuid, id } = res
       currentUUID.value = uuid
+      currentId.value = id
       productName.value = product_name
       listRisk.value = [...risk_detail]
     })

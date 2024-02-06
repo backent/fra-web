@@ -312,7 +312,7 @@ const computedSelectedRisk = computed({
 })
 
 const computedUpdateDateOptions = computed(() => {
-  return [
+  const options = [
     {
       text: props.modelValue.created_at,
       value: props.modelValue.id
@@ -324,6 +324,8 @@ const computedUpdateDateOptions = computed(() => {
       }
     })
   ]
+  options.sort((a, b) => b.value - a.value)
+  return options
 })
 
 
@@ -381,13 +383,7 @@ const approve = function () {
         timeout: 3000
       })
     })
-    .catch(() => {
-      appStore.openSnackbar({
-        message: "Error While Approve Document. Please Contact your administrator",
-        color: 'error',
-        timeout: 3000
-      })
-    })
+    .catch(onCatchDocument)
     .finally(() => {
       isLoading.value = false
       close()
@@ -428,13 +424,7 @@ const submit = async function () {
         timeout: 3000
       })
     })
-    .catch(() => {
-      appStore.openSnackbar({
-        message: "Error While Reject Document. Please Contact your administrator",
-        color: 'error',
-        timeout: 3000
-      })
-    })
+    .catch(onCatchDocument)
     .finally(() => {
       isLoading.value = false
       close()
@@ -447,6 +437,7 @@ const reject = function () {
 
 const reset = function () {
   emits('update:modelValue', { ...templateWithDetail })
+  emits('update:mode', 'overall')
   rejectNote.value = {}
   selectedRisk.value = ''
   actionOn.value = ''
@@ -501,6 +492,29 @@ const updateRelatedDocument = function (documentId) {
       .then(res => {
         relatedDocumentFullData.value.push(res)
       })
+  }
+}
+
+const onCatchDocument = function (err) {
+
+  switch (err.status) {
+    case 409:
+      appStore.openSnackbar({
+        message: "Your document submission is incompatible due to the use of an outdated version.",
+        timeout: 4000,
+        color: 'error'
+      })
+      break;
+    case 500:
+      appStore.openSnackbar({
+        message: "There is something wrong on our server. Please contact your administrator.",
+        timeout: 4000,
+        color: 'error'
+      })
+      break;
+
+    default:
+      break;
   }
 }
 
