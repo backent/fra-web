@@ -8,6 +8,7 @@
       <VCardText>
         <AppCombobox v-model="productName" class="mb-5" label="Product Name" placeholder="Product Name"
           :items="productReference" item-title="text" />
+        <AppSelect v-model="category" class="mb-5 category-field" :items="categoryOptions" label="Category" />
         <div class="d-flex">
           <div class="risk-list">
             <div>List of Risks</div>
@@ -87,6 +88,7 @@ const productNameTempStore = ref('')
 const actionOn = ref('')
 const currentUUID = ref('')
 const currentId = ref(0)
+const category = ref('')
 const listRisk = ref([
   { ...template, risk_name: 'Risk 1' }
 ])
@@ -95,7 +97,12 @@ const riskName = ref('')
 const productReference = ref([])
 const listRiskSuggestion = ref([])
 const isOnPreviewSuggestion = ref(false)
-
+const categoryOptions = [
+  'communication',
+  'datacomm',
+  'wireless',
+  'internet',
+]
 
 const isSaveLoading = computed(() => {
   return isLoading.value && actionOn.value === 'save'
@@ -204,6 +211,7 @@ const getPayload = function (action) {
     id: currentId.value,
     uuid: currentUUID.value,
     product_name: productName.value,
+    category: category.value,
     risks: [...listRisk.value],
     action
   }
@@ -294,16 +302,18 @@ const fetchDocumentRiskSuggestionByDocumentId = function (id) {
   documentStore.fetchDocumentById({ id })
     .then(res => {
       listRiskSuggestion.value = [...res.risk_detail]
+      category.value = res.category
     })
 }
 
 const fetchDocumentById = function (id) {
   documentStore.fetchDocumentById({ id })
     .then(res => {
-      const { risk_detail, product_name, uuid, id } = res
+      const { risk_detail, product_name, uuid, id, category: categoryResponse } = res
       currentUUID.value = uuid
       currentId.value = id
       productName.value = product_name
+      category.value = categoryResponse
       listRisk.value = [...risk_detail]
     })
 }

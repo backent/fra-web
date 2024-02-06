@@ -99,8 +99,13 @@ const documentStore = useDocumentStore()
 const authStore = useAuthStore()
 const detailDialog = ref(false)
 const detailMode = ref('overall')
+const currentCategory = computed(() => {
+  const categoryParam = route?.params?.category ?? ''
+  return categoryParam.split('-')[0]
+})
 const query = ref({
   ...defaultQuery,
+  category: currentCategory.value
 })
 
 watch(detailDialog, (val) => {
@@ -122,11 +127,6 @@ const page = computed({
 const take = ref(10)
 
 const selectedDocument = ref({ ...templateWithDetail })
-
-const currentCategory = computed(() => {
-  const categoryParam = route?.params?.category ?? ''
-  return categoryParam.split('-')[0]
-})
 
 const isEditBtnVisible = function (document) {
   return authStore.isAuthor && (document.action === 'draft' || document.action === 'reject')
