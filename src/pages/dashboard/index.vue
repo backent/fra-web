@@ -90,7 +90,7 @@ const listAssessmentDetail = [
   },
   {
     color: 'error',
-    title: 'Reject',
+    title: 'Return',
     icon: 'tabler-x',
     count: 5,
   },

@@ -203,7 +203,7 @@
             </VBtn>
             <VBtn v-show="isRejectBtnVisible" :disabled="isApproveLoading || currentProduct.id !== modelValue.id"
               color="error" @click="reject()">
-              Reject
+              Return
             </VBtn>
             <VBtn v-show="isSubmitBtnVisible" :disabled="isApproveLoading || currentProduct.id !== modelValue.id"
               :loading="isRejectLoading" color="error" @click="submit()">
