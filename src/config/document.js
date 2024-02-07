@@ -88,9 +88,30 @@ const getUploadMappingFieldActualFieldRisk = function(importField) {
   return uploadMappingField[importField]
 }
 
-
-
-export {
-  getColorStatus, getStatus, getUploadMappingFieldActualFieldRisk
+const exportColumnIndexMappingField = {
+  'no': 0,
+  'risk_name': 1,
+  'fraud_schema': 2,
+  'fraud_motive': 3,
+  'fraud_technique': 4,
+  'risk_source': 5,
+  'root_cause': 6,
+  'bispro_control_procedure': 7,
+  'qualitative_impact': 8,
+  'assessment_likehood': 9,
+  'assessment_impact': 10,
+  'assessment_risk_level': 11,
+  'likehood_justification': 12,
+  'impact_justification': 13,
+  'strategy_agreement': 14,
+  'strategy_recomendation': 15,
 }
+
+const exportStartRow = 3
+
+
+
+
+
+export { exportColumnIndexMappingField, exportStartRow, getColorStatus, getStatus, getUploadMappingFieldActualFieldRisk }
 
