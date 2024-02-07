@@ -4,12 +4,14 @@ import authV1BottomShape from '@images/svg/auth-v1-bottom-shape.svg?raw';
 import authV1TopShape from '@images/svg/auth-v1-top-shape.svg?raw';
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer';
 
+import { useAppStore } from '@/@core/stores/app';
 import { useAuthStore } from '@/store/auth';
 import { useRouter } from 'vue-router';
 
 definePage({ meta: { layout: 'blank' } })
 
 const authStore = useAuthStore()
+const appStore = useAppStore()
 const router = useRouter()
 
 const form = ref({
@@ -21,12 +23,35 @@ const form = ref({
 const isPasswordVisible = ref(false)
 const applyDialog = ref(false)
 
-const login = function () {
+const login = async function () {
   return authStore.login(form.value)
     .then(authStore.initializeCurrentUser)
     .then(() => {
       router.push('/')
     })
+    .catch(catchHandler)
+}
+
+const catchHandler = function (err) {
+  switch (err.status) {
+    case 400:
+      appStore.openSnackbar({
+        message: "NIK or password is incorrect.",
+        timeout: 4000,
+        color: 'error'
+      })
+      break;
+    case 500:
+      appStore.openSnackbar({
+        message: "There is something wrong on our server. Please contact your administrator.",
+        timeout: 4000,
+        color: 'error'
+      })
+      break;
+
+    default:
+      break;
+  }
 }
 
 </script>
