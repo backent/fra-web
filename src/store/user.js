@@ -1,4 +1,4 @@
-import { postUserRegistrationApply } from "@/http/user";
+import { getUserRegistrations, postUserRegistrationApply } from "@/http/user";
 import { defineStore } from "pinia";
 
 export const useUserStore = defineStore('user', {
@@ -13,6 +13,19 @@ export const useUserStore = defineStore('user', {
   actions: {
     async postUserRegistrationApply(body) {
       return postUserRegistrationApply(body)
+    },
+    async fetchUserRegistrations(query) {
+      return getUserRegistrations(query)
+    },
+    userRegistrationToTable(res) {
+      return res.map(item => {
+        return {
+          name: item.nik,
+          nik: item.nik,
+          status: item.status,
+          email: `${item.nik}@telkom.co.id`
+        }
+      })
     }
   }
 })

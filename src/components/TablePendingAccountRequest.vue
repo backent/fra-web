@@ -1,5 +1,9 @@
 <template>
-  <VDataTable :headers="headers" :items="data" :items-per-page="5">
+  <VDataTableServer :headers="headers" :items="data" v-model:items-per-page="query.take" v-model:page="page"
+    :items-length="totalData" @update:options="onUpdateOptions">
+    <template #item.no="{ index }">
+      {{ (query.take * (page - 1)) + index + 1 }}
+    </template>
     <template #item.action="{ item }">
       <VRow>
         <VCol cols="4">
@@ -14,11 +18,16 @@
         </VCol>
       </VRow>
     </template>
-  </VDataTable>
+  </VDataTableServer>
 </template>
 
 <script setup>
-import { VDataTable } from 'vuetify/labs/VDataTable';
+import { useUserStore } from '@/store/user';
+import { onMounted, watch } from 'vue';
+import { VDataTableServer } from 'vuetify/labs/VDataTable';
+
+
+const userStore = useUserStore()
 
 const headers = [
   {
@@ -28,7 +37,7 @@ const headers = [
     title: 'NAME', key: 'name', sortable: false
   },
   {
-    title: 'NIK', key: 'nik', sortable: false
+    title: 'NIK', key: 'nik', sortable: true
   },
   {
     title: 'EMAIL', key: 'email', sortable: false
@@ -38,36 +47,47 @@ const headers = [
   },
 ]
 
-const data = [
-  {
-    no: 1,
-    name: 'John Doe',
-    nik: 1234567,
-    email: 'john@doe.com'
+const data = ref([])
+const totalData = ref(0)
+
+const defaultQuery = {
+  orderBy: 'created_at',
+  orderDirection: 'desc',
+  take: 5,
+  skip: 0
+}
+const query = ref({
+  ...defaultQuery
+})
+const page = computed({
+  get() {
+    return (query.value.skip / query.value.take) + 1
   },
-  {
-    no: 2,
-    name: 'John Doe',
-    nik: 1234567,
-    email: 'john@doe.com'
-  },
-  {
-    no: 3,
-    name: 'John Doe',
-    nik: 1234567,
-    email: 'john@doe.com'
-  },
-  {
-    no: 4,
-    name: 'John Doe',
-    nik: 1234567,
-    email: 'john@doe.com'
-  },
-  {
-    no: 5,
-    name: 'John Doe',
-    nik: 1234567,
-    email: 'john@doe.com'
-  },
-]
+  set(v) {
+    query.value.skip = (v - 1) * query.value.take
+  }
+})
+
+onMounted(() => {
+  fetchUserRegistrations()
+})
+
+const fetchUserRegistrations = async function () {
+  return userStore.fetchUserRegistrations({ ...query.value, take: query.value.take === -1 ? 9999 : query.value.take })
+    .then(res => {
+      data.value = userStore.userRegistrationToTable(res.data)
+      totalData.value = res.extras.total
+    })
+}
+const onUpdateOptions = function (options) {
+  if (options.sortBy.length > 0) {
+    query.value.orderBy = options.sortBy[0].key
+    query.value.orderDirection = options.sortBy[0].order
+  }
+}
+
+watch(query, () => {
+  fetchUserRegistrations()
+}, { deep: true })
+
 </script>
