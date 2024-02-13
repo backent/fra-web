@@ -37,3 +37,7 @@ export const getTrackingDocuments = function (query) {
   const newUrl = pathParse(apis.tracking_document, query)
   return GetApi(newUrl)
 }
+
+export const getDocumentDashboardSummary = function () {
+  return GetApi(apis.get_document_dashboard_summary)
+}

@@ -1,4 +1,4 @@
-import { approveDocument, getDocumentById, getDocuments, getDocumentsDistinctProductName, getMonitoringDocuments, getTrackingDocuments, postDocument, rejectDocument } from "@/http/document";
+import { approveDocument, getDocumentById, getDocumentDashboardSummary, getDocuments, getDocumentsDistinctProductName, getMonitoringDocuments, getTrackingDocuments, postDocument, rejectDocument } from "@/http/document";
 import { formatDateTime } from "@/utils/formatter";
 import { defineStore } from "pinia";
 
@@ -44,6 +44,10 @@ export const useDocumentStore = defineStore('document', {
     },
     async fetchTrackingDocuments(query) {
       return getTrackingDocuments(query)
+        .then(res => res.data)
+    },
+    async fetchDocumentDashboardSummary(query) {
+      return getDocumentDashboardSummary(query)
         .then(res => res.data)
     },
     async submitDocument(body) {

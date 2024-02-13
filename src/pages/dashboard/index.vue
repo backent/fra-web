@@ -7,8 +7,8 @@
             <VRow>
               <VCol class="assessment-total__all-summary">
                 <span class="text-h4">Total Assessment</span>
-                <span>Total Assessment in 2022</span>
-                <span>45</span>
+                <span>Total Assessment in {{ currentYear }}</span>
+                <span>{{ totalAssessment }}</span>
               </VCol>
               <VCol class="assessment-total__detail">
                 <div class="assessment-total__detail__card">
@@ -81,32 +81,41 @@ import CardFraTopList from '@/components/CardFraToplist.vue';
 import UploadFraDocumentDialog from '@/components/UploadFraDocumentDialog.vue';
 import config from '@/config/category';
 import { useAuthStore } from '@/store/auth';
-import { computed } from 'vue';
+import { useDocumentStore } from '@/store/document';
+import dayjs from 'dayjs';
+import { computed, onMounted } from 'vue';
 
 
 const authStore = useAuthStore()
+const documentStore = useDocumentStore()
 
-
-const listAssessmentDetail = [
+const totalAssessment = ref(0)
+const listAssessmentDetail = ref([
   {
     color: 'success',
     title: 'Release',
     icon: 'tabler-check',
-    count: 23,
+    count: 0,
   },
   {
     color: 'error',
     title: 'Return',
     icon: 'tabler-x',
-    count: 5,
+    count: 0,
   },
   {
     color: 'info',
-    title: 'Assessment',
+    title: 'Received',
     icon: 'tabler-file-invoice',
-    count: 28,
-  },
-]
+    count: 0,
+  }
+])
+
+const mapSummaryActionAndTitle = {
+  'Release': 'release',
+  'Return': 'return',
+  'Received': 'received'
+}
 
 const listCategoryCard = [
   {
@@ -258,9 +267,29 @@ const computedListTop = computed(() => {
     return { ...item, list }
   })
 })
+const currentYear = computed(() => {
+  return dayjs().format('YYYY')
+})
+
+onMounted(() => {
+  fetchDocumentDashboardSummary()
+})
 
 const openDocumentUpload = function () {
   uploadDocumentDialog.value = true
+}
+
+const fetchDocumentDashboardSummary = function () {
+  documentStore.fetchDocumentDashboardSummary()
+    .then(data => {
+      listAssessmentDetail.value = listAssessmentDetail.value.map(item => {
+        return {
+          ...item,
+          count: data.summary_assessement[mapSummaryActionAndTitle[item.title]]
+        }
+      })
+      totalAssessment.value = data.summary_assessement.total
+    })
 }
 </script>
 

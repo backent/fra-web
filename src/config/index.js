@@ -10,6 +10,7 @@ export const apis = {
   reject_document: '/documents-reject',
   monitoring_document: '/documents-monitoring',
   tracking_document: '/documents-tracker/:name',
+  get_document_dashboard_summary: '/documents-dashboard-summary',
   get_notifications: '/notifications',
   read_all_notifications: '/notifications/read-all',
   user_registration_apply: '/user-registrations/apply',
