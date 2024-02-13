@@ -1,5 +1,5 @@
 <template>
-  <VDialog v-model="dialogValue" width="500" persistent>
+  <VDialog v-model="dialogValue" width="650" persistent>
     <!-- Dialog close btn -->
     <DialogCloseBtn @click="close" />
 
@@ -7,6 +7,14 @@
     <VCard title="Upload New Assessment">
       <VCardText>
         <div class="w-full h-auto relative mb-3">
+          <VRow>
+            <VCol>
+              <AppSelect v-model="category" class="my-5 category-field" :items="categoryOptions" label="Category" />
+            </VCol>
+            <VCol>
+              <AppSelect v-model="uploadType" class="my-5 category-field" :items="['New', 'Final']" label="Type" />
+            </VCol>
+          </VRow>
           <div ref="dropZoneRef" class="cursor-pointer" @click="() => open()">
             <div v-if="fileData.length === 0"
               class="d-flex flex-column justify-center align-center gap-y-3 px-6 py-10 border-dashed drop-zone">
@@ -56,7 +64,6 @@
           <VIcon icon="tabler-upload" />
           FRA Document Template.xlsx
         </a>
-        <AppSelect v-model="category" class="my-5 category-field" :items="categoryOptions" label="Category" />
       </VCardText>
 
       <VCardText class="d-flex justify-end actions">
@@ -80,7 +87,7 @@ import {
   useFileDialog,
   useObjectUrl,
 } from '@vueuse/core';
-import { watch, watchEffect } from 'vue';
+import { computed, watch, watchEffect } from 'vue';
 import { read, utils } from 'xlsx';
 
 const props = defineProps({
@@ -90,14 +97,18 @@ const props = defineProps({
   }
 })
 
+const emits = defineEmits(['update:active'])
+
 const appStore = useAppStore()
 const documentStore = useDocumentStore()
+const { open, onChange, reset: resetDropzone } = useFileDialog({ accept: '*', multiple: false })
 
 const isUploadLoading = ref(false)
 const dropZoneRef = ref()
 const fileData = ref([])
 const category = ref('')
 const fileName = ref('')
+const uploadType = ref('New')
 const risks = ref([])
 const categoryOptions = [
   'communication',
@@ -105,7 +116,9 @@ const categoryOptions = [
   'wireless',
   'internet',
 ]
-const { open, onChange, reset: resetDropzone } = useFileDialog({ accept: '*', multiple: false })
+
+const dialogValue = ref(false)
+
 function onDrop(DroppedFiles) {
   DroppedFiles?.forEach(file => {
     // if (file.type.slice(0, 6) !== 'image/') {
@@ -132,22 +145,19 @@ onChange(selectedFiles => {
   }
 })
 
-watch(() => props.active, (val) => {
-  if (val) {
-    useDropZone(dropZoneRef, onDrop)
+const action = computed(() => {
+  switch (uploadType.value) {
+    case 'New':
+      return 'submit'
+    case 'Final':
+      return 'approve'
+    default:
+      return ''
   }
 })
 
-const dialogValue = ref(false)
-
-watchEffect(() => {
-  dialogValue.value = props.active
-})
-
-const emits = defineEmits(['update:active'])
-
 const upload = function () {
-  const payload = getPayload(fileName.value, risks.value, category.value, 'submit')
+  const payload = getPayload(fileName.value, risks.value, category.value, action.value)
   if (fileData.value.length < 1) {
     appStore.openSnackbar({
       message: "Uploaded file is required",
@@ -215,6 +225,8 @@ const cancel = function () {
 
 const reset = function () {
   fileData.value = []
+  category.value = []
+  uploadType.value = 'New'
   resetDropzone()
 }
 
@@ -251,6 +263,17 @@ const getPayload = function (fileName, risks, category, action) {
   }
   return payload
 }
+
+
+watch(() => props.active, (val) => {
+  if (val) {
+    useDropZone(dropZoneRef, onDrop)
+  }
+})
+watchEffect(() => {
+  dialogValue.value = props.active
+})
+
 
 </script>
 
