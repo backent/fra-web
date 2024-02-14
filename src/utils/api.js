@@ -2,7 +2,7 @@ import { useStorage } from '@vueuse/core';
 import { ofetch } from 'ofetch';
 
 const baseApiConfig = {
-  baseURL: '/api',
+  baseURL: '/fra/api',
   async onRequest({ options }) {
     const token = useStorage('token').value
     options.headers = {

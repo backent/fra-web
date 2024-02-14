@@ -12,6 +12,7 @@ import vuetify from 'vite-plugin-vuetify'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/fra',
   plugins: [
     // Docs: https://github.com/posva/unplugin-vue-router
     // ℹ️ This plugin should be placed before vue plugin
@@ -104,10 +105,10 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api': {
+      '/fra/api': {
         target: 'http://localhost:8022',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        rewrite: (path) => path.replace(/^\/fra\/api/, ''),
       }
     }
   }
