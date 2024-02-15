@@ -2,7 +2,7 @@ import { useStorage } from '@vueuse/core';
 import { ofetch } from 'ofetch';
 
 const baseApiConfig = {
-  baseURL: '/fra/api',
+  baseURL: import.meta.env.BASE_URL + 'api',
   async onRequest({ options }) {
     const token = useStorage('token').value
     options.headers = {
@@ -12,7 +12,7 @@ const baseApiConfig = {
   },
   async onResponseError({ response }) {
     if (response.status === 401) {
-      window.location.href = '/login'
+      window.location.href = import.meta.env.BASE_URL + 'login'
     }
   },
 }
