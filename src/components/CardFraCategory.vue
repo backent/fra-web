@@ -2,7 +2,8 @@
   <VCard>
     <VCardText>
       <div class="card-title">
-        <VAvatar rounded size="34" :color="colorTheme" variant="tonal" />
+        <img v-if="imgSrc" :src="imgSrc" />
+        <VAvatar v-else rounded size="34" :color="colorTheme" variant="tonal" />
         <span>
           {{ title }}
         </span>
@@ -33,6 +34,10 @@ defineProps({
   colorTheme: {
     type: String,
     default: ''
+  },
+  imgSrc: {
+    type: String,
+    default: ''
   }
 })
 </script>
@@ -46,6 +51,11 @@ defineProps({
     gap: 10px;
 
     margin-bottom: 12px;
+
+    &>img {
+      width: 32px;
+      height: auto;
+    }
   }
 
   &-description {

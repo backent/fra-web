@@ -61,7 +61,7 @@
     <VRow class="list-category-card align-stretch">
       <VCol cols="3" v-for="item in listCategoryCard" :key="item.title">
         <CardFraCategory :title="item.title" :description="item.description" :color-theme="item.color"
-          style="height: 100%;" />
+          :img-src="item.imgSrc" style="height: 100%;" />
       </VCol>
     </VRow>
 
@@ -76,6 +76,10 @@
 </template>
 
 <script setup>
+import CommunicationImg from '@/assets/images/Communication.png';
+import DatacommImg from '@/assets/images/Datacomm.png';
+import InternetImg from '@/assets/images/Internet.png';
+import WirelessImg from '@/assets/images/Wireless.png';
 import CardFraCategory from '@/components/CardFraCategory.vue';
 import CardFraTopList from '@/components/CardFraToplist.vue';
 import UploadFraDocumentDialog from '@/components/UploadFraDocumentDialog.vue';
@@ -122,21 +126,25 @@ const listCategoryCard = [
     color: config.colors.communication,
     title: 'Communication',
     description: 'Dokumen FRA terkait Layanan jasa teleponi.',
+    imgSrc: CommunicationImg,
   },
   {
     color: config.colors.datacomm,
     title: 'Datacomm',
     description: 'Dokumen FRA terkait produk untuk memenuhi komunikasi data antara nodes jaringan.',
+    imgSrc: DatacommImg,
   },
   {
     color: config.colors.wireless,
     title: 'Wireless',
     description: 'Dokumen FRA terkait produk untuk memenuhi komunikasi data antara nodes jaringan.',
+    imgSrc: WirelessImg,
   },
   {
     color: config.colors.internet,
     title: 'Internet',
     description: 'Dokumen FRA terkait Layanan internet.',
+    imgSrc: InternetImg,
   },
 ]
 
