@@ -528,7 +528,7 @@ const exportDocument = async function () {
   const fileName = currentProduct.value.product_name
 
   // fetch template
-  const response = await fetch('/template/FRA Document Template.xlsx');
+  const response = await fetch(import.meta.env.BASE_URL + 'template/FRA Document Template.xlsx');
   const arrayBuffer = await response.arrayBuffer();
   const workbook = read(arrayBuffer, { type: 'array' });
 

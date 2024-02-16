@@ -60,7 +60,7 @@
             </div>
           </div>
         </div>
-        <a class="download-template" href="/template/FRA Document Template.xlsx">
+        <a class="download-template" href="template/FRA Document Template.xlsx">
           <VIcon icon="tabler-upload" />
           FRA Document Template.xlsx
         </a>
