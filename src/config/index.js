@@ -14,5 +14,7 @@ export const apis = {
   get_notifications: '/notifications',
   read_all_notifications: '/notifications/read-all',
   user_registration_apply: '/user-registrations/apply',
+  user_registration_approve: '/user-registrations/approve',
+  user_registration_reject: '/user-registrations/reject',
   get_user_registration: '/user-registrations',
 }

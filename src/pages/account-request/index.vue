@@ -43,7 +43,7 @@ const TableAccount = defineAsyncComponent(() => import('@/components/TableAccoun
 
 const tabsData = [
   { title: 'List Account' },
-  { title: 'Request', count: 3 }
+  { title: 'Request' }
 ]
 const activeTab = ref(null)
 </script>
