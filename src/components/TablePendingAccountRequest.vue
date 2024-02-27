@@ -79,7 +79,6 @@ const fetchUserRegistrations = async function () {
   return userStore.fetchUserRegistrations({ ...query.value, take: query.value.take === -1 ? 9999 : query.value.take })
     .then(res => {
       data.value = userStore.userRegistrationToTable(res.data)
-      console.log(data.value)
       totalData.value = res.extras.total
     })
 }

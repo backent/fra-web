@@ -16,3 +16,9 @@ export const getUserRegistrations = function(query) {
   return GetApi(newUrl)
 }
 
+export const getUsers = function(query) {
+  const newUrl = pathParse(apis.get_user, query)
+  return GetApi(newUrl)
+}
+
+

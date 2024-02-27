@@ -17,4 +17,5 @@ export const apis = {
   user_registration_approve: '/user-registrations/approve',
   user_registration_reject: '/user-registrations/reject',
   get_user_registration: '/user-registrations',
+  get_user: '/users'
 }
