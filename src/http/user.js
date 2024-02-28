@@ -1,5 +1,5 @@
 import { apis } from "@/config"
-import { GetApi, PostApi } from "@/utils/api"
+import { DeleteApi, GetApi, PostApi } from "@/utils/api"
 
 export const postUserRegistrationApply = function(body) {
   return PostApi(apis.user_registration_apply, body)
@@ -19,6 +19,11 @@ export const getUserRegistrations = function(query) {
 export const getUsers = function(query) {
   const newUrl = pathParse(apis.get_user, query)
   return GetApi(newUrl)
+}
+
+export const deleteUser = function (query) {
+  const newUrl = pathParse(apis.delete_user, query)
+  return DeleteApi(newUrl)
 }
 
 

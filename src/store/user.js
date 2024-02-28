@@ -1,4 +1,4 @@
-import { getUserRegistrations, getUsers, postUserRegistrationApply, postUserRegistrationApprove, postUserRegistrationReject } from "@/http/user";
+import { deleteUser, getUserRegistrations, getUsers, postUserRegistrationApply, postUserRegistrationApprove, postUserRegistrationReject } from "@/http/user";
 import { defineStore } from "pinia";
 
 export const useUserStore = defineStore('user', {
@@ -13,6 +13,9 @@ export const useUserStore = defineStore('user', {
   actions: {
     async fetchUsers(query) {
       return getUsers(query)
+    },
+    async removeUser(id) {
+      return deleteUser({ id })
     },
     async postUserRegistrationApply(body) {
       return postUserRegistrationApply(body)

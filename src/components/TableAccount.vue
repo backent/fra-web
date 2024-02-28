@@ -20,12 +20,12 @@
       <template #item.action="{ item }">
         <VRow>
           <VCol v-if="item.status === 'reject'">
-            <VBtn variant="tonal" color="success" size="38" @click="approve(item.id)">
+            <VBtn variant="tonal" color="success" size="38" @click="approveHandler(item.id)">
               <VIcon icon="tabler-check" size="22" />
             </VBtn>
           </VCol>
           <VCol v-if="item.status === 'approve'">
-            <VBtn variant="tonal" color="error" size="38">
+            <VBtn variant="tonal" color="error" size="38" @click="deleteHandler(item.id)">
               <VIcon icon="tabler-trash" size="22" />
             </VBtn>
           </VCol>
@@ -138,12 +138,31 @@ const onUpdateOptions = function (options) {
   }
 }
 
-const approve = async function (id) {
+const approveHandler = async function (id) {
   return userStore.postUserRegistrationApprove({ id })
     .then(() => {
       fetchUsers()
       appStore.openSnackbar({
         message: "User successfully approved.",
+        timeout: 4000,
+        color: 'success'
+      })
+    })
+    .catch(() => {
+      appStore.openSnackbar({
+        message: "There is something wrong on our server. Please contact your administrator.",
+        timeout: 4000,
+        color: 'error'
+      })
+    })
+}
+
+const deleteHandler = async function (id) {
+  return userStore.removeUser(id)
+    .then(() => {
+      fetchUsers()
+      appStore.openSnackbar({
+        message: "User successfully deleted.",
         timeout: 4000,
         color: 'success'
       })
