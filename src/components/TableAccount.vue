@@ -20,7 +20,7 @@
       <template #item.action="{ item }">
         <VRow>
           <VCol v-if="item.status === 'reject'">
-            <VBtn variant="tonal" color="success" size="38">
+            <VBtn variant="tonal" color="success" size="38" @click="approve(item.id)">
               <VIcon icon="tabler-check" size="22" />
             </VBtn>
           </VCol>
@@ -36,12 +36,14 @@
 </template>
 
 <script setup>
+import { useAppStore } from '@/@core/stores/app';
 import { useUserStore } from '@/store/user';
 import { onMounted, watch } from 'vue';
 import { VDataTableServer } from 'vuetify/labs/VDataTable';
 
 
 const userStore = useUserStore()
+const appStore = useAppStore()
 
 const options = [
   {
@@ -134,6 +136,25 @@ const onUpdateOptions = function (options) {
     query.value.orderBy = options.sortBy[0].key
     query.value.orderDirection = options.sortBy[0].order
   }
+}
+
+const approve = async function (id) {
+  return userStore.postUserRegistrationApprove({ id })
+    .then(() => {
+      fetchUsers()
+      appStore.openSnackbar({
+        message: "User successfully approved.",
+        timeout: 4000,
+        color: 'success'
+      })
+    })
+    .catch(() => {
+      appStore.openSnackbar({
+        message: "There is something wrong on our server. Please contact your administrator.",
+        timeout: 4000,
+        color: 'error'
+      })
+    })
 }
 
 watch(query, () => {

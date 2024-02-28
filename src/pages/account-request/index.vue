@@ -20,10 +20,10 @@
         <VCol cols="10">
           <VWindow v-model="activeTab" class="disable-tab-transition" :touch="false">
             <VWindowItem>
-              <TableAccount />
+              <TableAccount :key="tableAccountKey" />
             </VWindowItem>
             <VWindowItem>
-              <TablePendingAccountRequest />
+              <TablePendingAccountRequest :key="tablePendingAccountRequestKey" />
             </VWindowItem>
           </VWindow>
 
@@ -45,5 +45,14 @@ const tabsData = [
   { title: 'List Account' },
   { title: 'Request' }
 ]
-const activeTab = ref(null)
+const activeTab = ref(0)
+const tableAccountKey = ref(0)
+const tablePendingAccountRequestKey = ref(0)
+watch(activeTab, (v) => {
+  if (v === 0) {
+    tableAccountKey.value++
+  } else {
+    tablePendingAccountRequestKey.value++
+  }
+})
 </script>
