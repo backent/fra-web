@@ -12,6 +12,7 @@ export const apis = {
   tracking_document: '/documents-tracker/:name',
   get_document_dashboard_summary: '/documents-dashboard-summary',
   get_notifications: '/notifications',
+  get_document_search_global: 'documents-search-global',
   read_all_notifications: '/notifications/read-all',
   user_registration_apply: '/user-registrations/apply',
   user_registration_approve: '/user-registrations/approve',

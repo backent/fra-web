@@ -1,7 +1,9 @@
 <script setup>
+import DocumentDetailDialog from '@/components/DocumentDetailDialog.vue';
+import { templateWithDetail } from '@/config/risk';
+import { useDocumentStore } from '@/store/document';
 import { useConfigStore } from '@core/stores/config';
 import Shepherd from 'shepherd.js';
-import { withQuery } from 'ufo';
 
 defineOptions({
   // 👉 Is App Search Bar Visible
@@ -9,6 +11,7 @@ defineOptions({
 })
 
 const configStore = useConfigStore()
+const documentStore = useDocumentStore()
 const isAppSearchBarVisible = ref(false)
 
 // 👉 Default suggestions
@@ -140,14 +143,53 @@ const noDataSuggestions = [
 const searchQuery = ref('')
 const router = useRouter()
 const searchResult = ref([])
+const selectedDocument = ref({ ...templateWithDetail })
+const detailMode = ref('overall')
+const detailDialog = ref(false)
+const onLoading = ref(false)
 
 const fetchResults = async () => {
-  const { data } = await useApi(withQuery('/app-bar/search', { q: searchQuery.value }))
+  if (!searchQuery.value) {
+    searchResult.value = []
+    return
+  }
+  const query = {
+    search: searchQuery.value,
+    take: 10,
+    skip: 0
+  }
+  onLoading.value = true
+  return documentStore.fetchDocumentSearchGlobal(query)
+    .then(res => {
+      searchResult.value = res.data
+    })
+    .finally(() => {
+      onLoading.value = false
+    })
 
-  searchResult.value = []
 }
 
-watch(searchQuery, fetchResults)
+const handleSearchItemClick = item => {
+  fetchDocumentById(item.id)
+  detailDialog.value = true
+}
+
+const fetchDocumentById = function (id) {
+  documentStore.fetchDocumentById({ id })
+    .then(res => {
+      selectedDocument.value = { ...res }
+    })
+}
+
+const searchDebounce = ref(0)
+
+watch(searchQuery, () => {
+  if (searchDebounce.value) {
+    clearTimeout(searchDebounce.value)
+  }
+
+  searchDebounce.value = setTimeout(fetchResults, 700)
+})
 
 const redirectToSuggestedOrSearchedPage = selected => {
   router.push(selected.url)
@@ -159,40 +201,24 @@ const LazyAppBarSearch = defineAsyncComponent(() => import('@core/components/App
 </script>
 
 <template>
-  <div
-    class="d-flex align-center cursor-pointer"
-    v-bind="$attrs"
-    style="user-select: none;"
-    @click="isAppSearchBarVisible = !isAppSearchBarVisible"
-  >
+  <div class="d-flex align-center cursor-pointer" v-bind="$attrs" style="user-select: none;"
+    @click="isAppSearchBarVisible = !isAppSearchBarVisible">
     <!-- 👉 Search Trigger button -->
     <!-- close active tour while opening search bar using icon -->
-    <IconBtn
-      class="me-1"
-      @click="Shepherd.activeTour?.cancel()"
-    >
-      <VIcon
-        size="26"
-        icon="tabler-search"
-      />
+    <IconBtn class="me-1" @click="Shepherd.activeTour?.cancel()">
+      <VIcon size="26" icon="tabler-search" />
     </IconBtn>
 
-    <span
-      v-if="configStore.appContentLayoutNav === 'vertical'"
-      class="d-none d-md-flex align-center text-disabled"
-      @click="Shepherd.activeTour?.cancel()"
-    >
+    <span v-if="configStore.appContentLayoutNav === 'vertical'" class="d-none d-md-flex align-center text-disabled"
+      @click="Shepherd.activeTour?.cancel()">
       <span class="me-3">Search</span>
       <span class="meta-key">&#8984;K</span>
     </span>
   </div>
 
   <!-- 👉 App Bar Search -->
-  <LazyAppBarSearch
-    v-model:isDialogVisible="isAppSearchBarVisible"
-    :search-results="searchResult"
-    @search="searchQuery = $event"
-  >
+  <LazyAppBarSearch v-model:isDialogVisible="isAppSearchBarVisible" :search-results="searchResult"
+    :on-loading="onLoading" @search="searchQuery = $event">
     <!-- suggestion -->
     <!-- <template #suggestions>
       <VCardText class="app-bar-search-suggestions h-100 pa-10">
@@ -226,12 +252,12 @@ const LazyAppBarSearch = defineAsyncComponent(() => import('@core/components/App
                     class="me-2"
                   />
                 </template>
-              </VListItem>
-            </VList>
-          </VCol>
-        </VRow>
-      </VCardText>
-    </template> -->
+</VListItem>
+</VList>
+</VCol>
+</VRow>
+</VCardText>
+</template> -->
     <!-- no data suggestion -->
     <!-- <template #noDataSuggestion>
       <div class="mt-8">
@@ -252,36 +278,31 @@ const LazyAppBarSearch = defineAsyncComponent(() => import('@core/components/App
       </div>
     </template> -->
     <!-- search result -->
+
     <template #searchResult="{ item }">
-      <VListSubheader class="text-disabled">
-        {{ item.title }}
-      </VListSubheader>
-      <VListItem
-        v-for="list in item.children"
-        :key="list.title"
-        link
-        @click="redirectToSuggestedOrSearchedPage(list)"
-      >
-        <template #prepend>
-          <VIcon
-            size="20"
-            :icon="list.icon"
-            class="me-3"
-          />
-        </template>
-        <template #append>
-          <VIcon
-            size="20"
-            icon="tabler-corner-down-left"
-            class="enter-icon text-disabled"
-          />
-        </template>
-        <VListItemTitle>
-          {{ list.title }}
-        </VListItemTitle>
+      <VListItem link @click="handleSearchItemClick(item)">
+        <VListSubheader>
+          <VListItemTitle>
+            <div class="text-disabled text-capitalize">
+              Product Name
+            </div>
+            <div v-if="!item.highlight.find(item => item.field === 'Product Name')">{{ item.product_name }}</div>
+            <div v-else v-html="item.highlight.find(item => item.field === 'Product Name').value"></div>
+          </VListItemTitle>
+        </VListSubheader>
+        <VListItem v-for="item in  item.highlight.filter(item => item.field !== 'Product Name') " :key="item.field">
+          <VListSubheader>
+            <div class="text-disabled text-capitalize">
+              {{ item.field }}
+            </div>
+            <div style="text-transform: initial;" v-html="item.value"></div>
+          </VListSubheader>
+        </VListItem>
       </VListItem>
+      <VDivider />
     </template>
   </LazyAppBarSearch>
+  <DocumentDetailDialog v-model="selectedDocument" v-model:active="detailDialog" v-model:mode="detailMode" />
 </template>
 
 <style lang="scss" scoped>
@@ -294,5 +315,11 @@ const LazyAppBarSearch = defineAsyncComponent(() => import('@core/components/App
   line-height: 1.3125rem;
   padding-block: 0.125rem;
   padding-inline: 0.25rem;
+}
+</style>
+
+<style>
+.highlight {
+  color: rgb(var(--v-theme-primary));
 }
 </style>

@@ -1,9 +1,9 @@
 <script setup>
-import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
+import { PerfectScrollbar } from 'vue3-perfect-scrollbar';
 import {
   VList,
   VListItem,
-} from 'vuetify/components/VList'
+} from 'vuetify/components/VList';
 
 const props = defineProps({
   isDialogVisible: {
@@ -14,6 +14,10 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  onLoading: {
+    type: Boolean,
+    default: false
+  }
 })
 
 const emit = defineEmits([
@@ -76,61 +80,32 @@ watch(() => props.isDialogVisible, () => {
 </script>
 
 <template>
-  <VDialog
-    max-width="600"
-    :model-value="props.isDialogVisible"
-    :height="$vuetify.display.smAndUp ? '550' : '100%'"
-    :fullscreen="$vuetify.display.width < 600"
-    class="app-bar-search-dialog"
-    @update:model-value="dialogModelValueUpdate"
-    @keyup.esc="clearSearchAndCloseDialog"
-  >
-    <VCard
-      height="100%"
-      width="100%"
-      class="position-relative"
-    >
+  <VDialog max-width="600" :model-value="props.isDialogVisible" :height="$vuetify.display.smAndUp ? '550' : '100%'"
+    :fullscreen="$vuetify.display.width < 600" class="app-bar-search-dialog"
+    @update:model-value="dialogModelValueUpdate" @keyup.esc="clearSearchAndCloseDialog">
+    <VCard height="100%" width="100%" class="position-relative">
       <VCardText class="pt-2">
         <!-- 👉 Search Input -->
-        <VTextField
-          ref="refSearchInput"
-          v-model="searchQueryLocal"
-          autofocus
-          density="comfortable"
-          variant="plain"
-          @keyup.esc="clearSearchAndCloseDialog"
-          @keydown="getFocusOnSearchList"
-          @update:model-value="$emit('search', searchQueryLocal)"
-        >
+        <VTextField ref="refSearchInput" v-model="searchQueryLocal" autofocus density="comfortable" variant="plain"
+          @keyup.esc="clearSearchAndCloseDialog" @keydown="getFocusOnSearchList"
+          @update:model-value="$emit('search', searchQueryLocal)">
           <!-- 👉 Prepend Inner -->
           <template #prepend-inner>
             <div class="d-flex align-center text-high-emphasis me-1">
-              <VIcon
-                size="22"
-                icon="tabler-search"
-                style="opacity: 1;"
-              />
+              <VIcon size="22" icon="tabler-search" style="opacity: 1;" />
             </div>
           </template>
 
           <!-- 👉 Append Inner -->
+
           <template #append-inner>
             <div class="d-flex align-start">
-              <div
-                class="text-base text-disabled cursor-pointer me-1"
-                @click="clearSearchAndCloseDialog"
-              >
+              <div class="text-base text-disabled cursor-pointer me-1" @click="clearSearchAndCloseDialog">
                 [esc]
               </div>
 
-              <IconBtn
-                size="22"
-                @click="clearSearchAndCloseDialog"
-              >
-                <VIcon
-                  icon="tabler-x"
-                  size="20"
-                />
+              <IconBtn size="22" @click="clearSearchAndCloseDialog">
+                <VIcon icon="tabler-x" size="20" />
               </IconBtn>
             </div>
           </template>
@@ -141,26 +116,14 @@ watch(() => props.isDialogVisible, () => {
       <VDivider />
 
       <!-- 👉 Perfect Scrollbar -->
-      <PerfectScrollbar
-        :options="{ wheelPropagation: false, suppressScrollX: true }"
-        class="h-100"
-      >
+      <PerfectScrollbar :options="{ wheelPropagation: false, suppressScrollX: true }" class="h-100">
         <!-- 👉 Search List -->
-        <VList
-          v-show="searchQueryLocal.length && !!props.searchResults.length"
-          ref="refSearchList"
-          density="compact"
-          class="app-bar-search-list"
-        >
+        <VList v-show="searchQueryLocal.length && !!props.searchResults.length && !props.onLoading" ref="refSearchList"
+          density="compact" class="app-bar-search-list">
           <!-- 👉 list Item /List Sub header -->
-          <template
-            v-for="item in props.searchResults"
-            :key="item"
-          >
-            <slot
-              name="searchResult"
-              :item="item"
-            >
+
+          <template v-for="item in props.searchResults" :key="item">
+            <slot name="searchResult" :item="item">
               <VListItem>
                 {{ item }}
               </VListItem>
@@ -168,26 +131,23 @@ watch(() => props.isDialogVisible, () => {
           </template>
         </VList>
 
+        <div v-show="props.onLoading"
+          style="height: 100%; display: flex; justify-content: center; align-items: center;">
+          <VProgressCircular indeterminate />
+        </div>
+
         <!-- 👉 Suggestions -->
-        <div
-          v-show="!!props.searchResults && !searchQueryLocal && $slots.suggestions"
-          class="h-100"
-        >
+        <div v-show="!!props.searchResults && !searchQueryLocal && $slots.suggestions" class="h-100">
           <slot name="suggestions" />
         </div>
 
         <!-- 👉 No Data found -->
-        <div
-          v-show="!props.searchResults.length && searchQueryLocal.length"
-          class="h-100"
-        >
+        <div v-show="!props.searchResults.length && searchQueryLocal.length && !props.onLoading" class="h-100">
           <slot name="noData">
             <VCardText class="h-100">
-              <div class="app-bar-search-suggestions d-flex flex-column align-center justify-center text-high-emphasis h-100">
-                <VIcon
-                  size="75"
-                  icon="tabler-file-x"
-                />
+              <div
+                class="app-bar-search-suggestions d-flex flex-column align-center justify-center text-high-emphasis h-100">
+                <VIcon size="75" icon="tabler-file-x" />
                 <div class="d-flex align-center flex-wrap justify-center gap-2 text-h6 my-3">
                   <span>No Result For </span>
                   <span>"{{ searchQueryLocal }}"</span>
@@ -221,10 +181,10 @@ watch(() => props.isDialogVisible, () => {
     font-size: 0.875rem !important;
   }
 
-  .v-input{
-    .v-field{
-      .v-field__field{
-        input{
+  .v-input {
+    .v-field {
+      .v-field__field {
+        input {
           padding-block-start: 1rem !important;
         }
       }
@@ -232,6 +192,7 @@ watch(() => props.isDialogVisible, () => {
   }
 
   .app-bar-search-list {
+
     .v-list-item,
     .v-list-subheader {
       font-size: 0.75rem;

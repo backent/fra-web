@@ -1,4 +1,5 @@
-import { approveDocument, getDocumentById, getDocumentDashboardSummary, getDocuments, getDocumentsDistinctProductName, getMonitoringDocuments, getTrackingDocuments, postDocument, rejectDocument } from "@/http/document";
+import { parameterMap } from "@/config/document";
+import { approveDocument, getDocumentById, getDocumentDashboardSummary, getDocumentSearchGlobal, getDocuments, getDocumentsDistinctProductName, getMonitoringDocuments, getTrackingDocuments, postDocument, rejectDocument } from "@/http/document";
 import { formatDateTime } from "@/utils/formatter";
 import { defineStore } from "pinia";
 
@@ -49,6 +50,15 @@ export const useDocumentStore = defineStore('document', {
     async fetchDocumentDashboardSummary(query) {
       return getDocumentDashboardSummary(query)
         .then(res => res.data)
+    },
+    async fetchDocumentSearchGlobal(query) {
+      return getDocumentSearchGlobal(query)
+        .then(res => {
+          return {
+            ...res,
+            data: this.searchResponseToSearchResult(res.data)
+          }
+        })
     },
     async submitDocument(body) {
       return postDocument(body)
@@ -104,6 +114,22 @@ export const useDocumentStore = defineStore('document', {
         return {
           ...parent,
           tracker
+        }
+      })
+    },
+    searchResponseToSearchResult(response) {
+      return response.map(res => {
+        const highlight = Object.entries(res.highlight).map(item => {
+          const [field, value] = item
+          return {
+            field: parameterMap[field.replace('risk.', '')],
+            value
+          }
+        })
+        return {
+          id: res.id,
+          product_name: res.product_name,
+          highlight
         }
       })
     }

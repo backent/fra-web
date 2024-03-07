@@ -110,8 +110,23 @@ const exportColumnIndexMappingField = {
 const exportStartRow = 3
 
 
+const parameterMap = {
+  'product_name': 'Product Name',
+  'risk_name': 'Risk Name',
+  'fraud_schema': 'Fraud Schema',
+  'fraud_motive': 'Fraud Motive',
+  'fraud_technique': 'Fraud Technique',
+  'risk_source': 'Risk Source',
+  'root_cause': 'Root Cause',
+  'bispro_control_procedure': 'Bispro Control Procedure',
+  'qualitative_impact': 'Qualitative Impact',
+  'likehood_justification': 'Likehood Justification',
+  'impact_justification': 'Impact Justification',
+  'strategy_recomendation': 'Strategy Recommendation'
+}
 
 
 
-export { exportColumnIndexMappingField, exportStartRow, getColorStatus, getStatus, getUploadMappingFieldActualFieldRisk }
+
+export { exportColumnIndexMappingField, exportStartRow, getColorStatus, getStatus, getUploadMappingFieldActualFieldRisk, parameterMap }
 
