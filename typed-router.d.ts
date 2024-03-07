@@ -48,6 +48,7 @@ declare module 'vue-router/auto/routes' {
     'dashboard-update-document-uuid': RouteRecordInfo<'dashboard-update-document-uuid', '/dashboard/update-document/:uuid', { uuid: ParamValue<true> }, { uuid: ParamValue<false> }>,
     'login': RouteRecordInfo<'login', '/login', Record<never, never>, Record<never, never>>,
     'monitoring-evaluation': RouteRecordInfo<'monitoring-evaluation', '/monitoring-evaluation', Record<never, never>, Record<never, never>>,
+    'search': RouteRecordInfo<'search', '/search', Record<never, never>, Record<never, never>>,
     'second-page': RouteRecordInfo<'second-page', '/second-page', Record<never, never>, Record<never, never>>,
     'third-page': RouteRecordInfo<'third-page', '/third-page', Record<never, never>, Record<never, never>>,
     'tracking-process-fra': RouteRecordInfo<'tracking-process-fra', '/tracking-process-fra', Record<never, never>, Record<never, never>>,

@@ -1,6 +1,7 @@
 <script setup>
 import DocumentDetailDialog from '@/components/DocumentDetailDialog.vue';
 import { templateWithDetail } from '@/config/risk';
+import SearchResult from '@/layouts/components/SearchResult.vue';
 import { useDocumentStore } from '@/store/document';
 import { useConfigStore } from '@core/stores/config';
 import Shepherd from 'shepherd.js';
@@ -191,6 +192,10 @@ watch(searchQuery, () => {
   searchDebounce.value = setTimeout(fetchResults, 700)
 })
 
+watch(isAppSearchBarVisible, () => {
+  searchResult.value = []
+})
+
 const redirectToSuggestedOrSearchedPage = selected => {
   router.push(selected.url)
   isAppSearchBarVisible.value = false
@@ -280,25 +285,7 @@ const LazyAppBarSearch = defineAsyncComponent(() => import('@core/components/App
     <!-- search result -->
 
     <template #searchResult="{ item }">
-      <VListItem link @click="handleSearchItemClick(item)">
-        <VListSubheader>
-          <VListItemTitle>
-            <div class="text-disabled text-capitalize">
-              Product Name
-            </div>
-            <div v-if="!item.highlight.find(item => item.field === 'Product Name')">{{ item.product_name }}</div>
-            <div v-else v-html="item.highlight.find(item => item.field === 'Product Name').value"></div>
-          </VListItemTitle>
-        </VListSubheader>
-        <VListItem v-for="item in  item.highlight.filter(item => item.field !== 'Product Name') " :key="item.field">
-          <VListSubheader>
-            <div class="text-disabled text-capitalize">
-              {{ item.field }}
-            </div>
-            <div style="text-transform: initial;" v-html="item.value"></div>
-          </VListSubheader>
-        </VListItem>
-      </VListItem>
+      <SearchResult :item="item" @onListItemClick="handleSearchItemClick(item)" />
       <VDivider />
     </template>
   </LazyAppBarSearch>

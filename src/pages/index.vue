@@ -13,7 +13,8 @@
     </VContainer>
     <VContainer>
 
-      <VTextField v-bind="$attrs" placeholder="Search" class="search-input  my-3" density="comfortable">
+      <VTextField v-bind="$attrs" v-model="search" placeholder="Search" class="search-input  my-3" density="comfortable"
+        @keyup.enter="doSearch">
         <template #prepend-inner>
           <VIcon icon="tabler-search" size="23" />
         </template>
@@ -53,8 +54,17 @@ import UserProfile from '@/layouts/components/UserProfile.vue';
 import imageCard1 from '@images/pages/home-page-document-fra.png';
 import imageCard3 from '@images/pages/home-page-monitoring-evaluation.png';
 import imageCard2 from '@images/pages/home-page-tracking-process-fra.png';
+import { useRouter } from 'vue-router';
 
 definePage({ meta: { layout: 'blank-auth' } })
+
+const router = useRouter()
+
+const search = ref('')
+
+const doSearch = function () {
+  router.push({ path: '/search', query: { s: search.value } })
+}
 </script>
 
 <style lang="scss" scoped>
