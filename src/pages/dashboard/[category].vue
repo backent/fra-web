@@ -14,7 +14,7 @@
           </template>
           <template #item.action="{ value }">
             <span class="text-capitalize" :class="`text-${getColorStatus(value, authStore.currentUser.role)}`">{{
-              getStatus(value, authStore.currentUser.role) }}</span>
+          getStatus(value, authStore.currentUser.role) }}</span>
           </template>
           <template #item.actions="{ item }">
             <VRow>
@@ -160,7 +160,13 @@ const fetchDocumentById = function (id) {
   documentStore.fetchDocumentById({ id })
     .then(res => {
       selectedDocument.value = { ...res }
+      return res.uuid
     })
+    .then(uuid => trackerDocumentView(uuid))
+}
+
+const trackerDocumentView = function (uuid) {
+  documentStore.postDocumentTracker(uuid, 'view')
 }
 const openDetailDialog = function (id) {
   fetchDocumentById(id)

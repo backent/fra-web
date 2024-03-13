@@ -1,5 +1,5 @@
 import { parameterMap } from "@/config/document";
-import { approveDocument, getDocumentById, getDocumentDashboardSummary, getDocumentSearchGlobal, getDocuments, getDocumentsDistinctProductName, getMonitoringDocuments, getTrackingDocuments, postDocument, rejectDocument } from "@/http/document";
+import { approveDocument, getDocumentById, getDocumentDashboardSummary, getDocumentSearchGlobal, getDocuments, getDocumentsDistinctProductName, getMonitoringDocuments, getTrackingDocuments, postDocument, postDocumentTracker, rejectDocument } from "@/http/document";
 import { formatDateTime } from "@/utils/formatter";
 import { defineStore } from "pinia";
 
@@ -68,6 +68,9 @@ export const useDocumentStore = defineStore('document', {
     },
     async rejectDocument(payload) {
       return rejectDocument(payload)
+    },
+    async postDocumentTracker(uuid, type) {
+      return postDocumentTracker({ uuid, type })
     },
     documentResponseToTable(response) {
       return response.map(item => {

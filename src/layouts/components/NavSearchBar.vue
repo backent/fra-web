@@ -179,7 +179,23 @@ const fetchDocumentById = function (id) {
   documentStore.fetchDocumentById({ id })
     .then(res => {
       selectedDocument.value = { ...res }
+      return res.uuid
     })
+    .then(uuid => {
+      Promise.all([
+        trackerDocumentSearch(uuid),
+        trackerDocumentView(uuid)
+      ])
+    })
+}
+
+
+const trackerDocumentView = function (uuid) {
+  documentStore.postDocumentTracker(uuid, 'view')
+}
+
+const trackerDocumentSearch = function (uuid) {
+  documentStore.postDocumentTracker(uuid, 'search')
 }
 
 const searchDebounce = ref(0)

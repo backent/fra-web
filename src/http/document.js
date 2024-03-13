@@ -46,3 +46,7 @@ export const getDocumentSearchGlobal = function(query) {
   const newUrl = pathParse(apis.get_document_search_global, query)
   return GetApi(newUrl)
 }
+
+export const postDocumentTracker = function(body) {
+  return PostApi(apis.post_document_tracker, body)
+}
