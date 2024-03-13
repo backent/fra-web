@@ -11,6 +11,7 @@ export const apis = {
   monitoring_document: '/documents-monitoring',
   tracking_document: '/documents-tracker/:name',
   get_document_dashboard_summary: '/documents-dashboard-summary',
+  get_dashboard: '/dashboards',
   get_notifications: '/notifications',
   get_document_search_global: 'documents-search-global',
   read_all_notifications: '/notifications/read-all',

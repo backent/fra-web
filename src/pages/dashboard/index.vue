@@ -85,13 +85,13 @@ import CardFraTopList from '@/components/CardFraToplist.vue';
 import UploadFraDocumentDialog from '@/components/UploadFraDocumentDialog.vue';
 import config from '@/config/category';
 import { useAuthStore } from '@/store/auth';
-import { useDocumentStore } from '@/store/document';
+import { useDashboardStore } from '@/store/dashboard';
 import dayjs from 'dayjs';
 import { computed, onMounted } from 'vue';
 
 
 const authStore = useAuthStore()
-const documentStore = useDocumentStore()
+const dashboardStore = useDashboardStore()
 
 const totalAssessment = ref(0)
 const listAssessmentDetail = ref([
@@ -288,7 +288,7 @@ const openDocumentUpload = function () {
 }
 
 const fetchDocumentDashboardSummary = function () {
-  documentStore.fetchDocumentDashboardSummary()
+  dashboardStore.fetchDocumentDashboardSummary()
     .then(data => {
       listAssessmentDetail.value = listAssessmentDetail.value.map(item => {
         return {
