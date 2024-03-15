@@ -7,7 +7,7 @@
       </div>
     </VCardTitle>
     <VList density="compact">
-      <VListItem v-for="listItem in list" :key="listItem.title">
+      <VListItem v-for="(listItem, idx) in list" :key="idx">
         <VListItemTitle>
           <div v-html="listItem.title" />
         </VListItemTitle>

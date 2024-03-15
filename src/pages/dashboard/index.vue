@@ -66,8 +66,9 @@
     </VRow>
 
     <VRow class="list-top-card align-stretch">
-      <VCol cols="4" v-for="item in computedListTop" :key="item.title">
-        <CardFraTopList :title="item.title" :subtitle="item.subtitle" :list="item.list" style="height: 100%;" />
+      <VCol cols="4" v-for="(item, idx) in computedListTop" :key="item.title">
+        <CardFraTopList :title="item.title" :subtitle="item.subtitle" :list="item.list" :key="idx"
+          style="height: 100%;" />
       </VCol>
     </VRow>
 
@@ -148,9 +149,10 @@ const listCategoryCard = [
   },
 ]
 
-const listTop = [
+const listTop = ref([
   {
     title: 'Recently Viewed',
+    listType: 'recently_viewed',
     subtitle: '5 Top Assassment Document Viewed',
     type: 'category',
     list: [
@@ -178,6 +180,7 @@ const listTop = [
   },
   {
     title: 'Top Search',
+    listType: 'top_search',
     subtitle: '5 Top Assassment Document Searched',
     type: 'category',
     list: [
@@ -250,17 +253,17 @@ const listTop = [
       },
     ]
   },
-]
+])
 
 const uploadDocumentDialog = ref(false)
 const computedListTop = computed(() => {
-  return listTop.map(item => {
+  return listTop.value.map(item => {
     let list
     if (item.type === 'category') {
       list = item.list.map(listItem => {
         return {
           title: `<div class="truncate">${listItem.title}</div>`,
-          subtitle: `<span class="text-${config.colors[listItem.category.toLowerCase()]}">${listItem.category}</span>`
+          subtitle: `<span class="text-${config.colors[listItem.category.toLowerCase()]} text-capitalize">${listItem.category}</span>`
         }
       })
     } else if (item.type === 'user') {
@@ -290,14 +293,46 @@ const openDocumentUpload = function () {
 const fetchDocumentDashboardSummary = function () {
   dashboardStore.fetchDocumentDashboardSummary()
     .then(data => {
-      listAssessmentDetail.value = listAssessmentDetail.value.map(item => {
-        return {
-          ...item,
-          count: data.summary_assessement[mapSummaryActionAndTitle[item.title]]
-        }
-      })
-      totalAssessment.value = data.summary_assessement.total
+      setDocumentSummary(data)
+      setTopListRecentlyViewed(data.recently_viewed)
+      setTopListTopSearch(data.top_search)
     })
+}
+
+const setDocumentSummary = data => {
+  listAssessmentDetail.value = listAssessmentDetail.value.map(item => {
+    return {
+      ...item,
+      count: data.summary_assessement[mapSummaryActionAndTitle[item.title]]
+    }
+  })
+  totalAssessment.value = data.summary_assessement.total
+}
+
+const setTopListRecentlyViewed = data => {
+  listTop.value = listTop.value.map(item => {
+    let list = item.list
+    if (item.listType === 'recently_viewed') {
+      list = data.map(i => ({ ...i, title: i.product_name }))
+    }
+    return {
+      ...item,
+      list
+    }
+  })
+}
+
+const setTopListTopSearch = data => {
+  listTop.value = listTop.value.map(item => {
+    let list = item.list
+    if (item.listType === 'top_search') {
+      list = data.map(i => ({ ...i, title: i.product_name }))
+    }
+    return {
+      ...item,
+      list
+    }
+  })
 }
 </script>
 
