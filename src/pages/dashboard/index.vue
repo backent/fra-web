@@ -208,6 +208,7 @@ const listTop = ref([
   },
   {
     title: 'User Active in a Month',
+    listType: 'user_active',
     subtitle: '10 Top Active User',
     type: 'user',
     list: [
@@ -269,7 +270,7 @@ const computedListTop = computed(() => {
     } else if (item.type === 'user') {
       list = item.list.map(listItem => {
         return {
-          title: `<span class="text-primary"> ${listItem.username} </span> ${listItem.name}`
+          title: `<span class="text-primary" style="display:inline-block; min-width: 80px;"> ${listItem.username} </span> ${listItem.name}`
         }
       })
     } else {
@@ -296,6 +297,7 @@ const fetchDocumentDashboardSummary = function () {
       setDocumentSummary(data)
       setTopListRecentlyViewed(data.recently_viewed)
       setTopListTopSearch(data.top_search)
+      setTopUserActive(data.user_active)
     })
 }
 
@@ -327,6 +329,19 @@ const setTopListTopSearch = data => {
     let list = item.list
     if (item.listType === 'top_search') {
       list = data.map(i => ({ ...i, title: i.product_name }))
+    }
+    return {
+      ...item,
+      list
+    }
+  })
+}
+
+const setTopUserActive = data => {
+  listTop.value = listTop.value.map(item => {
+    let list = item.list
+    if (item.listType === 'user_active') {
+      list = data.map(i => ({ ...i, username: i.nik }))
     }
     return {
       ...item,
