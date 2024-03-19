@@ -41,6 +41,9 @@ watch([
 
         <VSpacer />
 
+        <a class="mr-5 download-sop" href="Standard Operating Procedure FRA Online.pdf" target="_blank">
+          <VIcon icon="tabler-book" />
+        </a>
         <NavBarI18n v-if="themeConfig.app.i18n.enable && themeConfig.app.i18n.langConfig?.length"
           :languages="themeConfig.app.i18n.langConfig" />
         <NavbarThemeSwitcher class="mr-3" />
@@ -67,3 +70,10 @@ watch([
     <!-- <TheCustomizer /> -->
   </VerticalNavLayout>
 </template>
+
+
+<style lang="scss" scoped>
+.download-sop {
+  color: rgba(var(--v-theme-dark));
+}
+</style>
