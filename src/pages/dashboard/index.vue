@@ -42,15 +42,15 @@
         <VCard>
           <VCardText class="card d-flex flex-column align-center">
             <div class="text-h5">Add New Assessement</div>
-            <VBtn color="primary" variant="tonal" :disabled="authStore.isReviewer" @click="openDocumentUpload">
+            <VBtn color="primary" variant="tonal" :disabled="authStore.isGuest" @click="openDocumentUpload">
               <VIcon start icon="tabler-upload" /> Document Upload
             </VBtn>
-            <RouterLink v-show="!authStore.isReviewer" :to="{ name: 'dashboard-create-document' }">
+            <RouterLink v-show="!authStore.isGuest" :to="{ name: 'dashboard-create-document' }">
               <VBtn color="primary" variant="tonal">
                 <VIcon start icon="tabler-clipboard" /> Create Document
               </VBtn>
             </RouterLink>
-            <VBtn v-show="authStore.isReviewer" :disabled="authStore.isReviewer" color="primary" variant="tonal">
+            <VBtn v-show="authStore.isGuest" :disabled="authStore.isGuest" color="primary" variant="tonal">
               <VIcon start icon="tabler-clipboard" /> Create Document
             </VBtn>
           </VCardText>

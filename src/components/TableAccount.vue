@@ -20,7 +20,7 @@
       <template #item.action="{ item }">
         <VRow>
           <VCol v-if="item.status === 'reject'">
-            <VBtn variant="tonal" color="success" size="38" @click="approveHandler(item.id)">
+            <VBtn variant="tonal" color="success" size="38" @click="openDialogApprove(item.id)">
               <VIcon icon="tabler-check" size="22" />
             </VBtn>
           </VCol>
@@ -32,6 +32,7 @@
         </VRow>
       </template>
     </VDataTableServer>
+    <AccountRequestApproveDialog v-model:active="approveDialog" @approve="approveHandler" />
   </VCard>
 </template>
 
@@ -40,6 +41,7 @@ import { useAppStore } from '@/@core/stores/app';
 import { useUserStore } from '@/store/user';
 import { onMounted, watch } from 'vue';
 import { VDataTableServer } from 'vuetify/labs/VDataTable';
+import AccountRequestApproveDialog from './AccountRequestApproveDialog.vue';
 
 
 const userStore = useUserStore()
@@ -80,6 +82,8 @@ const headers = [
   },
 ]
 
+const approveDialog = ref(false)
+const selectedUserId = ref(0)
 const search = ref('')
 const searchTimeout = ref(0)
 const totalData = ref(0)
@@ -138,8 +142,10 @@ const onUpdateOptions = function (options) {
   }
 }
 
-const approveHandler = async function (id) {
-  return userStore.postUserRegistrationApprove({ id })
+const approveHandler = async function (unit) {
+  const id = selectedUserId.value
+
+  return userStore.postUserRegistrationApprove({ id, unit })
     .then(() => {
       fetchUsers()
       appStore.openSnackbar({
@@ -176,6 +182,11 @@ const deleteHandler = async function (id) {
     })
 }
 
+const openDialogApprove = function (id) {
+  selectedUserId.value = id
+  approveDialog.value = true
+}
+
 watch(query, () => {
   fetchUsers()
 }, { deep: true })
@@ -189,4 +200,4 @@ watch(search, (v) => {
   }, 700)
 })
 
-</script>
+</script>./AccountRequestReject2Dialog.vue

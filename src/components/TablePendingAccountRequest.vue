@@ -7,18 +7,20 @@
     <template #item.action="{ item }">
       <VRow>
         <VCol cols="4">
-          <VBtn variant="tonal" color="success" size="38" @click="approve(item.id)">
+          <VBtn variant="tonal" color="success" size="38" @click="openApproveDialog(item.id)">
             <VIcon icon="tabler-check" size="22" />
           </VBtn>
         </VCol>
         <VCol cols="4">
-          <VBtn variant="tonal" color="error" size="38" @click="reject(item.id)">
+          <VBtn variant="tonal" color="error" size="38" @click="openRejectDialog(item.id)">
             <VIcon icon="tabler-x" size="22" />
           </VBtn>
         </VCol>
       </VRow>
     </template>
   </VDataTableServer>
+  <AccountRequestApproveDialog v-model:active="approveDialog" @approve="approve" />
+  <AccountRequestRejectDialog v-model:active="rejectDialog" @reject="reject" />
 </template>
 
 <script setup>
@@ -26,6 +28,8 @@ import { useAppStore } from '@/@core/stores/app';
 import { useUserStore } from '@/store/user';
 import { onMounted, watch } from 'vue';
 import { VDataTableServer } from 'vuetify/labs/VDataTable';
+import AccountRequestApproveDialog from './AccountRequestApproveDialog.vue';
+import AccountRequestRejectDialog from './AccountRequestRejectDialog.vue';
 
 
 const userStore = useUserStore()
@@ -49,6 +53,9 @@ const headers = [
   },
 ]
 
+const approveDialog = ref(false)
+const rejectDialog = ref(false)
+const selectedAccountId = ref(0)
 const data = ref([])
 const totalData = ref(0)
 
@@ -89,8 +96,9 @@ const onUpdateOptions = function (options) {
   }
 }
 
-const approve = async function (id) {
-  return userStore.postUserRegistrationApprove({ id })
+const approve = async function (unit) {
+  const id = selectedAccountId.value
+  return userStore.postUserRegistrationApprove({ id, unit })
     .then(() => {
       fetchUserRegistrations()
       appStore.openSnackbar({
@@ -108,7 +116,8 @@ const approve = async function (id) {
     })
 }
 
-const reject = async function (id) {
+const reject = async function () {
+  const id = selectedAccountId.value
   return userStore.postUserRegistrationReject({ id })
     .then(() => {
       fetchUserRegistrations()
@@ -127,8 +136,18 @@ const reject = async function (id) {
     })
 }
 
+const openApproveDialog = function (id) {
+  approveDialog.value = true
+  selectedAccountId.value = id
+}
+
+const openRejectDialog = function (id) {
+  rejectDialog.value = true
+  selectedAccountId.value = id
+}
+
 watch(query, () => {
   fetchUserRegistrations()
 }, { deep: true })
 
-</script>
+</script>./AccountRequestReject2Dialog.vue
