@@ -150,4 +150,4 @@ watch(query, () => {
   fetchUserRegistrations()
 }, { deep: true })
 
-</script>./AccountRequestReject2Dialog.vue
+</script>
