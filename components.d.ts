@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    AccountEditDialog: typeof import('./src/components/AccountEditDialog.vue')['default']
     AccountRequestApproveDialog: typeof import('./src/components/AccountRequestApproveDialog.vue')['default']
     AccountRequestReject2Dialog: typeof import('./src/components/AccountRequestReject2Dialog.vue')['default']
     AccountRequestRejectDialog: typeof import('./src/components/AccountRequestRejectDialog.vue')['default']

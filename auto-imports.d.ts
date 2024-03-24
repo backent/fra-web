@@ -7,6 +7,7 @@ export {}
 declare global {
   const $api: typeof import('./src/utils/api.js')['$api']
   const COOKIE_MAX_AGE_1_YEAR: typeof import('./src/utils/constants.js')['COOKIE_MAX_AGE_1_YEAR']
+  const CapitalizeFirstLetter: typeof import('./src/utils/formatter.js')['CapitalizeFirstLetter']
   const DeleteApi: typeof import('./src/utils/api.js')['DeleteApi']
   const EffectScope: typeof import('vue')['EffectScope']
   const GetApi: typeof import('./src/utils/api.js')['GetApi']
@@ -366,6 +367,7 @@ declare module 'vue' {
   interface ComponentCustomProperties {
     readonly $api: UnwrapRef<typeof import('./src/utils/api.js')['$api']>
     readonly COOKIE_MAX_AGE_1_YEAR: UnwrapRef<typeof import('./src/utils/constants.js')['COOKIE_MAX_AGE_1_YEAR']>
+    readonly CapitalizeFirstLetter: UnwrapRef<typeof import('./src/utils/formatter.js')['CapitalizeFirstLetter']>
     readonly DeleteApi: UnwrapRef<typeof import('./src/utils/api.js')['DeleteApi']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly GetApi: UnwrapRef<typeof import('./src/utils/api.js')['GetApi']>
@@ -719,6 +721,7 @@ declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     readonly $api: UnwrapRef<typeof import('./src/utils/api.js')['$api']>
     readonly COOKIE_MAX_AGE_1_YEAR: UnwrapRef<typeof import('./src/utils/constants.js')['COOKIE_MAX_AGE_1_YEAR']>
+    readonly CapitalizeFirstLetter: UnwrapRef<typeof import('./src/utils/formatter.js')['CapitalizeFirstLetter']>
     readonly DeleteApi: UnwrapRef<typeof import('./src/utils/api.js')['DeleteApi']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly GetApi: UnwrapRef<typeof import('./src/utils/api.js')['GetApi']>

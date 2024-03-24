@@ -1,4 +1,5 @@
-import { deleteUser, getUserRegistrations, getUsers, postUserRegistrationApply, postUserRegistrationApprove, postUserRegistrationReject } from "@/http/user";
+import { deleteUser, getUserRegistrations, getUsers, postUserRegistrationApply, postUserRegistrationApprove, postUserRegistrationReject, putUser } from "@/http/user";
+import { CapitalizeFirstLetter } from "@/utils/formatter";
 import { defineStore } from "pinia";
 
 export const useUserStore = defineStore('user', {
@@ -16,6 +17,9 @@ export const useUserStore = defineStore('user', {
     },
     async removeUser(id) {
       return deleteUser({ id })
+    },
+    async updateUser(body) {
+      return putUser(body)
     },
     async postUserRegistrationApply(body) {
       return postUserRegistrationApply(body)
@@ -47,6 +51,8 @@ export const useUserStore = defineStore('user', {
           nik: item.nik,
           status: item.status,
           email: item.email,
+          unit: CapitalizeFirstLetter(item.unit),
+          role: CapitalizeFirstLetter(item.role),
         }
       })
     }

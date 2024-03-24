@@ -18,10 +18,15 @@
         <span :class="`text-${colorStatusMap[item.status]}`"> {{ textStatusMap[item.status] }}</span>
       </template>
       <template #item.action="{ item }">
-        <VRow>
+        <VRow style="min-width: 125px;">
           <VCol v-if="item.status === 'reject'">
             <VBtn variant="tonal" color="success" size="38" @click="openDialogApprove(item.id)">
               <VIcon icon="tabler-check" size="22" />
+            </VBtn>
+          </VCol>
+          <VCol v-if="item.status === 'approve'">
+            <VBtn variant="tonal" color="warning" size="38" @click="openDialogEdit(item)">
+              <VIcon icon="tabler-edit" size="22" />
             </VBtn>
           </VCol>
           <VCol v-if="item.status === 'approve'">
@@ -33,6 +38,7 @@
       </template>
     </VDataTableServer>
     <AccountRequestApproveDialog v-model:active="approveDialog" @approve="approveHandler" />
+    <AccountEditDialog v-model:active="editDialog" :user="selectedUser" @submit="editHandler" />
   </VCard>
 </template>
 
@@ -41,6 +47,7 @@ import { useAppStore } from '@/@core/stores/app';
 import { useUserStore } from '@/store/user';
 import { onMounted, watch } from 'vue';
 import { VDataTableServer } from 'vuetify/labs/VDataTable';
+import AccountEditDialog from './AccountEditDialog.vue';
 import AccountRequestApproveDialog from './AccountRequestApproveDialog.vue';
 
 
@@ -75,6 +82,12 @@ const headers = [
     title: 'EMAIL', key: 'email', sortable: true
   },
   {
+    title: 'Role', key: 'role', sortable: true
+  },
+  {
+    title: 'Unit', key: 'unit', sortable: true
+  },
+  {
     title: 'STATUS', key: 'status', sortable: false
   },
   {
@@ -83,7 +96,9 @@ const headers = [
 ]
 
 const approveDialog = ref(false)
+const editDialog = ref(false)
 const selectedUserId = ref(0)
+const selectedUser = ref({})
 const search = ref('')
 const searchTimeout = ref(0)
 const totalData = ref(0)
@@ -180,6 +195,37 @@ const deleteHandler = async function (id) {
         color: 'error'
       })
     })
+}
+
+const editHandler = async function (form) {
+  const id = selectedUserId.value
+  const payload = { id, ...form }
+
+  console.log({ payload })
+
+  return userStore.updateUser(payload)
+    .then(() => {
+      fetchUsers()
+      appStore.openSnackbar({
+        message: "User successfully updated.",
+        timeout: 4000,
+        color: 'success'
+      })
+    })
+    .catch((err) => {
+      console.log(err)
+      appStore.openSnackbar({
+        message: "There is something wrong on our server. Please contact your administrator.",
+        timeout: 4000,
+        color: 'error'
+      })
+    })
+}
+
+const openDialogEdit = function (user) {
+  selectedUserId.value = user.id
+  selectedUser.value = user
+  editDialog.value = true
 }
 
 const openDialogApprove = function (id) {

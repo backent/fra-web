@@ -39,7 +39,12 @@ const getTimeAgo = function (timestamp) {
   }
 }
 
-export {
-  formatCompleteTime, formatDateTime, formatTableDate, getTimeAgo
+const CapitalizeFirstLetter = function(text) {
+  if (!text) {
+    return ''
+  }
+  return text.charAt(0).toUpperCase() + text.slice(1)
 }
+
+export { CapitalizeFirstLetter, formatCompleteTime, formatDateTime, formatTableDate, getTimeAgo }
 

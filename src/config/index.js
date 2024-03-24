@@ -22,4 +22,7 @@ export const apis = {
   get_user_registration: '/user-registrations',
   get_user: '/users',
   delete_user: '/users/:id',
+  update_user: '/users/:id',
 }
+
+export const roles = ['reviewer', 'author', 'guest']

@@ -37,7 +37,7 @@ export const GetApi = function(url) {
   })
 }
 
-export const PutApi = function(url) {
+export const PutApi = function(url, body) {
   return ofetch(url, {
     ...baseApiConfig,
     method: 'PUT',

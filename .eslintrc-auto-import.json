@@ -359,6 +359,7 @@
     "PutApi": true,
     "pathParse": true,
     "getTimeAgo": true,
-    "formatDateTime": true
+    "formatDateTime": true,
+    "CapitalizeFirstLetter": true
   }
 }
