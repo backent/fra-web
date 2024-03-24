@@ -129,15 +129,15 @@ const take = ref(10)
 const selectedDocument = ref({ ...templateWithDetail })
 
 const isEditBtnVisible = function (document) {
-  return authStore.isAuthor && (document.action === 'draft' || document.action === 'reject')
+  return (authStore.isAuthor || authStore.isSuperadmin) && (document.action === 'draft' || document.action === 'reject')
 }
 
 const isApproveBtnVisible = function (document) {
-  return authStore.isReviewer && (document.action === 'submit' || document.action === 'update')
+  return (authStore.isReviewer || authStore.isSuperadmin) && (document.action === 'submit' || document.action === 'update')
 }
 
 const isRejectBtnVisible = function (document) {
-  return authStore.isReviewer && (document.action === 'submit' || document.action === 'update')
+  return (authStore.isReviewer || authStore.isSuperadmin) && (document.action === 'submit' || document.action === 'update')
 }
 
 watch(query, () => {

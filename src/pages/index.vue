@@ -26,18 +26,18 @@
         <VCardText>
           <div class="text-h4">Menus</div>
           <div class="mb-3">Lorem ipsum dolor sit amet.</div>
-          <VRow>
-            <VCol>
+          <VRow class="justify-space-evenly">
+            <VCol cols="4">
               <HomeCard title="Document FRA"
                 subtitle1="Menu yang menampilkan List Dokumen FRA Product Digital Connectivity"
                 subtitle2="Pencarian Dokumen Repository FRA" :img="imageCard1" :to="{ name: 'dashboard' }" />
             </VCol>
-            <VCol>
+            <VCol cols="4">
               <HomeCard title="Tracking Process FRA"
                 subtitle1="Menu yang menampilkan tracking process dokumen FRA mulai dari Submit sampai Sign"
                 subtitle2="Checklist Tracking Process" :img="imageCard2" :to="{ name: 'tracking-process-fra' }" />
             </VCol>
-            <VCol>
+            <VCol v-if="authStore.isSuperadmin" cols="4">
               <HomeCard title="Account Request" subtitle1="Menu yang menampilkan Account pada aplikasi FRA"
                 subtitle2="Account FRA" :img="imageCard3" :to="{ name: 'account-request' }" />
             </VCol>
@@ -51,6 +51,7 @@
 <script setup>
 import HomeCard from '@/components/CardHome.vue';
 import UserProfile from '@/layouts/components/UserProfile.vue';
+import { useAuthStore } from '@/store/auth';
 import imageCard1 from '@images/pages/home-page-document-fra.png';
 import imageCard3 from '@images/pages/home-page-monitoring-evaluation.png';
 import imageCard2 from '@images/pages/home-page-tracking-process-fra.png';
@@ -59,6 +60,7 @@ import { useRouter } from 'vue-router';
 definePage({ meta: { layout: 'blank-auth' } })
 
 const router = useRouter()
+const authStore = useAuthStore()
 
 const search = ref('')
 

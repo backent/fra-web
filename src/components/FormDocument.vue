@@ -239,6 +239,13 @@ const onCatchDocument = function (err) {
         color: 'error'
       })
       break;
+    case 403:
+      appStore.openSnackbar({
+        message: "You are not permitted to perform this action",
+        timeout: 4000,
+        color: 'error'
+      })
+      break;
     case 409:
       appStore.openSnackbar({
         message: "Your document submission is incompatible due to the use of an outdated version.",
@@ -255,6 +262,11 @@ const onCatchDocument = function (err) {
       break;
 
     default:
+      appStore.openSnackbar({
+        message: "There is something wrong on our server. Please contact your administrator.",
+        timeout: 4000,
+        color: 'error'
+      })
       break;
   }
 }

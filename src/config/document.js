@@ -4,7 +4,15 @@ const status = {
       text: 'Need Follow Up',
       color: 'orange',
     },
+    'superadmin': {
+      text: 'Need Follow Up',
+      color: 'orange',
+    },
     'reviewer': {
+      text: 'Return',
+      color: 'error',
+    },
+    'guest': {
       text: 'Return',
       color: 'error',
     }
@@ -14,7 +22,15 @@ const status = {
       text: 'Approved',
       color: 'success',
     },
+    'superadmin': {
+      text: 'Approved',
+      color: 'success',
+    },
     'reviewer': {
+      text: 'Approved',
+      color: 'success',
+    },
+    'guest': {
       text: 'Approved',
       color: 'success',
     }
@@ -24,7 +40,15 @@ const status = {
       text: 'Draft',
       color: 'grey-500',
     },
+    'superadmin': {
+      text: 'Draft',
+      color: 'grey-500',
+    },
     'reviewer': {
+      text: 'Draft',
+      color: 'grey-500',
+    },
+    'guest': {
       text: 'Draft',
       color: 'grey-500',
     }
@@ -34,7 +58,15 @@ const status = {
       text: 'Submit',
       color: 'info',
     },
+    'superadmin': {
+      text: 'Submit',
+      color: 'info',
+    },
     'reviewer': {
+      text: 'Submit',
+      color: 'info'
+    },
+    'guest': {
       text: 'Submit',
       color: 'info'
     }
@@ -44,7 +76,15 @@ const status = {
       text: 'Updated',
       color: 'info',
     },
+    'superadmin': {
+      text: 'Updated',
+      color: 'info',
+    },
     'reviewer': {
+      text: 'Updated',
+      color: 'info'
+    },
+    'guest': {
       text: 'Updated',
       color: 'info'
     }
@@ -54,15 +94,25 @@ const status = {
 const getStatus = function (action, role) {
   if (!action || !role) {
     return ''
+  } else if (!status[action]) {
+    return ''
+  } else if (!status[action][role]) {
+    return ''
+  } else {
+    return status[action][role].text
   }
-  return status[action][role].text
 }
 
 const getColorStatus = function (action, role) {
   if (!action || !role) {
     return ''
+  } else if (!status[action]) {
+    return ''
+  } else if (!status[action][role]) {
+    return ''
+  } else {
+    return status[action][role].color
   }
-  return status[action][role].color
 }
 
 const uploadMappingField = {

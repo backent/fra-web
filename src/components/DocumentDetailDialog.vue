@@ -183,8 +183,8 @@
           <VCol cols="4" class="d-flex align-center gap-5">
             <div class="mr-5">Accepted / Not Accepted: <span
                 :class="`text-uppercase ml-2 font-weight-semibold text-${getColorFromAcception(displayedRisk.strategy_agreement)}`">{{
-                  displayedRisk.strategy_agreement
-                }}</span></div>
+    displayedRisk.strategy_agreement
+  }}</span></div>
           </VCol>
         </VRow>
         <VCard class="mb-5">
@@ -280,15 +280,15 @@ const isRejectLoading = computed(() => {
 })
 
 const isApproveBtnVisible = computed(() => {
-  return authStore.isReviewer && (props.mode === 'overall' || props.mode === 'approve') && (props.modelValue.action === 'submit' || props.modelValue.action === 'update')
+  return (authStore.isReviewer || authStore.isSuperadmin) && (props.mode === 'overall' || props.mode === 'approve') && (props.modelValue.action === 'submit' || props.modelValue.action === 'update')
 })
 
 const isRejectBtnVisible = computed(() => {
-  return authStore.isReviewer && (props.mode === 'overall') && (props.modelValue.action === 'submit' || props.modelValue.action === 'update')
+  return (authStore.isReviewer || authStore.isSuperadmin) && (props.mode === 'overall') && (props.modelValue.action === 'submit' || props.modelValue.action === 'update')
 })
 
 const isSubmitBtnVisible = computed(() => {
-  return authStore.isReviewer && (props.mode === 'reject') && (props.modelValue.action === 'submit' || props.modelValue.action === 'update')
+  return (authStore.isReviewer || authStore.isSuperadmin) && (props.mode === 'reject') && (props.modelValue.action === 'submit' || props.modelValue.action === 'update')
 })
 
 const isDisplayRejectNote = computed(() => {

@@ -35,11 +35,33 @@
 
 
 <script setup>
-import { defineAsyncComponent } from 'vue';
-
+import { useAuthStore } from '@/store/auth';
+import { defineAsyncComponent, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 const TablePendingAccountRequest = defineAsyncComponent(() => import('@/components/TablePendingAccountRequest.vue'))
 const TableAccount = defineAsyncComponent(() => import('@/components/TableAccount.vue'))
+
+const allowedRoles = ['superadmin']
+const authStore = useAuthStore()
+const router = useRouter()
+
+const checkUserExists = function () {
+  if (!authStore.currentUserExists) {
+    return authStore.initializeCurrentUser()
+  } else {
+    return Promise.resolve()
+  }
+}
+
+onMounted(() => {
+
+  checkUserExists().then(() => {
+    if (!allowedRoles.includes(authStore.currentUser.role)) {
+      router.push('/')
+    }
+  })
+})
 
 const tabsData = [
   { title: 'List Account' },

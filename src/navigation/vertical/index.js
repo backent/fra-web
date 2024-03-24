@@ -12,6 +12,9 @@ export default [
   {
     title: 'Account Request',
     to: { name: 'account-request' },
-    icon: { icon: 'tabler-user-check' }
+    icon: { icon: 'tabler-user-check' },
+    meta: {
+      allowedRoles: ['superadmin']
+    }
   },
 ]

@@ -1,4 +1,5 @@
 <script setup>
+import { useAuthStore } from '@/store/auth'
 import { layoutConfig } from '@layouts'
 import {
   VerticalNavGroup,
@@ -7,6 +8,7 @@ import {
 } from '@layouts/components'
 import { useLayoutConfigStore } from '@layouts/stores/config'
 import { injectionKeyIsVerticalNavHovered } from '@layouts/symbols'
+import { computed } from 'vue'
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 
 const props = defineProps({
@@ -32,6 +34,17 @@ const props = defineProps({
     required: true,
   },
 })
+
+const authStore = useAuthStore()
+
+const computedNavItems = computed(() => {
+  return props.navItems.filter(nav => {
+    const allowedRoles = nav?.meta?.allowedRoles ?? []
+
+    return allowedRoles.length === 0 || allowedRoles.includes(authStore.currentUser.role)
+  })
+})
+
 
 const refNav = ref()
 const isHovered = useElementHover(refNav)
@@ -105,7 +118,8 @@ const hideTitleAndIcon = configStore.isVerticalNavMini(isHovered)
     <slot name="nav-items" :update-is-vertical-nav-scrolled="updateIsVerticalNavScrolled">
       <PerfectScrollbar :key="configStore.isAppRTL" tag="ul" class="nav-items" :options="{ wheelPropagation: false }"
         @ps-scroll-y="handleNavScroll">
-        <Component :is="resolveNavItemComponent(item)" v-for="(item, index) in navItems" :key="index" :item="item" />
+        <Component :is="resolveNavItemComponent(item)" v-for="(item, index) in computedNavItems" :key="index"
+          :item="item" />
       </PerfectScrollbar>
     </slot>
   </Component>

@@ -28,6 +28,9 @@ export const useAuthStore = defineStore('auth', {
     isAuthor() {
       return this.currentUser.role.toLowerCase() === 'author'
     },
+    isSuperadmin() {
+      return this.currentUser.role.toLowerCase() === 'superadmin'
+    },
     isGuest() {
       return this.currentUser.role.toLowerCase() === 'guest'
     }

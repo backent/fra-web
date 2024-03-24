@@ -201,8 +201,6 @@ const editHandler = async function (form) {
   const id = selectedUserId.value
   const payload = { id, ...form }
 
-  console.log({ payload })
-
   return userStore.updateUser(payload)
     .then(() => {
       fetchUsers()
@@ -212,8 +210,7 @@ const editHandler = async function (form) {
         color: 'success'
       })
     })
-    .catch((err) => {
-      console.log(err)
+    .catch(() => {
       appStore.openSnackbar({
         message: "There is something wrong on our server. Please contact your administrator.",
         timeout: 4000,
