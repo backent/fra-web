@@ -31,4 +31,8 @@ export const putUser = function (body) {
   return PutApi(newUrl, body)
 }
 
+export const postCheckLDAPUser = function(body) {
+  return PostApi(apis.ldap_check, body)
+}
+
 

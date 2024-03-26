@@ -23,6 +23,7 @@ export const apis = {
   get_user: '/users',
   delete_user: '/users/:id',
   update_user: '/users/:id',
+  ldap_check: '/user-registrations-check-ldap',
 }
 
 export const roles = ['reviewer', 'author', 'guest']

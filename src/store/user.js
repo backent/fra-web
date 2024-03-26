@@ -1,4 +1,4 @@
-import { deleteUser, getUserRegistrations, getUsers, postUserRegistrationApply, postUserRegistrationApprove, postUserRegistrationReject, putUser } from "@/http/user";
+import { deleteUser, getUserRegistrations, getUsers, postCheckLDAPUser, postUserRegistrationApply, postUserRegistrationApprove, postUserRegistrationReject, putUser } from "@/http/user";
 import { CapitalizeFirstLetter } from "@/utils/formatter";
 import { defineStore } from "pinia";
 
@@ -29,6 +29,9 @@ export const useUserStore = defineStore('user', {
     },
     async postUserRegistrationReject(body) {
       return postUserRegistrationReject(body)
+    },
+    async postCheckUserLDAP(body) {
+      return postCheckLDAPUser(body)
     },
     async fetchUserRegistrations(query) {
       return getUserRegistrations(query)

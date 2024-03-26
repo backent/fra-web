@@ -7,7 +7,27 @@
     <VCard title="Apply An Account">
       <VCardText>
         <VForm @submit.prevent="apply">
-          <AppTextField v-model="nik" placeholder="Input your NIK..." label="NIK" />
+          <AppTextField v-model="form.nik" placeholder="Input your NIK..." label="NIK" />
+          <div class="my-2">
+            <div v-show="onLoadingCheckLDAP">
+              <VProgressCircular indeterminate :size="20" :width="2" />
+              Checking user's nik
+            </div>
+            <div v-show="!!form.nik && !onLoadingCheckLDAP && isUserLDAP">
+              <VIcon size="20" icon="tabler-user-check" />
+              <span class="text-success">Verified user ldap</span>
+            </div>
+            <div v-show="!!form.nik && !onLoadingCheckLDAP && !isUserLDAP">
+              <VIcon size="20" icon="tabler-user" />
+              <span class="text-warning">Not user ldap</span>
+            </div>
+          </div>
+          <AppTextField v-show="!!form.nik && !onLoadingCheckLDAP && !isUserLDAP" v-model="form.name"
+            placeholder="Input your Name..." label="Name" />
+          <AppTextField v-show="!!form.nik && !onLoadingCheckLDAP && !isUserLDAP" v-model="form.email"
+            placeholder="Input your Email..." label="Email" />
+          <AppTextField v-show="!!form.nik && !onLoadingCheckLDAP && !isUserLDAP" v-model="form.password"
+            placeholder="Input your Password..." label="Password" />
         </VForm>
       </VCardText>
 
@@ -41,7 +61,14 @@ const userStore = useUserStore()
 const appStore = useAppStore()
 const dialogValue = ref(false)
 const loadingApply = ref(false)
-const nik = ref('')
+const onLoadingCheckLDAP = ref(false)
+const isUserLDAP = ref(false)
+const form = ref({
+  nik: '',
+  email: '',
+  name: '',
+  password: '',
+})
 
 watchEffect(() => {
   dialogValue.value = props.active
@@ -53,18 +80,31 @@ const close = function () {
 }
 
 const apply = function () {
-  if (!nik.value) {
+  if (!form.value.nik) {
+    appStore.openSnackbar({
+      message: "Please fill all the field",
+      color: 'error',
+      timeout: 1000
+    })
+    return
+  }
+  if ((!!form.value.nik && !onLoadingCheckLDAP.value && !isUserLDAP.value) && Object.values(form.value).some(attr => !attr)) {
+    appStore.openSnackbar({
+      message: "Please fill all the field",
+      color: 'error',
+      timeout: 1000
+    })
     return
   }
   loadingApply.value = true
-  userStore.postUserRegistrationApply({ nik: nik.value })
+  userStore.postUserRegistrationApply({ ...form.value })
     .then(() => {
       appStore.openSnackbar({
         message: "Successfully Apply an Account",
         color: 'success',
         timeout: 1000
       })
-      close()
+      // close()
     })
     .catch(onCatchDocument)
     .finally(() => {
@@ -73,7 +113,12 @@ const apply = function () {
 }
 
 const reset = function () {
-  nik.value = ''
+  form.value = {
+    nik: '',
+    email: '',
+    name: '',
+    password: '',
+  }
 }
 
 const onCatchDocument = function (err) {
@@ -98,4 +143,37 @@ const onCatchDocument = function (err) {
       break;
   }
 }
+
+const checkUserLDAP = async function () {
+  onLoadingCheckLDAP.value = true
+  return userStore.postCheckUserLDAP({
+    nik: form.value.nik
+  })
+    .then(() => {
+      isUserLDAP.value = true
+    })
+    .catch(() => {
+      isUserLDAP.value = false
+    })
+    .finally(() => {
+      onLoadingCheckLDAP.value = false
+    })
+}
+
+const nikDebounce = ref(0)
+
+watch(() => form.value.nik, (v) => {
+  if (v) {
+    isUserLDAP.value = false
+    onLoadingCheckLDAP.value = true
+    clearTimeout(nikDebounce.value)
+    nikDebounce.value = setTimeout(checkUserLDAP, 700)
+  }
+})
+
+watch(() => !!form.value.nik && !onLoadingCheckLDAP.value && !isUserLDAP.value, () => {
+  form.value.name = ''
+  form.value.email = ''
+  form.value.password = ''
+})
 </script>
