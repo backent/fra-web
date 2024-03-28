@@ -26,4 +26,4 @@ export const apis = {
   ldap_check: '/user-registrations-check-ldap',
 }
 
-export const roles = ['reviewer', 'author', 'guest']
+export const roles = ['superadmin', 'author', 'reviewer' , 'guest']

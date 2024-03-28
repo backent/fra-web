@@ -7,7 +7,7 @@
     <VCard title="Apply An Account">
       <VCardText>
         <VForm @submit.prevent="apply">
-          <AppTextField v-model="form.nik" placeholder="Input your NIK..." label="NIK" />
+          <AppTextField v-model="form.nik" placeholder="Input your NIK..." label="NIK" class="input-nik" />
           <div class="my-2">
             <div v-show="onLoadingCheckLDAP">
               <VProgressCircular indeterminate :size="20" :width="2" />
@@ -48,6 +48,7 @@
 import AppTextField from '@/@core/components/app-form-elements/AppTextField.vue';
 import { useAppStore } from '@/@core/stores/app';
 import { useUserStore } from '@/store/user';
+import { watch } from 'vue';
 
 const props = defineProps({
   active: {
@@ -88,6 +89,14 @@ const apply = function () {
     })
     return
   }
+  if (form.value.nik.length > 25) {
+    appStore.openSnackbar({
+      message: "NIK maximum length is 25 characters",
+      color: 'error',
+      timeout: 3000
+    })
+    return
+  }
   if ((!!form.value.nik && !onLoadingCheckLDAP.value && !isUserLDAP.value) && Object.values(form.value).some(attr => !attr)) {
     appStore.openSnackbar({
       message: "Please fill all the field",
@@ -104,7 +113,7 @@ const apply = function () {
         color: 'success',
         timeout: 1000
       })
-      // close()
+      close()
     })
     .catch(onCatchDocument)
     .finally(() => {
@@ -160,6 +169,12 @@ const checkUserLDAP = async function () {
     })
 }
 
+const onInputNik = function (e) {
+  if (e.key === ' ') {
+    e.preventDefault()
+  }
+}
+
 const nikDebounce = ref(0)
 
 watch(() => form.value.nik, (v) => {
@@ -175,5 +190,22 @@ watch(() => !!form.value.nik && !onLoadingCheckLDAP.value && !isUserLDAP.value, 
   form.value.name = ''
   form.value.email = ''
   form.value.password = ''
+})
+
+watch(dialogValue, (v) => {
+  if (v) {
+    setTimeout(() => {
+      const eInput = document.querySelector('.input-nik input')
+      eInput.addEventListener('keydown', onInputNik)
+      eInput.addEventListener('paste', e => {
+        appStore.openSnackbar({
+          message: "Paste on NIK field is not allowed",
+          color: 'warning',
+          timeout: 3000
+        })
+        e.preventDefault()
+      })
+    }, 700)
+  }
 })
 </script>
