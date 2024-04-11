@@ -11,7 +11,8 @@ pipeline {
         echo "building"
         '''
         sh '''
-        echo "still building"
+        echo "checking dir"
+        ls -la
         '''
       }
     }
