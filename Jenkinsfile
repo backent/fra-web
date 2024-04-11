@@ -3,7 +3,7 @@ pipeline {
     node {
       label "docker-agent-slave"
     }
-  },
+  }
   stages {
     stage("build") {
       steps {
