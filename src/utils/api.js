@@ -23,6 +23,7 @@ export const $api = ofetch.create({
 
 
 export const PostApi = function(url, body) {
+  console.log('post api', { body })
   return ofetch(url, {
     ...baseApiConfig,
     method: 'POST',

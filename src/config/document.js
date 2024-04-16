@@ -88,6 +88,24 @@ const status = {
       text: 'Updated',
       color: 'info'
     }
+  },
+  'final': {
+    'author': {
+      text: 'Final',
+      color: 'info',
+    },
+    'superadmin': {
+      text: 'Final',
+      color: 'info',
+    },
+    'reviewer': {
+      text: 'Final',
+      color: 'info'
+    },
+    'guest': {
+      text: 'Final',
+      color: 'info'
+    }
   }
 }
 

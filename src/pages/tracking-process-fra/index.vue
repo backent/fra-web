@@ -7,8 +7,8 @@
 
         <div>
           <div class="mb-2">Enter a document name to view tracking</div>
-          <VTextField v-model="searchText" v-bind="$attrs" placeholder="Enter document name..." class="search-input mb-5"
-            density="comfortable" variant="solo">
+          <VTextField v-model="searchText" v-bind="$attrs" placeholder="Enter document name..."
+            class="search-input mb-5" density="comfortable" variant="solo">
             <template #prepend-inner>
               <VIcon icon="tabler-clipboard" size="25" />
             </template>
@@ -77,8 +77,8 @@
                   <VBtn v-if="item.type === 'upload'" class="tracker-action-button" variant="outlined" size="small">
                     Upload Document
                   </VBtn>
-                <div v-else-if="item.type === 'upload-done' || item.type === 'signin-onprocess'"
-                  class="plain-action-button">
+                <div v-else-if="item.type === 'final' || item.type === 'signin-onprocess'" class="plain-action-button"
+                  @click="downloadFile(item.fileLink, item.filename)">
                   {{ item.filename }}
                 </div>
                 </p>
@@ -97,6 +97,7 @@ import { getColorStatus, getStatus } from '@/config/document';
 import { useAuthStore } from '@/store/auth';
 import { useDocumentStore } from '@/store/document';
 import { formatCompleteTime, formatTableDate } from '@/utils/formatter';
+import { saveAs } from 'file-saver';
 import { onMounted, watch } from 'vue';
 import { VDataTableServer } from 'vuetify/labs/VDataTable';
 
@@ -211,6 +212,11 @@ const fetchTrackingDocuments = function (name) {
     .catch(() => {
       result.value = []
     })
+}
+
+const downloadFile = function (fileLink, fileOriginalName) {
+  const completeLink = `${import.meta.env.VITE_BASE_PATH}/api${fileLink}`
+  saveAs(completeLink, fileOriginalName)
 }
 
 

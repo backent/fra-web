@@ -1,5 +1,5 @@
 import { parameterMap } from "@/config/document";
-import { approveDocument, getDocumentById, getDocumentDashboardSummary, getDocumentSearchGlobal, getDocuments, getDocumentsDistinctProductName, getMonitoringDocuments, getTrackingDocuments, postDocument, postDocumentTracker, rejectDocument } from "@/http/document";
+import { approveDocument, getDocumentById, getDocumentDashboardSummary, getDocumentSearchGlobal, getDocuments, getDocumentsDistinctProductName, getMonitoringDocuments, getTrackingDocuments, postDocument, postDocumentTracker, postUploadFinalDocument, rejectDocument } from "@/http/document";
 import { formatDateTime } from "@/utils/formatter";
 import { defineStore } from "pinia";
 
@@ -63,6 +63,10 @@ export const useDocumentStore = defineStore('document', {
     async submitDocument(body) {
       return postDocument(body)
     },
+    async uploadFinalDocument(body) {
+      console.log('store')
+      return postUploadFinalDocument(body)
+    },
     async approveDocument(id) {
       return approveDocument({ id })
     },
@@ -110,7 +114,9 @@ export const useDocumentStore = defineStore('document', {
             title: `FRA ${item.action}`,
             subtitle: item.user_detail.nik,
             timestamp: item.created_at,
-            type: 'info'
+            fileLink: item.file_link,
+            filename: item.file_original_name,
+            type: item.action
           }
         })
 

@@ -44,6 +44,10 @@
             {{ displayedRisk.strategy_agreement }}
           </VChip>
           <VSpacer />
+          <VBtn v-if="isExportDocsFinalBtnVisible" color="info" variant="outlined" @click="exportDocumentFinal">
+            <VIcon start icon="tabler-file-download" />
+            Final Docs
+          </VBtn>
           <VBtn color="success" variant="outlined" @click="exportDocument">
             <VIcon start icon="tabler-file-export" />
             Export
@@ -183,8 +187,8 @@
           <VCol cols="4" class="d-flex align-center gap-5">
             <div class="mr-5">Accepted / Not Accepted: <span
                 :class="`text-uppercase ml-2 font-weight-semibold text-${getColorFromAcception(displayedRisk.strategy_agreement)}`">{{
-    displayedRisk.strategy_agreement
-  }}</span></div>
+                  displayedRisk.strategy_agreement
+                }}</span></div>
           </VCol>
         </VRow>
         <VCard class="mb-5">
@@ -214,10 +218,15 @@
               :loading="isRejectLoading" color="error" @click="submit()">
               Submit
             </VBtn>
+            <VBtn v-show="isUploadFinalBtnVisible" color="info" @click="uploadFinal()">
+              <VIcon class="mr-2" icon="tabler-upload" size="22" />
+              Upload Final
+            </VBtn>
           </div>
         </div>
       </VCardText>
     </VCard>
+    <UploadFinalDialog v-model:active="uploadFinalDialogValue" :document-id="documentId" @successUpload="close" />
   </VDialog>
 </template>
 
@@ -230,8 +239,10 @@ import { exportColumnIndexMappingField, exportStartRow, getColorStatus, getStatu
 import { getColorFromAcception, getColorFromRisk, templateWithDetail } from '@/config/risk';
 import { useAuthStore } from '@/store/auth';
 import { useDocumentStore } from '@/store/document';
+import { saveAs } from 'file-saver';
 import { watch } from 'vue';
 import { read, utils, write } from 'xlsx';
+import UploadFinalDialog from './UploadFinalDialog.vue';
 
 const props = defineProps({
   active: {
@@ -259,6 +270,7 @@ const selectedRisk = ref('')
 const rejectNote = ref({})
 const selectedUpdatedDate = ref({})
 const relatedDocumentFullData = ref([])
+const uploadFinalDialogValue = ref(false)
 
 
 
@@ -291,12 +303,20 @@ const isSubmitBtnVisible = computed(() => {
   return (authStore.isReviewer || authStore.isSuperadmin) && (props.mode === 'reject') && (props.modelValue.action === 'submit' || props.modelValue.action === 'update')
 })
 
+const isUploadFinalBtnVisible = computed(() => {
+  return !authStore.isGuest && (props.mode === 'overall') && props.modelValue.action === 'approve'
+})
+
 const isDisplayRejectNote = computed(() => {
   return currentProduct.value.action === 'reject' && !isOnRejectMode.value
 })
 
 const isOnRejectMode = computed(() => {
   return props.mode === 'reject' && currentProduct.value.id === props.modelValue.id
+})
+
+const isExportDocsFinalBtnVisible = computed(() => {
+  return props.modelValue.action === 'final' && !!props.modelValue.file_link
 })
 
 const computedRisksOptions = computed(() => {
@@ -374,6 +394,13 @@ const displayedRisk = computed(() => {
   }
 })
 
+const documentId = computed(() => {
+  if (!props.modelValue.id) {
+    return 0
+  }
+  return props.modelValue.id
+})
+
 const close = function () {
   emits('update:active', false)
 }
@@ -439,6 +466,10 @@ const submit = async function () {
 
 const reject = function () {
   emits('update:mode', 'reject')
+}
+
+const uploadFinal = function () {
+  uploadFinalDialogValue.value = true
 }
 
 const reset = function () {
@@ -566,6 +597,11 @@ const exportDocument = async function () {
 
   // Step 7: Clean up by revoking the temporary URL
   URL.revokeObjectURL(url);
+}
+
+const exportDocumentFinal = function () {
+  const completeLink = `${import.meta.env.VITE_BASE_PATH}/api${props.modelValue.file_link}`
+  saveAs(completeLink, props.modelValue.file_original_name)
 }
 
 watchEffect(() => {

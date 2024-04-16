@@ -50,3 +50,7 @@ export const getDocumentSearchGlobal = function(query) {
 export const postDocumentTracker = function(body) {
   return PostApi(apis.post_document_tracker, body)
 }
+
+export const postUploadFinalDocument = function(body) {
+  return PostApi(apis.post_upload_final_document, body)
+}
