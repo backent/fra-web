@@ -50,6 +50,7 @@ declare module 'vue' {
     CustomRadiosWithIcon: typeof import('./src/@core/components/app-form-elements/CustomRadiosWithIcon.vue')['default']
     CustomRadiosWithImage: typeof import('./src/@core/components/app-form-elements/CustomRadiosWithImage.vue')['default']
     DialogCloseBtn: typeof import('./src/@core/components/DialogCloseBtn.vue')['default']
+    DocumentActionConfirmationDialog: typeof import('./src/components/DocumentActionConfirmationDialog.vue')['default']
     DocumentDetailDialog: typeof import('./src/components/DocumentDetailDialog.vue')['default']
     EnableOneTimePasswordDialog: typeof import('./src/components/dialogs/EnableOneTimePasswordDialog.vue')['default']
     ErrorHeader: typeof import('./src/components/ErrorHeader.vue')['default']

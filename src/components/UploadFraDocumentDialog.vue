@@ -111,10 +111,10 @@ const fileName = ref('')
 const uploadType = ref('New')
 const risks = ref([])
 const categoryOptions = [
-  'communication',
-  'datacomm',
-  'wireless',
-  'internet',
+  'Communication',
+  'Datacomm',
+  'Wireless',
+  'Internet',
 ]
 
 const dialogValue = ref(false)
@@ -257,7 +257,7 @@ const convertToJson = async (file) => {
 const getPayload = function (fileName, risks, category, action) {
   const payload = {
     product_name: fileName,
-    category,
+    category: category.toLowerCase(),
     risks,
     action
   }

@@ -207,18 +207,18 @@
               Cancel
             </VBtn>
             <VBtn v-show="isApproveBtnVisible" :disabled="isRejectLoading || currentProduct.id !== modelValue.id"
-              :loading="isApproveLoading" color="success" @click="approve()">
+              :loading="isApproveLoading" color="success" @click="openConfirmation('approve', approve)">
               Approve
             </VBtn>
             <VBtn v-show="isRejectBtnVisible" :disabled="isApproveLoading || currentProduct.id !== modelValue.id"
-              color="error" @click="reject()">
+              color="error" @click="openConfirmation('reject', reject)">
               Return
             </VBtn>
             <VBtn v-show="isSubmitBtnVisible" :disabled="isApproveLoading || currentProduct.id !== modelValue.id"
-              :loading="isRejectLoading" color="error" @click="submit()">
+              :loading="isRejectLoading" color="error" @click="openConfirmation('submit', submit)">
               Submit
             </VBtn>
-            <VBtn v-show="isUploadFinalBtnVisible" color="info" @click="uploadFinal()">
+            <VBtn v-show="isUploadFinalBtnVisible" color="info" @click="openConfirmation('upload final', uploadFinal)">
               <VIcon class="mr-2" icon="tabler-upload" size="22" />
               Upload Final
             </VBtn>
@@ -227,6 +227,8 @@
       </VCardText>
     </VCard>
     <UploadFinalDialog v-model:active="uploadFinalDialogValue" :document-id="documentId" @successUpload="close" />
+    <DocumentActionConfirmationDialog v-model:active="documentActionConfirmationDialogValue"
+      :action="confirmationAction" @clickAction="clickAction" />
   </VDialog>
 </template>
 
@@ -242,6 +244,7 @@ import { useDocumentStore } from '@/store/document';
 import { saveAs } from 'file-saver';
 import { watch } from 'vue';
 import { read, utils, write } from 'xlsx';
+import DocumentActionConfirmationDialog from './DocumentActionConfirmationDialog.vue';
 import UploadFinalDialog from './UploadFinalDialog.vue';
 
 const props = defineProps({
@@ -271,6 +274,9 @@ const rejectNote = ref({})
 const selectedUpdatedDate = ref({})
 const relatedDocumentFullData = ref([])
 const uploadFinalDialogValue = ref(false)
+const documentActionConfirmationDialogValue = ref(false)
+const confirmationAction = ref('')
+const clickAction = ref(() => { })
 
 
 
@@ -602,6 +608,12 @@ const exportDocument = async function () {
 const exportDocumentFinal = function () {
   const completeLink = `${import.meta.env.VITE_BASE_PATH}/api${props.modelValue.file_link}`
   saveAs(completeLink, props.modelValue.file_original_name)
+}
+
+const openConfirmation = function (action, onClickActionFunc) {
+  confirmationAction.value = action
+  clickAction.value = onClickActionFunc
+  documentActionConfirmationDialogValue.value = true
 }
 
 watchEffect(() => {

@@ -75,6 +75,7 @@ import RiskForm from '@/components/RiskForm.vue';
 import TitlePage from '@/components/TitlePage.vue';
 import { template } from '@/config/risk';
 import { useDocumentStore } from '@/store/document';
+import { CapitalizeFirstLetter } from '@/utils/formatter';
 import { onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -98,10 +99,10 @@ const productReference = ref([])
 const listRiskSuggestion = ref([])
 const isOnPreviewSuggestion = ref(false)
 const categoryOptions = [
-  'communication',
-  'datacomm',
-  'wireless',
-  'internet',
+  'Communication',
+  'Datacomm',
+  'Wireless',
+  'Internet',
 ]
 
 const isSaveLoading = computed(() => {
@@ -211,7 +212,7 @@ const getPayload = function (action) {
     id: currentId.value,
     uuid: currentUUID.value,
     product_name: productName.value,
-    category: category.value,
+    category: category.value.toLowerCase(),
     risks: [...listRisk.value],
     action
   }
@@ -325,7 +326,7 @@ const fetchDocumentById = function (id) {
       currentUUID.value = uuid
       currentId.value = id
       productName.value = product_name
-      category.value = categoryResponse
+      category.value = CapitalizeFirstLetter(categoryResponse)
       listRisk.value = [...risk_detail]
     })
 }
