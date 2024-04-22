@@ -24,8 +24,7 @@
     <VContainer>
       <VCard>
         <VCardText>
-          <div class="text-h4">Menus</div>
-          <div class="mb-3">Lorem ipsum dolor sit amet.</div>
+          <div class="text-h4 mb-3">Menus</div>
           <VRow class="justify-space-evenly">
             <VCol cols="4">
               <HomeCard title="Document FRA"

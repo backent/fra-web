@@ -1,4 +1,5 @@
 <script setup>
+import { resolveVuetifyTheme } from '@/@core/utils/vuetify'
 import { useAuthStore } from '@/store/auth'
 import { layoutConfig } from '@layouts'
 import {
@@ -95,7 +96,8 @@ const hideTitleAndIcon = configStore.isVerticalNavMini(isHovered)
       <slot name="nav-header">
         <div class="app-logo app-title-wrapper flex-column">
           <RouterLink to="/">
-            <img src="@/assets/logo.png" />
+            <img v-show="resolveVuetifyTheme() === 'light'" src="@/assets/logo.png" />
+            <img v-show="resolveVuetifyTheme() === 'dark'" src="@/assets/logo-dark.png" />
           </RouterLink>
         </div>
         <!-- 👉 Vertical nav actions -->

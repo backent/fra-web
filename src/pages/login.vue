@@ -5,6 +5,7 @@ import authV1TopShape from '@images/svg/auth-v1-top-shape.svg?raw';
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer';
 
 import { useAppStore } from '@/@core/stores/app';
+import { resolveVuetifyTheme } from '@/@core/utils/vuetify';
 import { useAuthStore } from '@/store/auth';
 import { useRouter } from 'vue-router';
 
@@ -70,16 +71,14 @@ const catchHandler = function (err) {
       <!-- 👉 Auth Card -->
       <VCard class="auth-card pa-4" max-width="448">
         <div class="d-flex justify-center">
-          <img class="img-logo" src="@/assets/logo.png" />
+          <img v-show="resolveVuetifyTheme() === 'light'" class="img-logo" src="@/assets/logo.png" />
+          <img v-show="resolveVuetifyTheme() === 'dark'" class="img-logo" src="@/assets/logo-dark.png" />
         </div>
 
         <VCardText class="pt-1">
           <h4 class="text-h4 mb-1">
             Login
           </h4>
-          <p class="mb-0">
-            Lorem ipsum is the dummy text.
-          </p>
         </VCardText>
 
         <VCardText>
