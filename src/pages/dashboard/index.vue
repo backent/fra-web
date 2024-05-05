@@ -155,104 +155,21 @@ const listTop = ref([
     listType: 'recently_viewed',
     subtitle: '5 Top Assassment Document Viewed',
     type: 'category',
-    list: [
-      {
-        title: 'Dokumen FRA_SD Wan Fortinet_2023',
-        category: 'Communication',
-      },
-      {
-        title: 'Dokumen FRA_SD Wan Fortinet_2023',
-        category: 'Datacomm',
-      },
-      {
-        title: 'Dokumen FRA_SD Wan Fortinet_2023',
-        category: 'Wireless',
-      },
-      {
-        title: 'Dokumen FRA_SD Wan Fortinet_2023',
-        category: 'Internet',
-      },
-      {
-        title: 'Dokumen FRA_SD Wan Fortinet_2023',
-        category: 'Datacomm',
-      },
-    ]
+    list: []
   },
   {
     title: 'Top Search',
     listType: 'top_search',
     subtitle: '5 Top Assassment Document Searched',
     type: 'category',
-    list: [
-      {
-        title: 'Dokumen FRA_SD Wan Fortinet_2023',
-        category: 'Datacomm',
-      },
-      {
-        title: 'Dokumen FRA_SD Wan Fortinet_2023',
-        category: 'Wireless',
-      },
-      {
-        title: 'Dokumen FRA_SD Wan Fortinet_2023',
-        category: 'Internet',
-      },
-      {
-        title: 'Dokumen FRA_SD Wan Fortinet_2023',
-        category: 'Datacomm',
-      },
-      {
-        title: 'Dokumen FRA_SD Wan Fortinet_2023',
-        category: 'Communication',
-      },
-    ]
+    list: []
   },
   {
     title: 'User Active in a Month',
     listType: 'user_active',
     subtitle: '10 Top Active User',
     type: 'user',
-    list: [
-      {
-        username: '999999',
-        name: 'John Doe'
-      },
-      {
-        username: '999999',
-        name: 'John Doe'
-      },
-      {
-        username: '999999',
-        name: 'John Doe'
-      },
-      {
-        username: '999999',
-        name: 'John Doe'
-      },
-      {
-        username: '999999',
-        name: 'John Doe'
-      },
-      {
-        username: '999999',
-        name: 'John Doe'
-      },
-      {
-        username: '999999',
-        name: 'John Doe'
-      },
-      {
-        username: '999999',
-        name: 'John Doe'
-      },
-      {
-        username: '999999',
-        name: 'John Doe'
-      },
-      {
-        username: '999999',
-        name: 'John Doe'
-      },
-    ]
+    list: []
   },
 ])
 
