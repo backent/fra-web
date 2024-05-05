@@ -64,7 +64,6 @@ export const useDocumentStore = defineStore('document', {
       return postDocument(body)
     },
     async uploadFinalDocument(body) {
-      console.log('store')
       return postUploadFinalDocument(body)
     },
     async approveDocument(id) {

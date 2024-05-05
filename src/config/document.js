@@ -175,7 +175,7 @@ const exportColumnIndexMappingField = {
   'strategy_recomendation': 15,
 }
 
-const exportStartRow = 3
+const exportStartRow = 4
 
 
 const parameterMap = {

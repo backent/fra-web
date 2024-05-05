@@ -241,9 +241,9 @@ import { exportColumnIndexMappingField, exportStartRow, getColorStatus, getStatu
 import { getColorFromAcception, getColorFromRisk, templateWithDetail } from '@/config/risk';
 import { useAuthStore } from '@/store/auth';
 import { useDocumentStore } from '@/store/document';
+import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver';
 import { watch } from 'vue';
-import { read, utils, write } from 'xlsx';
 import DocumentActionConfirmationDialog from './DocumentActionConfirmationDialog.vue';
 import UploadFinalDialog from './UploadFinalDialog.vue';
 
@@ -561,35 +561,41 @@ const onCatchDocument = function (err) {
   }
 }
 
-const exportDocument = async function () {
-  const fileName = currentProduct.value.product_name
 
-  // fetch template
+
+const exportDocument = async function () {
+  const fileName = currentProduct.value.product_name;
+
+  // Create a new workbook
+  const workbook = new Workbook();
+
+  // Fetch template
   const response = await fetch(import.meta.env.BASE_URL + 'template/FRA Document Template.xlsx');
   const arrayBuffer = await response.arrayBuffer();
-  const workbook = read(arrayBuffer, { type: 'array' });
+  await workbook.xlsx.load(arrayBuffer);
 
-  const sheetName = workbook.SheetNames[0]; // Assuming the data is in the first sheet
-  const worksheet = workbook.Sheets[sheetName];
+  const worksheet = workbook.getWorksheet(1); // Assuming the data is in the first sheet
+
   currentProduct.value.risk_detail.forEach((risk, index) => {
-    // defining cell location
-    const cell = utils.encode_cell({ r: exportStartRow + index, c: exportColumnIndexMappingField['no'] });
-    worksheet[cell] = { v: index + 1, t: 's' }; // 's' indicates a string value
-    Object.entries(risk).forEach(([key, val]) => {
-      if (exportColumnIndexMappingField[key]) {
-        // defining cell location
-        const cell = utils.encode_cell({ r: exportStartRow + index, c: exportColumnIndexMappingField[key] }); // Row index 1, Column index 2
-        worksheet[cell] = { v: val, t: 's' }; // 's' indicates a string value
+    const row = worksheet.getRow(exportStartRow + index);
+
+    Object.entries(exportColumnIndexMappingField).forEach(([key, value]) => {
+      let val
+      if (value + 1 === 1) {
+        val = index + 1;
+      } else {
+        val = risk[key];
       }
+      row.getCell(value + 1).value = val;
     })
+
   });
 
-
   // Step 3: Write the modified data to a new XLSX file
-  const modifiedArrayBuffer = write(workbook, { type: 'array', bookType: 'xlsx' });
+  const buffer = await workbook.xlsx.writeBuffer();
 
-  // Step 4: Create a Blob from the modified array buffer
-  const blob = new Blob([modifiedArrayBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  // Step 4: Create a Blob from the modified buffer
+  const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
 
   // Step 5: Create a temporary URL for the Blob
   const url = URL.createObjectURL(blob);
@@ -603,7 +609,7 @@ const exportDocument = async function () {
 
   // Step 7: Clean up by revoking the temporary URL
   URL.revokeObjectURL(url);
-}
+};
 
 const exportDocumentFinal = function () {
   const completeLink = `${import.meta.env.VITE_BASE_PATH}/api${props.modelValue.file_link}`

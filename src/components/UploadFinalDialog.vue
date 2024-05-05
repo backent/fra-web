@@ -125,7 +125,6 @@ onChange(selectedFiles => {
       url: useObjectUrl(file).value ?? '',
     })
 
-    console.log(file)
   }
 })
 
