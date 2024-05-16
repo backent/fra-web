@@ -6,7 +6,7 @@
     <!-- Dialog Content -->
     <VCard title="Upload New Assessment">
       <VCardText>
-        <div class="w-full h-auto relative mb-3">
+        <div class="w-full h-auto relative">
           <VRow>
             <VCol>
               <AppSelect v-model="category" class="my-5 category-field" :items="categoryOptions" label="Category" />
@@ -15,6 +15,7 @@
               <AppSelect v-model="uploadType" class="my-5 category-field" :items="['New', 'Final']" label="Type" />
             </VCol>
           </VRow>
+          <AppDateTimePicker class="mb-5" v-model="createdAt" label="Document Created Date" />
           <div ref="dropZoneRef" class="cursor-pointer" @click="() => open()">
             <div v-if="fileData.length === 0"
               class="d-flex flex-column justify-center align-center gap-y-3 px-6 py-10 border-dashed drop-zone">
@@ -60,10 +61,11 @@
             </div>
           </div>
         </div>
-        <a class="download-template" href="template/FRA Document Template.xlsx">
+        <a class="download-template mb-4" href="template/FRA Document Template.xlsx">
           <VIcon icon="tabler-upload" />
           FRA Document Template.xlsx
         </a>
+
       </VCardText>
 
       <VCardText class="d-flex justify-end actions">
@@ -79,6 +81,7 @@
 </template>
 
 <script setup>
+import AppDateTimePicker from '@/@core/components/app-form-elements/AppDateTimePicker.vue';
 import { useAppStore } from '@/@core/stores/app';
 import { getUploadMappingFieldActualFieldRisk } from '@/config/document';
 import { useDocumentStore } from '@/store/document';
@@ -87,6 +90,7 @@ import {
   useFileDialog,
   useObjectUrl,
 } from '@vueuse/core';
+import dayjs from 'dayjs';
 import { computed, watch, watchEffect } from 'vue';
 import { read, utils } from 'xlsx';
 
@@ -110,6 +114,7 @@ const category = ref('')
 const fileName = ref('')
 const uploadType = ref('New')
 const risks = ref([])
+const createdAt = ref(dayjs().format('YYYY-MM-DD'))
 const categoryOptions = [
   'Communication',
   'Datacomm',
@@ -259,7 +264,8 @@ const getPayload = function (fileName, risks, category, action) {
     product_name: fileName,
     category: category.toLowerCase(),
     risks,
-    action
+    action,
+    created_at: dayjs(createdAt.value).unix()
   }
   return payload
 }
